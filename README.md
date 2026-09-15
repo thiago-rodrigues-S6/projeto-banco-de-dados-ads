@@ -1,5 +1,13 @@
 # 🍽️ Projeto: Palazio del Chef
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-Em%20Andamento-yellow?style=for-the-badge" alt="Status">
+  <img src="https://img.shields.io/badge/Banco_de_Dados-Relacional-blue?style=for-the-badge&logo=mysql" alt="Database">
+  <img src="https://img.shields.io/badge/Documenta%C3%A7%C3%A3o-Datapsico-orange?style=for-the-badge" alt="Docs">
+</p>
+
+---
+
 ## 📖 1. Contextualização e Visão Geral
 
 ### 📍 O Estabelecimento
