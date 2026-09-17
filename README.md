@@ -213,20 +213,23 @@ Normalização	⏳ Pendente
 Implementação SQL	⏳ Pendente
 Consultas SQL	⏳ Pendente
 Documentação final	⏳ Pendente
+
 🤖 13. Uso de Inteligência Artificial
+Durante o desenvolvimento deste projeto, foi utilizado o ChatGPT (OpenAI) como ferramenta de apoio na organização,
+estruturação e revisão da documentação do projeto, especialmente na elaboração e formatação deste arquivo README.md.
 
-Durante o desenvolvimento deste projeto, foi utilizado o ChatGPT (OpenAI) como ferramenta de apoio na organização, estruturação e revisão da documentação do projeto, especialmente na elaboração e formatação deste arquivo README.md.
+A ferramenta foi utilizada como auxílio para melhorar a clareza das informações,
+organização das seções, descrição dos conteúdos e padronização da documentação.
 
-A ferramenta foi utilizada como auxílio para melhorar a clareza das informações, organização das seções, descrição dos conteúdos e padronização da documentação.
-
-As informações referentes ao estabelecimento, requisitos, regras de negócio, entidades, atributos e decisões de modelagem foram definidas e revisadas pelos integrantes do grupo.
+As informações referentes ao estabelecimento, requisitos, regras de negócio,entidades,
+ atributos e decisões de modelagem foram definidas e revisadas pelos integrantes do grupo.
 
 🎓 14. Contexto Acadêmico
-
-Projeto desenvolvido como atividade acadêmica da disciplina de Modelagem de Banco de Dados, aplicando conceitos de levantamento de requisitos, modelagem conceitual, entidades, atributos, relacionamentos, cardinalidade, chaves e normalização.
+Projeto desenvolvido como atividade acadêmica da disciplina de Modelagem de Banco de Dados,
+aplicando conceitos de levantamento de requisitos, modelagem conceitual, entidades, atributos,
+relacionamentos, cardinalidade, chaves e normalização.
 
 👥 Equipe
-
 Victor Anjos
 Thiago Rodrigues
 Ricardo Santos
