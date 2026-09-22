@@ -103,7 +103,7 @@ O modelo utiliza **Chaves Primárias (PK)** e **Chaves Estrangeiras (FK)** para 
 
 > 📌 O dicionário de dados completo será disponibilizado na documentação do projeto.
 
-[Ver Projeto](./dicionario_dados_palazio/)
+[Ver Dicionario](./dicionario_dados_palazio/)
 
 ---
 
@@ -117,7 +117,7 @@ O **Diagrama Entidade-Relacionamento (DER)** representa graficamente as entidade
   <img src="./docs/diagrama-der.png" alt="Diagrama Entidade-Relacionamento do Palazio del Chef" width="900">
 </p>
 
-> ⚠️ **Status:** Em desenvolvimento e sujeito a alterações conforme as orientações do professor.
+> [Ver Diagrama](./DiagramaPalaziodelChef/).
 
 ---
 
