@@ -121,6 +121,20 @@ O **Diagrama Entidade-Relacionamento (DER)** representa graficamente as entidade
 
 ---
 
+## 🔄 6.1 Fluxograma do Processo
+
+O **Fluxograma do Processo** representa o fluxo operacional do atendimento, desde a chegada do cliente até o pagamento, relacionando cada etapa com as entidades correspondentes do banco de dados (Mesa, Funcionário, Pedido, Item_pedido, Produto e Setor).
+
+### 📊 FLUXOGRAMA
+
+<p align="center">
+  <img src="./Fluxograma_Palazio_del_Chef/fluxograma_palazio_del_chef.png" alt="Fluxograma do processo de pedido do Palazio del Chef" width="700">
+</p>
+
+> [Ver Fluxograma](./Fluxograma_Palazio_del_Chef/).
+
+---
+
 ## 🧩 7. Modelo Relacional
 
 A partir do modelo conceitual, será desenvolvido o modelo relacional contendo as tabelas, chaves primárias, chaves estrangeiras e demais restrições necessárias para a implementação do banco de dados.
@@ -196,43 +210,58 @@ Palazio-del-Chef/
 ├── docs/
 │   └── diagrama-der.png
 │
+├── Diagrama_Palazio_del_Chef/
+│   └── diagrama_palazio_del_chef.jpg
+│
+├── Fluxograma_Palazio_del_Chef/
+│   └── fluxograma_palazio_del_chef.png
+│
 ├── sql/
 │   ├── create_tables.sql
 │   ├── insert_data.sql
 │   └── consultas.sql
 │
 └── README.md
-📌 12. Status do Projeto
-Etapa	Status
-Contextualização	✅ Concluído
-Identificação do problema	✅ Concluído
-Requisitos	✅ Concluído
-Regras de negócio	✅ Concluído
-Dicionário de dados	🔄 Em desenvolvimento
-Diagrama Entidade-Relacionamento	🔄 Em desenvolvimento
-Modelo relacional	⏳ Pendente
-Normalização	⏳ Pendente
-Implementação SQL	⏳ Pendente
-Consultas SQL	⏳ Pendente
-Documentação final	⏳ Pendente
+```
 
-🤖 13. Uso de Inteligência Artificial
-Durante o desenvolvimento deste projeto, foi utilizado o ChatGPT (OpenAI) como ferramenta de apoio na organização,
-estruturação e revisão da documentação do projeto, especialmente na elaboração e formatação deste arquivo README.md.
+---
 
-A ferramenta foi utilizada como auxílio para melhorar a clareza das informações,
-organização das seções, descrição dos conteúdos e padronização da documentação.
+## 📌 12. Status do Projeto
 
-As informações referentes ao estabelecimento, requisitos, regras de negócio,entidades,
- atributos e decisões de modelagem foram definidas e revisadas pelos integrantes do grupo.
+| Etapa | Status |
+| :--- | :--- |
+| Contextualização | ✅ Concluído |
+| Identificação do problema | ✅ Concluído |
+| Requisitos | ✅ Concluído |
+| Regras de negócio | ✅ Concluído |
+| Dicionário de dados | 🔄 Em desenvolvimento |
+| Diagrama Entidade-Relacionamento | 🔄 Em desenvolvimento |
+| Fluxograma do processo | ✅ Concluído |
+| Modelo relacional | ⏳ Pendente |
+| Normalização | ⏳ Pendente |
+| Implementação SQL | ⏳ Pendente |
+| Consultas SQL | ⏳ Pendente |
+| Documentação final | ⏳ Pendente |
 
-🎓 14. Contexto Acadêmico
-Projeto desenvolvido como atividade acadêmica da disciplina de Modelagem de Banco de Dados,
-aplicando conceitos de levantamento de requisitos, modelagem conceitual, entidades, atributos,
-relacionamentos, cardinalidade, chaves e normalização.
+---
 
-👥 Equipe
-Victor Anjos
-Thiago Rodrigues
-Ricardo Santos
-Raphael Luiz
+## 🤖 13. Uso de Inteligência Artificial
+
+Durante o desenvolvimento deste projeto, foi utilizado o ChatGPT (OpenAI) como ferramenta de apoio na organização, estruturação e revisão da documentação do projeto, especialmente na elaboração e formatação deste arquivo README.md.
+
+A ferramenta foi utilizada como auxílio para melhorar a clareza das informações, organização das seções, descrição dos conteúdos e padronização da documentação.
+
+As informações referentes ao estabelecimento, requisitos, regras de negócio, entidades, atributos e decisões de modelagem foram definidas e revisadas pelos integrantes do grupo.
+
+---
+
+## 🎓 14. Contexto Acadêmico
+
+Projeto desenvolvido como atividade acadêmica da disciplina de Modelagem de Banco de Dados, aplicando conceitos de levantamento de requisitos, modelagem conceitual, entidades, atributos, relacionamentos, cardinalidade, chaves e normalização.
+
+### 👥 Equipe
+
+- Victor Anjos
+- Thiago Rodrigues
+- Ricardo Santos
+- Raphael Luiz
