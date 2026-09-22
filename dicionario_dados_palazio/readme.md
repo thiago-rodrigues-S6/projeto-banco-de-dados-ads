@@ -54,3 +54,5 @@ Cada entidade apresenta seus atributos organizados nas seguintes informações:
 O Dicionário de Dados complementa o **Modelo Entidade-Relacionamento (DER)** e o modelo conceitual do projeto, detalhando os atributos que compõem cada entidade e suas respectivas características.
 
 A documentação foi desenvolvida de acordo com as regras e necessidades identificadas para o sistema do restaurante/bar **Palazio del Chef**.
+
+[🔝 Voltar ao início](https://github.com/thiago-rodrigues-S6/projeto-banco-de-dados-ads)
