@@ -89,11 +89,11 @@ O mapeamento das variáveis do sistema foi estruturado e documentado internament
 O modelo de banco de dados relacional é composto pelas seguintes entidades principais:
 
 - **Atendente**
-- **Pedido**
-- **Produto**
 - **Mesa**
+- **Pedido**
+- **Item_pedido**
+- **Produto**
 - **Setor**
-- **Histórico_Produto**
 
 Cada entidade possui atributos específicos, identificadores e relacionamentos definidos de acordo com as necessidades levantadas durante a análise do estabelecimento.
 
@@ -102,6 +102,8 @@ Os atributos são tipados de acordo com suas características, utilizando tipos 
 O modelo utiliza **Chaves Primárias (PK)** e **Chaves Estrangeiras (FK)** para estabelecer os relacionamentos e garantir a integridade dos dados.
 
 > 📌 O dicionário de dados completo será disponibilizado na documentação do projeto.
+
+[Ver Projeto](./dicionario_dados_palazio/)
 
 ---
 
