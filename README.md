@@ -234,9 +234,9 @@ Palazio-del-Chef/
 | Identificação do problema | ✅ Concluído |
 | Requisitos | ✅ Concluído |
 | Regras de negócio | ✅ Concluído |
-| Dicionário de dados | 🔄 Em desenvolvimento |
-| Diagrama Entidade-Relacionamento | 🔄 Em desenvolvimento |
-| Fluxograma do processo | ✅ Concluído |
+| Dicionário de dados | ✅ Concluído |
+| Diagrama Entidade-Relacionamento | ✅ Concluído |
+| Fluxograma do processo | 🔄 Em Desenvolvimento |
 | Modelo relacional | ⏳ Pendente |
 | Normalização | ⏳ Pendente |
 | Implementação SQL | ⏳ Pendente |
