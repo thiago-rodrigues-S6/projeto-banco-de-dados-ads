@@ -114,7 +114,7 @@ O **Diagrama Entidade-Relacionamento (DER)** representa graficamente as entidade
 ### 📊 Diagrama
 
 <p align="center">
-  <img src="./docs/Diagrama_Palazio_del_Chef/diagrama_palazio_del_chef.jpg" alt="Diagrama Entidade-Relacionamento do Palazio del Chef" width="900">
+  <img src="./Diagrama_Palazio_del_Chef/diagrama_palazio_del_chef.jpg" alt="Diagrama Entidade-Relacionamento do Palazio del Chef" width="900">
 </p>
 
 > [Ver Diagrama](./Diagrama_Palazio_del_Chef/).
