@@ -18,6 +18,12 @@ Versão em PDF do Dicionário de Dados, destinada principalmente à consulta e v
 
 O PDF reúne todas as entidades em um único arquivo, facilitando a leitura sem a necessidade de utilizar um editor de planilhas.
 
+### 📄 Dicionario_de_Dados.HTML
+
+Um Dicionário de Dados interativo em formato web. 
+
+Ele documenta todas as regras de negócio aplicadas ao banco de dados em formato HTML para melhor compreensão e facilidade para visualizar pelo navegador
+
 ## 🗂️ Entidades documentadas
 
 O Dicionário de Dados contempla as seguintes entidades:
