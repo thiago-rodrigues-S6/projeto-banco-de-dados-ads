@@ -40,7 +40,7 @@ Essa situação dificulta a identificação do responsável pelo registro dos pe
 
 ### 💡 Solução Proposta
 
-Como solução, foi proposta a criação da entidade **Atendente**, responsável por identificar o funcionário que realiza o registro dos pedidos.
+Como solução, foi proposta a criação da entidade **Atendente**, que por sua vez tem um atributo chamado **id_atendente** responsável por identificar cada atendente individualmente que realiza o registro dos pedidos.
 
 Dessa forma, cada pedido poderá ser associado ao respectivo atendente responsável pelo seu registro.
 
