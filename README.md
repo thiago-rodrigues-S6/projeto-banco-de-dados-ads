@@ -121,18 +121,6 @@ O **Diagrama Entidade-Relacionamento (DER)** representa graficamente as entidade
 
 ---
 
-## 🔄 6.1 Fluxograma do Processo
-
-O **Fluxograma do Processo** representa o fluxo operacional do atendimento, desde a chegada do cliente até o pagamento, relacionando cada etapa com as entidades correspondentes do banco de dados (Mesa, Funcionário, Pedido, Item_pedido, Produto e Setor).
-
-### 📊 FLUXOGRAMA
-
-<p align="center">
-  <img src="./Fluxograma_Palazio_del_Chef/fluxograma_palazio_del_chef.png" alt="Fluxograma do processo de pedido do Palazio del Chef" width="700">
-</p>
-
-> [Ver Fluxograma](./Fluxograma_Palazio_del_Chef/).
-
 ---
 
 ## 🧩 7. Modelo Relacional
