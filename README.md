@@ -121,8 +121,6 @@ O **Diagrama Entidade-Relacionamento (DER)** representa graficamente as entidade
 
 ---
 
----
-
 ## 🧩 7. Modelo Relacional
 
 A partir do modelo conceitual, será desenvolvido o modelo relacional contendo as tabelas, chaves primárias, chaves estrangeiras e demais restrições necessárias para a implementação do banco de dados.
