@@ -7,7 +7,16 @@
 
 ---
 
-## 📖 1. Contextualização e Visão Geral
+## 👥 1. Integrantes
+
+- **Victor Anjos**
+- **Thiago Rodrigues**
+- **Ricardo Santos**
+- **Raphael Luiz**
+
+---
+
+## 📖 2. Contextualização e Visão Geral
 
 ### 📍 O Estabelecimento
 
@@ -18,15 +27,6 @@ A escolha do estabelecimento para o desenvolvimento do projeto ocorreu devido à
 ### 🎯 Objetivo do Projeto
 
 O projeto tem como objetivo analisar os processos do estabelecimento e desenvolver uma modelagem de banco de dados capaz de organizar as principais informações relacionadas ao atendimento, pedidos, produtos, mesas, setores e atendentes.
-
----
-
-## 👥 2. Integrantes
-
-- **Victor Anjos**
-- **Thiago Rodrigues**
-- **Ricardo Santos**
-- **Raphael Luiz**
 
 ---
 
@@ -245,9 +245,3 @@ As informações referentes ao estabelecimento, requisitos, regras de negócio, 
 
 Projeto desenvolvido como atividade acadêmica da disciplina de Modelagem de Banco de Dados, aplicando conceitos de levantamento de requisitos, modelagem conceitual, entidades, atributos, relacionamentos, cardinalidade, chaves e normalização.
 
-### 👥 Equipe
-
-- Victor Anjos
-- Thiago Rodrigues
-- Ricardo Santos
-- Raphael Luiz
