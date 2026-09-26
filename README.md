@@ -37,6 +37,22 @@ O projeto tem como objetivo analisar os processos do estabelecimento e desenvolv
 
 ## 🔍 3. Análise e Modelagem
 
+### 🗺️ Mapeamento de Processos
+
+
+Foram mapeados os seguintes processos principais do estabelecimento:
+
+
+- 🛎️ Atendimento ao cliente
+- 📝 Registro do pedido
+- 🍳 Preparação do pedido
+- 🏃 Encaminhamento para a cozinha/bar
+- 💳 Pagamento
+- 📦 Controle de estoque
+- 🧑‍🍳 Cadastro e controle de atendentes
+
+---
+
 ### ⚠️ Identificação do Problema
 
 Durante a análise, foi identificado um problema relacionado ao **controle dos atendentes**, uma vez que atualmente a equipe não é registrada por meio de credenciais.
@@ -48,18 +64,6 @@ Essa situação dificulta a identificação do responsável pelo registro dos pe
 Como solução, foi proposta a criação da entidade **Atendente**, que por sua vez tem um atributo chamado **id_atendente** responsável por identificar cada atendente individualmente que realiza o registro dos pedidos.
 
 Dessa forma, cada pedido poderá ser associado ao respectivo atendente responsável pelo seu registro.
-
-### 🗺️ Mapeamento de Processos
-
-Foram mapeados os seguintes processos principais do estabelecimento:
-
-- 🛎️ Atendimento ao cliente
-- 📝 Registro do pedido
-- 🍳 Preparação do pedido
-- 🏃 Encaminhamento para a cozinha/bar
-- 💳 Pagamento
-- 📦 Controle de estoque
-- 🧑‍🍳 Cadastro e controle de atendentes
 
 ---
 
