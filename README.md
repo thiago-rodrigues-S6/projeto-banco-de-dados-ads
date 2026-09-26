@@ -24,6 +24,11 @@ O **Palazio del Chef** é um estabelecimento do segmento de alimentação, com c
 
 A escolha do estabelecimento para o desenvolvimento do projeto ocorreu devido à sua estrutura operacional e aos processos envolvidos em seu funcionamento, possibilitando a aplicação dos conceitos de modelagem de banco de dados.
 
+<p align="center">
+  <img src="./imagem_palazio.jpeg" alt="Imagem visual do estabelecimento do Palazio Del Chef" width="550">
+</p>
+
+
 ### 🎯 Objetivo do Projeto
 
 O projeto tem como objetivo analisar os processos do estabelecimento e desenvolver uma modelagem de banco de dados capaz de organizar as principais informações relacionadas ao atendimento, pedidos, produtos, mesas, setores e atendentes.
