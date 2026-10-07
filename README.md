@@ -20,7 +20,7 @@
 
 ### 📍 O Estabelecimento
 
-O **Palazio del Chef** é um estabelecimento do segmento de alimentação, com características de restaurante e bar. Possui médio porte e apresenta um fluxo considerável de clientes.
+O **Palazio del Chef** é um estabelecimento do segmento de alimentação, com características de restaurante e bar. Possui médio porte e apresenta um fluxo considerável de clientes. Está situado na R. Apucarana, 480, no bairro do Tatuapé, em São Paulo - SP (CEP 03311-000), em uma localidade ótima pela facilidade de acesso, tanto a pé quanto de carro, moto ou outros meios motorizados. Além disso, o ambiente é arborizado, graças ao **Parque Municipal Sampaio Moreira**, localizado bem em frente ao restaurante, o que torna o entorno mais agradável para clientes e colaboradores.
 
 A escolha do estabelecimento para o desenvolvimento do projeto ocorreu devido à sua estrutura operacional e aos processos envolvidos em seu funcionamento, possibilitando a aplicação dos conceitos de modelagem de banco de dados.
 
