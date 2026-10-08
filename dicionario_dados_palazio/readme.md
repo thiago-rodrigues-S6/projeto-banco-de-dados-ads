@@ -72,6 +72,44 @@ Cada entidade possui seus atributos documentados individualmente, acompanhados d
 
 ---
 
+## Legenda e convenções do banco de dados
+
+Esta seção apresenta as siglas, abreviações e convenções utilizadas na documentação do banco de dados do **Palazio del Chef**, facilitando a compreensão das entidades, dos atributos e de suas respectivas regras.
+
+### 1. Chaves e relacionamentos
+
+| Sigla           | Termo em inglês       | Significado em português | Descrição                                                                                                          |
+| --------------- | --------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| **PK**          | Primary Key           | Chave primária           | Atributo que identifica exclusivamente cada registro de uma tabela. Não pode se repetir nem aceitar valores nulos. |
+| **FK**          | Foreign Key           | Chave estrangeira        | Atributo que referencia uma chave de outra tabela, permitindo estabelecer relacionamentos entre entidades.         |
+| **PK composta** | Composite Primary Key | Chave primária composta  | Chave primária formada por dois ou mais atributos, cuja combinação identifica exclusivamente um registro.          |
+
+### 2. Tipos de dados
+
+| Termo              | Significado                                    | Descrição                                                                                                                   |
+| ------------------ | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| **INT**            | Integer (inteiro)                              | Armazena números inteiros, sem casas decimais.                                                                              |
+| **VARCHAR**        | Variable Character (texto de tamanho variável) | Armazena textos com limite de caracteres definido.                                                                          |
+| **DECIMAL**        | Número decimal                                 | Armazena valores numéricos com precisão definida, sendo adequado para valores monetários.                                   |
+| **DATE**           | Data                                           | Armazena uma data, conforme o sistema gerenciador de banco de dados utilizado.                                              |
+| **DATETIME**       | Data e hora                                    | Armazena uma data acompanhada de um horário, quando suportado pelo banco utilizado.                                         |
+| **AUTO_INCREMENT** | Incremento automático                          | Recurso que gera automaticamente valores numéricos sequenciais para um atributo, conforme a configuração do banco de dados. |
+| **NULL**           | Valor ausente ou desconhecido                  | Indica que não há um valor registrado para determinado atributo. Não é o mesmo que zero ou texto vazio.                     |
+| **NOT NULL**       | Não nulo                                       | Restrição que impede que o atributo receba um valor nulo.                                                                   |
+
+### 3. Convenções de nomenclatura
+
+* Os nomes dos atributos devem utilizar letras minúsculas.
+* Palavras compostas devem ser separadas por sublinhado (`_`), seguindo o padrão `snake_case`.
+* Devem ser evitados espaços, acentos e caracteres especiais nos nomes dos atributos.
+* As siglas **PK** e **FK** identificam, respectivamente, chaves primárias e estrangeiras na documentação.
+* Os tipos de dados e as restrições devem ser definidos de acordo com o modelo do banco de dados e o sistema gerenciador escolhido.
+
+**Observação:** esta legenda documenta as convenções adotadas no projeto. A utilização efetiva de tipos, restrições e recursos como `AUTO_INCREMENT` dependerá da implementação do banco de dados.
+
+
+---
+
 ## 📄 Arquivo disponível
 
 O dicionário está disponível em formato HTML, permitindo a visualização das tabelas e a consulta das informações por entidade.
