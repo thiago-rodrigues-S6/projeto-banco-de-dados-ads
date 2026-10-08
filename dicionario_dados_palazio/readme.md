@@ -1,58 +1,119 @@
-# Dicionário de Dados — Palazio del Chef
+# 📚 Dicionário de Dados Conceitual — Palazio del Chef
 
-Esta pasta contém a documentação do Dicionário de Dados desenvolvido para o banco de dados do projeto **Palazio del Chef**.
+## 📌 Sobre o projeto
 
-O Dicionário de Dados tem como objetivo descrever os atributos utilizados no banco de dados, apresentando suas características, finalidades, tipos de dados, valores permitidos e demais informações relevantes para a compreensão e implementação do modelo.
+Este repositório contém o **Dicionário de Dados Conceitual (Preliminar)** do projeto Palazio del Chef, desenvolvido como parte da disciplina de Banco de Dados do curso de Análise e Desenvolvimento de Sistemas.
 
-## 📁 Arquivos
+O documento tem como objetivo organizar e descrever os atributos das entidades identificadas no contexto do estabelecimento, facilitando a compreensão das informações que compõem o modelo de dados.
 
-### 📊 Dicionario_de_Dados.xlsx
+O dicionário foi estruturado conforme o modelo solicitado na disciplina, utilizando três campos principais: **Atributo, Descrição e Regra de negócio associada**.
 
-Arquivo em formato Excel contendo o Dicionário de Dados em sua versão editável.
+---
 
-O arquivo está organizado por entidades, permitindo a consulta individual das informações de cada uma delas.
+## 🎯 Objetivo do dicionário
 
-### 📄 Dicionario_de_Dados_Completo.pdf
+O Dicionário de Dados Conceitual tem a finalidade de documentar os atributos que compõem cada entidade do projeto, explicando o significado de cada informação e as regras que orientam sua utilização.
 
-Versão em PDF do Dicionário de Dados, destinada principalmente à consulta e visualização da documentação.
+Essa documentação contribui para:
 
-O PDF reúne todas as entidades em um único arquivo, facilitando a leitura sem a necessidade de utilizar um editor de planilhas.
+- Padronizar a descrição dos dados do projeto.
+- Facilitar a compreensão das entidades e de seus atributos.
+- Registrar regras de negócio relacionadas aos dados.
+- Reduzir ambiguidades na interpretação das informações.
+- Apoiar as próximas etapas da modelagem do banco de dados.
 
-### 📄 Dicionario_de_Dados.HTML
+---
 
-Um Dicionário de Dados interativo em formato web. 
+## 🗂️ Organização do documento
 
-Ele documenta todas as regras de negócio aplicadas ao banco de dados em formato HTML para melhor compreensão e facilidade para visualizar pelo navegador
+O dicionário está organizado por entidades. Cada entidade possui uma tabela com três colunas, seguindo o padrão definido para a atividade acadêmica.
 
-## 🗂️ Entidades documentadas
+### 1. Atributo
 
-O Dicionário de Dados contempla as seguintes entidades:
+Identifica o nome do atributo pertencente à entidade.
 
-- **Atendente** — informações relacionadas aos atendentes responsáveis pelo registro dos pedidos.
-- **Mesa** — identificação das mesas utilizadas no estabelecimento.
-- **Pedido** — informações referentes aos pedidos realizados.
-- **Item_pedido** — itens que compõem cada pedido, incluindo quantidade e valor unitário.
-- **Produto** — informações dos produtos comercializados pelo estabelecimento.
-- **Setor** — setores responsáveis pela preparação ou atendimento dos produtos.
+Cada atributo representa uma informação relevante para o funcionamento do sistema. Sua nomenclatura deve ser clara e padronizada, facilitando a identificação e a compreensão dos dados.
 
-## 📋 Estrutura do Dicionário
+### 2. Descrição
 
-Cada entidade apresenta seus atributos organizados nas seguintes informações:
+Apresenta o significado do atributo e explica qual informação ele representa dentro do contexto do Palazio del Chef.
 
-| Campo | Descrição |
+O objetivo é permitir que qualquer pessoa que consulte o dicionário compreenda a finalidade do atributo sem depender de interpretações ou conhecimentos prévios sobre sua utilização.
+
+### 3. Regra de negócio associada
+
+Registra as condições e restrições que devem ser respeitadas na utilização do atributo, quando aplicáveis.
+
+Essas regras podem estabelecer, por exemplo:
+
+- Obrigatoriedade de preenchimento.
+- Unicidade de identificadores.
+- Valores ou categorias permitidos.
+- Restrições relacionadas ao funcionamento do estabelecimento.
+- Condições que devem ser respeitadas para manter a consistência dos dados.
+
+As regras documentadas devem ser coerentes com as necessidades e os processos definidos para o projeto.
+
+---
+
+## 🏷️ Entidades documentadas
+
+O documento contempla as seguintes entidades:
+
+| Entidade | Finalidade |
 |---|---|
-| **Variável** | Atributo representado no banco de dados. |
-| **Nome da Variável** | Nome utilizado para representar o atributo no sistema. |
-| **Tipo de Variável** | Tipo de dado utilizado pelo atributo. |
-| **Descrição** | Explicação sobre a finalidade e o significado do atributo. |
-| **Valores Permitidos** | Valores ou categorias que podem ser armazenados. |
-| **Possui Valores Nulos?** | Indica se o atributo pode permanecer sem valor. |
-| **Anotações** | Informações complementares sobre o atributo, como chaves primárias, chaves estrangeiras e outras regras. |
+| **Atendente** | Representa os atendentes envolvidos no registro e acompanhamento dos pedidos. |
+| **Mesa** | Representa as mesas utilizadas no atendimento do estabelecimento. |
+| **Pedido** | Registra os pedidos realizados, incluindo informações sobre data, mesa, atendente responsável e pagamento. |
+| **Produto** | Representa os produtos disponibilizados pelo estabelecimento, incluindo informações como nome, preço, estoque e setor responsável. |
+| **Setor** | Representa os setores responsáveis pela preparação ou pelo atendimento dos produtos, como Bar e Cozinha. |
 
-## 🔗 Relação com o modelo de dados
+Cada entidade possui seus atributos documentados individualmente, acompanhados de suas respectivas descrições e regras de negócio.
 
-O Dicionário de Dados complementa o **Modelo Entidade-Relacionamento (DER)** e o modelo conceitual do projeto, detalhando os atributos que compõem cada entidade e suas respectivas características.
+---
 
-A documentação foi desenvolvida de acordo com as regras e necessidades identificadas para o sistema do restaurante/bar **Palazio del Chef**.
+## 📄 Arquivo disponível
 
-[🔝 Voltar ao início](https://github.com/thiago-rodrigues-S6/projeto-banco-de-dados-ads)
+O dicionário está disponível em formato HTML, permitindo a visualização das tabelas e a consulta das informações por entidade.
+
+**Arquivo principal:** `dicionario_dados_palazio.html`
+
+O documento apresenta as informações de maneira organizada, facilitando a leitura e a consulta dos atributos e das regras de negócio associadas.
+
+---
+
+## 📐 Padronização e organização
+
+Para manter a consistência da documentação, o dicionário utiliza o mesmo formato de tabela para todas as entidades.
+
+A padronização busca garantir:
+
+- Uniformidade na apresentação das informações.
+- Clareza na nomenclatura dos atributos.
+- Descrições objetivas e contextualizadas.
+- Regras de negócio compatíveis com o funcionamento proposto para o estabelecimento.
+
+Essa organização facilita futuras revisões e contribui para a evolução da modelagem de dados.
+
+---
+
+## 🔒 Privacidade e responsabilidade
+
+A documentação prioriza a descrição conceitual dos dados necessários ao funcionamento do sistema.
+
+Eventuais exemplos utilizados para ilustrar os atributos devem ser fictícios e coerentes com as operações do estabelecimento, sem expor informações pessoais reais de clientes, atendentes ou outras pessoas.
+
+---
+
+## 🚀 Considerações finais
+
+O Dicionário de Dados Conceitual do Palazio del Chef constitui uma documentação de apoio à modelagem do banco de dados, reunindo o significado dos atributos e as regras de negócio relacionadas às entidades identificadas.
+
+Sua estrutura busca tornar as informações compreensíveis, organizadas e padronizadas, contribuindo para a comunicação entre os integrantes do grupo e para o desenvolvimento das próximas etapas do projeto.
+
+---
+
+**Projeto:** Palazio del Chef  
+**Documento:** Dicionário de Dados Conceitual (Preliminar)  
+**Formato:** HTML  
+**Curso:** Análise e Desenvolvimento de Sistemas
