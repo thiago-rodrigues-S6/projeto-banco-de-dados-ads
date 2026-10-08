@@ -92,33 +92,21 @@
     <table>
         <thead>
             <tr>
-                <th>Variável</th>
-                <th>Nome da variável</th>
-                <th>Tipo de variável</th>
+                <th>Atributo</th>
                 <th>Descrição</th>
-                <th>Valores permitidos</th>
-                <th>Nulos?</th>
-                <th>Anotações</th>
+                <th>Regra de negócio associada</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Id_Atendente</td>
-                <td>Id</td>
-                <td>Numérico (<span class="pk">PK</span>)</td>
-                <td>Número que identifica cada atendente no sistema.</td>
-                <td>001-999</td>
-                <td class="null-no">Não</td>
-                <td>O identificador deve ser registrado de forma única para cada atendente (ex: matrícula ou crachá).</td>
+                <td>id_atendente</td>
+                <td>Identifica de forma única para cada atendente cadastrado no sistema.</td>
+                <td>Deve ser único e obrigatório para cada atendente.</td>
             </tr>
             <tr>
-                <td>Nome_Atendente</td>
-                <td>Nome</td>
-                <td>Varchar</td>
+                <td>nome_atendente</td>
                 <td>Nome utilizado para identificar o atendente cadastrado no sistema.</td>
-                <td>Texto</td>
-                <td class="null-no">Não</td>
-                <td></td>
+                <td>Deve ser obrigatório para o cadastro do atendente.</td>
             </tr>
         </tbody>
     </table>
@@ -128,24 +116,16 @@
     <table>
         <thead>
             <tr>
-                <th>Variável</th>
-                <th>Nome da variável</th>
-                <th>Tipo de variável</th>
+                <th>atributo</th>
                 <th>Descrição</th>
-                <th>Valores permitidos</th>
-                <th>Nulos?</th>
-                <th>Anotações</th>
+                <th>Regra de negócio associada</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Numero_mesa</td>
-                <td>Nº mesa</td>
-                <td>Numérico (<span class="pk">PK</span>)</td>
+                <td>numero_mesa</td>
                 <td>Número que identifica cada mesa no estabelecimento.</td>
-                <td>01-20</td>
-                <td class="null-no">Não</td>
-                <td>O número da mesa é utilizado pelo atendente para identificar a mesa associada ao atendimento e ao pedido.</td>
+                <td>Deve ser único, obrigatório e corresponder a uma mesa existente no estabelecimento.</td>
             </tr>
         </tbody>
     </table>
@@ -155,116 +135,39 @@
     <table>
         <thead>
             <tr>
-                <th>Variável</th>
-                <th>Nome da variável</th>
-                <th>Tipo de variável</th>
+                <th>Atributo</th>
                 <th>Descrição</th>
-                <th>Valores permitidos</th>
-                <th>Nulos?</th>
-                <th>Anotações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Numero_pedido</td>
-                <td>Numero_pedido</td>
-                <td>Numérico (<span class="pk">PK</span>)</td>
-                <td>Número que identifica exclusivamente cada pedido no sistema.</td>
-                <td>001-999</td>
-                <td class="null-no">Não</td>
-                <td>Identificador gerado automaticamente pelo sistema em ordem numérica crescente e não reutilizado.</td>
-            </tr>
-            <tr>
-                <td>Data_pedido</td>
-                <td>Data</td>
-                <td>Data/horas</td>
-                <td>Marca o dia e também as horas que o pedido foi realizado.</td>
-                <td>DD/MM/AAAA HH:MM</td>
-                <td class="null-no">Não</td>
-                <td>Caso nenhuma data seja informada, o campo será preenchido pela data e hora atuais do sistema.</td>
-            </tr>
-            <tr>
-                <td>Forma_pagamento</td>
-                <td>Pagamento</td>
-                <td>Categórico</td>
-                <td>Forma de pagamento utilizada para quitar o pedido.</td>
-                <td>1 = Dinheiro; 2 = Crédito; 3 = Débito; 4 = Pix</td>
-                <td class="null-yes">Sim</td>
-                <td>A forma de pagamento é registrada no momento da quitação do pedido. (Permite nulo enquanto o pedido está aberto).</td>
-            </tr>
-            <tr>
-                <td>id_atendente</td>
-                <td>id</td>
-                <td>Numérico (<span class="fk">FK</span>)</td>
-                <td>Identificador do atendente responsável pelo registro do pedido.</td>
-                <td>001-999</td>
-                <td class="null-no">Não</td>
-                <td>Chave estrangeira que referencia o identificador do atendente na entidade Atendente.</td>
-            </tr>
-            <tr>
-                <td>numero_mesa</td>
-                <td>numero_mesa</td>
-                <td>Numérico (<span class="fk">FK</span>)</td>
-                <td>Número da mesa associada ao pedido.</td>
-                <td>01-20</td>
-                <td class="null-no">Não</td>
-                <td>Chave estrangeira que referencia o número da mesa na entidade Mesa.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- TABELA ITEM_PEDIDO -->
-    <h2>ITEM_PEDIDO</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Variável</th>
-                <th>Nome da variável</th>
-                <th>Tipo de variável</th>
-                <th>Descrição</th>
-                <th>Valores permitidos</th>
-                <th>Nulos?</th>
-                <th>Anotações</th>
+                <th>Regra de negócio associada</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>numero_pedido</td>
-                <td>número-pedido</td>
-                <td>Numérico (<span class="pk">PK</span>, <span class="fk">FK</span>)</td>
-                <td>Número que identifica o pedido ao qual o item está associado.</td>
-                <td>001-999</td>
-                <td class="null-no">Não</td>
-                <td>Parte da chave primária composta e chave estrangeira, referencia o número do pedido na entidade Pedido.</td>
+                <td>Número que identifica exclusivamente cada pedido no sistema.</td>
+                <td>Deve ser único e obrigatório. O número é gerado pelo sistema e não deve ser reutilizado.</td>
             </tr>
             <tr>
-                <td>Codigo_produto</td>
-                <td>Código-produto</td>
-                <td>Numérico (<span class="pk">PK</span>, <span class="fk">FK</span>)</td>
-                <td>Código numérico que identifica individualmente cada produto cadastrado.</td>
-                <td>001-999</td>
-                <td class="null-no">Não</td>
-                <td>Parte da chave primária composta e chave estrangeira, referencia o código do produto na entidade Produto.</td>
+                <td>data_pedido</td>
+                <td>Registra a data e o horário em que o pedido foi realizado.</td>
+                <td>Deve ser preenchida automaticamente pelo sistema no momento do registro do pedido.</td>
             </tr>
             <tr>
-                <td>qt_produto</td>
-                <td>quantidade de produto</td>
-                <td>Numérico</td>
-                <td>Quantidade de unidades do produto incluídas no pedido.</td>
-                <td>01-99</td>
-                <td class="null-no">Não</td>
-                <td></td>
+                <td>forma_pagamento</td>
+                <td>Forma utilizada para realizar o pagamento do pedido.</td>
+                <td>Pode ser dinheiro, crédito, débito ou pix. Pode permanecer sem preenchimento enquanto o pedido estiver aberto e deve ser informada quando ele for quitado. </td>
             </tr>
             <tr>
-                <td>preco_unitário</td>
-                <td>Valor de cada produto</td>
-                <td>Decimal</td>
-                <td>Preço de uma unidade do produto no momento em que o item foi registrado no pedido.</td>
-                <td>R$ 1,00 - 10.000</td>
-                <td class="null-no">Não</td>
-                <td>Armazena o preço praticado no momento do pedido, permitindo preservar o valor cobrado mesmo após alterações no preço base.</td>
+                <td>id_atendente</td>
+                <td>Identifica o atendente responsável pelo registro do pedido.</td>
+                <td>É obrigatório e deve corresponder a um atendente cadastrado.</td>
+            </tr>
+            <tr>
+                <td>numero_mesa</td>
+                <td>Identifica a mesa associada ao pedido. </td>
+                <td>É obrigatório e deve corresponder a uma mesa cadastrada no estabelecimento.</td>
             </tr>
         </tbody>
+    
     </table>
 
     <!-- TABELA PRODUTO -->
@@ -272,60 +175,36 @@
     <table>
         <thead>
             <tr>
-                <th>Variável</th>
-                <th>Nome da variável</th>
-                <th>Tipo de variável</th>
+                <th>Atributo</th>
                 <th>Descrição</th>
-                <th>Valores permitidos</th>
-                <th>Nulos?</th>
-                <th>Anotações</th>
+                <th>Regra de negócio associada</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Código_produto</td>
-                <td>Código do produto</td>
-                <td>Numérico (<span class="pk">PK</span>)</td>
-                <td>Código numérico que identifica exclusivamente cada produto cadastrado no sistema.</td>
-                <td>001-999</td>
-                <td class="null-no">Não</td>
-                <td></td>
+                <td>código_produto</td>
+                <td>Código que identifica exclusivamente cada produto cadastrado no sistema.</td>
+                <td>Deve ser único e obrigatório para cada produto.</td>
             </tr>
             <tr>
-                <td>Nome_produto</td>
-                <td>Nome do produto</td>
-                <td>Texto</td>
+                <td>nome_produto</td>
                 <td>Nome utilizado para identificar o produto cadastrado no sistema.</td>
-                <td>Texto</td>
-                <td class="null-no">Não</td>
-                <td></td>
+                <td>O preenchimento é obrigatório.</td>
             </tr>
             <tr>
                 <td>preco_atual</td>
-                <td>Valor do produto</td>
-                <td>Decimal</td>
-                <td>O valor que cada produto possui.</td>
-                <td>R$ 1,00 - 10.000</td>
-                <td class="null-no">Não</td>
-                <td></td>
+                <td>Valor monetário atual do produto.</td>
+                <td>Deve ser informado e não pode ser negativo.</td>
             </tr>
             <tr>
-                <td>Qt Estoque</td>
-                <td>Quantidade no estoque</td>
-                <td>Numérico</td>
-                <td>Mostra quantos daquele produto ainda tem no estoque.</td>
-                <td>01-200</td>
-                <td class="null-no">Não</td>
-                <td>Valor padrão definido como 0 quando o produto é cadastrado sem estoque disponível.</td>
+                <td>qt_estoque</td>
+                <td>Quantidade disponível do produto em estoque.</td>
+                <td>Deve ser um número inteiro igual ou superior a zero. Quando um produto for cadastrado sem estoque disponível, a quantidade será zero.</td>
             </tr>
             <tr>
-                <td>Nmr_setor</td>
-                <td>Número do setor</td>
-                <td>Numérico (<span class="fk">FK</span>)</td>
-                <td>Número que identifica o setor responsável pela preparação ou atendimento do produto.</td>
-                <td>01-02</td>
-                <td class="null-no">Não</td>
-                <td>Chave estrangeira que referencia o número do setor na entidade Setor.</td>
+                <td>id_setor</td>
+                <td>Identificador do setor responsável pela preparação ou atendimento do produto.</td>
+                <td>Deve corresponder a um setor cadastrado, como Bar ou Cozinha.</td>
             </tr>
         </tbody>
     </table>
@@ -335,39 +214,27 @@
     <table>
         <thead>
             <tr>
-                <th>Variável</th>
-                <th>Nome da variável</th>
-                <th>Tipo de variável</th>
+                <th>Atributo</th>
                 <th>Descrição</th>
-                <th>Valores permitidos</th>
-                <th>Nulos?</th>
-                <th>Anotações</th>
+                <th>Regra de negócio associada</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Id Setor</td>
-                <td>identificador de setor</td>
-                <td>Numérico (<span class="pk">PK</span>)</td>
+                <td>id_Setor</td>
                 <td>Número que identifica cada setor dentro do estabelecimento.</td>
-                <td>01-02</td>
-                <td class="null-no">Não</td>
-                <td>Cada setor possui um número único para ser identificado.</td>
+                <td>Cada setor deve possuir um identificador único e obrigatório.</td>
             </tr>
             <tr>
-                <td>Nome_setor</td>
-                <td>Nome do setor</td>
-                <td>Texto</td>
-                <td>Nome do setor responsável pela preparação ou atendimento do produto.</td>
-                <td>Bar; Cozinha</td>
-                <td class="null-no">Não</td>
-                <td></td>
+                <td>nome_setor</td>
+                <td>Nome do setor responsável pela preparação ou atendimento dos produtos.</td>
+                <td>Os setores cadastrados no projetoa são Bar e Cozinha. Cada setor deve possuir um nome obrigatório.</td>
             </tr>
         </tbody>
     </table>
 
     <footer>
-        <p>Gerado pelo seu DBA Virtual • Modelo Relacional - Palazio del Chef</p>
+        <p> • Modelo Relacional - Palazio del Chef</p>
     </footer>
 
 </body>
