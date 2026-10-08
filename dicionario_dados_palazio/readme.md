@@ -60,13 +60,13 @@ As regras documentadas devem ser coerentes com as necessidades e os processos de
 
 O documento contempla as seguintes entidades:
 
-| Entidade | Finalidade |
-|---|---|
-| **Atendente** | Representa os atendentes envolvidos no registro e acompanhamento dos pedidos. |
-| **Mesa** | Representa as mesas utilizadas no atendimento do estabelecimento. |
-| **Pedido** | Registra os pedidos realizados, incluindo informações sobre data, mesa, atendente responsável e pagamento. |
-| **Produto** | Representa os produtos disponibilizados pelo estabelecimento, incluindo informações como nome, preço, estoque e setor responsável. |
-| **Setor** | Representa os setores responsáveis pela preparação ou pelo atendimento dos produtos, como Bar e Cozinha. |
+| Entidade | Relaciona-se com | Cardinalidade |
+|---|---|---|
+| **Atendente** | Pedido | 1:N — Um atendente pode registrar vários pedidos, mas cada pedido é associado a um único atendente (**N:1 na visão de Pedido).**
+| **Mesa** | Pedido | 1:N — Uma mesa pode estar associada a vários pedidos ao longo do tempo, mas cada pedido é associado a uma única nesa(**N:1 na visão de Pedido).**
+| **Pedido** | Atendente e Mesa |  N:1 — Cada pedido está associado a um único atendente e a uma única mesa. Um atendente e uma mesa podem estar associados a vários pedidos. 
+| **Produto** | Setor | N:1 — Vários produtos podem pertencer ao mesmo setor, mas cada produto está associado a um único setor: (**1:N na visão de Setor).**
+| **Setor** | Produto | 1:N — Um setor pode ser responsável por vários produtos, enquanto cada produto pertence a um único setor (**N:1 na visão de Produto).**
 
 Cada entidade possui seus atributos documentados individualmente, acompanhados de suas respectivas descrições e regras de negócio.
 
