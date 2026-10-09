@@ -56,7 +56,9 @@ As regras documentadas devem ser coerentes com as necessidades e os processos de
 
 ---
 
-## 🏷️ Entidades documentadas
+## FLUXO DE DADOS (DFD)
+
+### 1. Entidades documentadas 🏷️
 
 O documento contempla as seguintes entidades:
 
@@ -72,11 +74,10 @@ Cada entidade possui seus atributos documentados individualmente, acompanhados d
 
 ---
 
-## Legenda e convenções do banco de dados
+### 2. Legenda e convenções do banco de dados
 
 Esta seção apresenta as siglas, abreviações e convenções utilizadas na documentação do banco de dados do **Palazio del Chef**, facilitando a compreensão das entidades, dos atributos e de suas respectivas regras.
 
-### 1. Chaves e relacionamentos
 
 | Sigla           | Termo em inglês       | Significado em português | Descrição                                                                                                          |
 | --------------- | --------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------ |
@@ -84,7 +85,7 @@ Esta seção apresenta as siglas, abreviações e convenções utilizadas na doc
 | **FK**          | Foreign Key           | Chave estrangeira        | Atributo que referencia uma chave de outra tabela, permitindo estabelecer relacionamentos entre entidades.         |
 | **PK composta** | Composite Primary Key | Chave primária composta  | Chave primária formada por dois ou mais atributos, cuja combinação identifica exclusivamente um registro.          |
 
-### 2. Tipos de dados
+### Tipos de dados
 
 | Termo              | Significado                                    | Descrição                                                                                                                   |
 | ------------------ | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
@@ -107,6 +108,58 @@ Esta seção apresenta as siglas, abreviações e convenções utilizadas na doc
 
 **Observação:** esta legenda documenta as convenções adotadas no projeto. A utilização efetiva de tipos, restrições e recursos como `AUTO_INCREMENT` dependerá da implementação do banco de dados.
 
+
+---
+
+### 4????
+
+### Entidade: ATENDENTE
+
+| Atributo            | Tipo    | Obrigatório      | Significado e relevância                                                                                                  |
+| ------------------- | ------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `id_atendente`      | INT (PK)| Sim (`NOT NULL`) | Identificador único de cada atendente. É a chave primária (PK) e permite distinguir os atendentes cadastrados no sistema. |
+| `nome_atendente`    | VARCHAR | Sim (`NOT NULL`) | Armazena o nome do atendente. Permite identificar qual atendente está associado a um pedido.                              |
+
+--- 
+
+### Entidade: MESA
+
+| Atributo           | Tipo | Obrigatório      | Significado e relevância                                                                                                                        |
+| ------------------ | ---- | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `numero_mesa`  | INT(PK)  | Sim (`NOT NULL`) | Número que identifica exclusivamente cada mesa do estabelecimento. É a chave primária (PK) e permite associar os pedidos à mesa correspondente. |
+
+---
+
+### Entidade: PEDIDO
+
+| Atributo             | Tipo        | Obrigatório                           | Significado e relevância                                                                                                                            |
+| -------------------- | ----------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `numero_pedido`  | INT (PK)        | Sim (`NOT NULL`)                      | Identificador único de cada pedido. É a chave primária (PK) e permite distinguir os pedidos registrados no sistema.                                 |
+| `data_pedido`        | DATETIME    | Sim (`NOT NULL`)                      | Registra a data e o horário em que o pedido foi realizado. Pode utilizar a data e a hora atuais como valor padrão.                                  |
+| `forma_pagamento`    | VARCHAR(20) | Não, enquanto o pedido estiver aberto | Armazena a forma de pagamento utilizada, como dinheiro, crédito, débito ou Pix. Pode permanecer vazia enquanto o pagamento não tiver sido definido. |
+| `id_atendente`   | INT (FK)         | Sim (`NOT NULL`)                      | Identifica o atendente responsável pelo pedido. É uma chave estrangeira (FK) relacionada ao atributo `id_atendente` da entidade ATENDENTE.          |
+| `numero_mesa`    | INT (FK)        | Sim (`NOT NULL`)                      | Identifica a mesa associada ao pedido. É uma chave estrangeira (FK) relacionada ao atributo `numero_mesa` da entidade MESA.                         |
+
+---
+
+### Entidade: PRODUTO
+
+| Atributo              | Tipo    | Obrigatório      | Significado e relevância                                                                                                   |
+| --------------------- | ------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `codigo_produto`      | INT (PK)| Sim (`NOT NULL`) | Identificador único de cada produto cadastrado. É a chave primária (PK) e permite distinguir um produto dos demais.        |
+| `nome_produto`        | VARCHAR | Sim (`NOT NULL`) | Armazena o nome do produto, permitindo identificá-lo nos pedidos e no cadastro do estabelecimento.                         |
+| `preco_atual`         | DECIMAL | Sim (`NOT NULL`) | Armazena o preço atual de venda do produto, utilizado como referência para calcular o valor dos pedidos.                   |
+| `qt_estoque`          | INT     | Sim (`NOT NULL`) | Registra a quantidade disponível do produto em estoque. Pode iniciar com valor `0` quando não houver unidades disponíveis. |
+| `id_setor`            | INT (FK)| Sim (`NOT NULL`) | Identifica o setor responsável pelo produto, relacionando-o à entidade SETOR por meio de uma chave estrangeira (FK).       |
+
+--- 
+
+### Entidade: SETOR
+
+| Atributo        | Tipo    | Obrigatório      | Significado e relevância                                                                                                                                                                              |
+| --------------- | ------- | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id_setor`      | INT (PK)| Sim (`NOT NULL`) | Identificador único de cada setor do estabelecimento. É a chave primária (PK) e permite distinguir os setores cadastrados no sistema.                                                                 |
+| `nome_setor`    | VARCHAR | Sim (`NOT NULL`) | Armazena o nome do setor responsável pelo preparo ou atendimento dos produtos. No projeto, os setores definidos são Bar e Cozinha. Permite identificar para qual setor cada produto está direcionado. |
 
 ---
 
