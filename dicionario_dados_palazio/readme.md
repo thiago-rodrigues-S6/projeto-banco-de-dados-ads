@@ -99,6 +99,7 @@ Esta seção apresenta as siglas, abreviações e convenções utilizadas na doc
 | **AUTO_INCREMENT** | Incremento automático                          | Recurso que gera automaticamente valores numéricos sequenciais para um atributo, conforme a configuração do banco de dados. |
 | **NULL**           | Valor ausente ou desconhecido                  | Indica que não há um valor registrado para determinado atributo. Não é o mesmo que zero ou texto vazio.                     |
 | **NOT NULL**       | Não nulo                                       | Restrição que impede que o atributo receba um valor nulo.                                                                   |
+---
 
 ### 3. Convenções de nomenclatura
 
@@ -113,14 +114,41 @@ Esta seção apresenta as siglas, abreviações e convenções utilizadas na doc
 
 ---
 
-### 4. Estrutura técnica dos atributos
+### 4. Expressão formal do modelo de dados
+
+Esta seção apresenta a representação formal preliminar do modelo de dados do sistema Palazio del Chef, identificando as entidades, seus atributos, as chaves primárias (PK), as chaves estrangeiras (FK) e os relacionamentos entre as entidades.
+
+### 4.1. Representação das entidades
+
+- **ATENDENTE** (`id_atendente` PK, `nome_atendente`)
+- **MESA** (`numero_mesa` PK)
+- **PEDIDO** (`numero_pedido` PK, `data_pedido`, `forma_pagamento`, `id_atendente` FK, `numero_mesa` FK)
+- **PRODUTO** (`codigo_produto` PK, `nome_produto`, `preco_atual`, `qt_estoque`, `id_setor` FK)
+- **SETOR** (`id_setor` PK, `nome_setor`)
+
+### 4.2. Representação dos relacionamentos
+
+- **ATENDENTE — PEDIDO:** um atendente pode registrar vários pedidos, enquanto cada pedido é associado a um único atendente (1:N).
+- **MESA — PEDIDO:** uma mesa pode estar associada a vários pedidos ao longo do tempo, enquanto cada pedido é associado a uma única mesa (1:N).
+- **SETOR — PRODUTO:** um setor pode estar associado a vários produtos, enquanto cada produto é associado a um único setor (1:N).
+
+### 4.3. Restrições gerais
+
+- Cada entidade possui uma chave primária destinada a identificar unicamente seus registros.
+- As chaves estrangeiras representam os vínculos entre as entidades relacionadas.
+- Os relacionamentos devem respeitar as cardinalidades definidas no modelo conceitual.
+- A obrigatoriedade e os valores permitidos para cada atributo são detalhados no dicionário de dados.
+
+---
+
+### 5. Estrutura técnica dos atributos
 
 ### Entidade: ATENDENTE
 
 | Atributo             | Tipo         | Obrigatório      | Significado e relevância                                                                                                  |
 | -------------------  | -------      | ---------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `id_atendente` (PK)  | INT          | Sim (`NOT NULL`) | Identificador único de cada atendente. É a chave primária (PK) e permite distinguir os atendentes cadastrados no sistema. |
-| `nome_atendente`(PK) | VARCHAR(100) | Sim (`NOT NULL`) | Armazena o nome do atendente. Permite identificar qual atendente está associado a um pedido.                              |
+| `nome_atendente`     | VARCHAR(100) | Sim (`NOT NULL`) | Armazena o nome do atendente. Permite identificar qual atendente está associado a um pedido.                              |
 
 --- 
 
@@ -205,8 +233,3 @@ O Dicionário de Dados Conceitual do Palazio del Chef constitui uma documentaç�
 Sua estrutura busca tornar as informações compreensíveis, organizadas e padronizadas, contribuindo para a comunicação entre os integrantes do grupo e para o desenvolvimento das próximas etapas do projeto.
 
 ---
-
-**Projeto:** Palazio del Chef  
-**Documento:** Dicionário de Dados Conceitual (Preliminar)  
-**Formato:** HTML  
-**Curso:** Análise e Desenvolvimento de Sistemas
