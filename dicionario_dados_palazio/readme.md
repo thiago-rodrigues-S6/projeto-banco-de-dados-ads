@@ -117,10 +117,10 @@ Esta seção apresenta as siglas, abreviações e convenções utilizadas na doc
 
 ### Entidade: ATENDENTE
 
-| Atributo            | Tipo    | Obrigatório      | Significado e relevância                                                                                                  |
-| ------------------- | ------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `id_atendente`      | INT (PK)| Sim (`NOT NULL`) | Identificador único de cada atendente. É a chave primária (PK) e permite distinguir os atendentes cadastrados no sistema. |
-| `nome_atendente`    | VARCHAR | Sim (`NOT NULL`) | Armazena o nome do atendente. Permite identificar qual atendente está associado a um pedido.                              |
+| Atributo             | Tipo         | Obrigatório      | Significado e relevância                                                                                                  |
+| -------------------  | -------      | ---------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `id_atendente` (PK)  | INT          | Sim (`NOT NULL`) | Identificador único de cada atendente. É a chave primária (PK) e permite distinguir os atendentes cadastrados no sistema. |
+| `nome_atendente`(PK) | VARCHAR(100) | Sim (`NOT NULL`) | Armazena o nome do atendente. Permite identificar qual atendente está associado a um pedido.                              |
 
 --- 
 
@@ -128,7 +128,7 @@ Esta seção apresenta as siglas, abreviações e convenções utilizadas na doc
 
 | Atributo           | Tipo | Obrigatório      | Significado e relevância                                                                                                                        |
 | ------------------ | ---- | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `numero_mesa`  | INT(PK)  | Sim (`NOT NULL`) | Número que identifica exclusivamente cada mesa do estabelecimento. É a chave primária (PK) e permite associar os pedidos à mesa correspondente. |
+| `numero_mesa`(PK)  | INT  | Sim (`NOT NULL`) | Número que identifica exclusivamente cada mesa do estabelecimento. É a chave primária (PK) e permite associar os pedidos à mesa correspondente. |
 
 ---
 
@@ -136,11 +136,11 @@ Esta seção apresenta as siglas, abreviações e convenções utilizadas na doc
 
 | Atributo             | Tipo        | Obrigatório                           | Significado e relevância                                                                                                                            |
 | -------------------- | ----------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `numero_pedido`  | INT (PK)        | Sim (`NOT NULL`)                      | Identificador único de cada pedido. É a chave primária (PK) e permite distinguir os pedidos registrados no sistema.                                 |
+| `numero_pedido`(PK)  | INT         | Sim (`NOT NULL`)                      | Identificador único de cada pedido. É a chave primária (PK) e permite distinguir os pedidos registrados no sistema.                                 |
 | `data_pedido`        | DATETIME    | Sim (`NOT NULL`)                      | Registra a data e o horário em que o pedido foi realizado. Pode utilizar a data e a hora atuais como valor padrão.                                  |
-| `forma_pagamento`    | VARCHAR     | Não, enquanto o pedido estiver aberto (Null permitido)| Armazena a forma de pagamento utilizada como dinheiro, crédito, débito ou pix. Deve ser preenchido quando o pagamento for definido. |
-| `id_atendente`   | INT (FK)         | Sim (`NOT NULL`)                      | Identifica o atendente responsável pelo pedido. É uma chave estrangeira (FK) relacionada ao atributo `id_atendente` da entidade ATENDENTE.          |
-| `numero_mesa`    | INT (FK)        | Sim (`NOT NULL`)                      | Identifica a mesa associada ao pedido. É uma chave estrangeira (FK) relacionada ao atributo `numero_mesa` da entidade MESA.                         |
+| `forma_pagamento`    | VARCHAR(20)     | Não, enquanto o pedido estiver aberto (Null permitido)| Armazena a forma de pagamento utilizada como dinheiro, crédito, débito ou pix. Deve ser preenchido quando o pagamento for definido. |
+| `id_atendente`(FK)  | INT          | Sim (`NOT NULL`)                      | Identifica o atendente responsável pelo pedido. É uma chave estrangeira (FK) relacionada ao atributo `id_atendente` da entidade ATENDENTE.          |
+| `numero_mesa`(FK)    | INT         | Sim (`NOT NULL`)                      | Identifica a mesa associada ao pedido. É uma chave estrangeira (FK) relacionada ao atributo `numero_mesa` da entidade MESA.                         |
 
 ---
 
@@ -148,11 +148,11 @@ Esta seção apresenta as siglas, abreviações e convenções utilizadas na doc
 
 | Atributo              | Tipo    | Obrigatório      | Significado e relevância                                                                                                   |
 | --------------------- | ------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `codigo_produto`      | INT (PK)| Sim (`NOT NULL`) | Identificador único de cada produto cadastrado. É a chave primária (PK) e permite distinguir um produto dos demais.        |
-| `nome_produto`        | VARCHAR | Sim (`NOT NULL`) | Armazena o nome do produto, permitindo identificá-lo nos pedidos e no cadastro do estabelecimento.                         |
-| `preco_atual`         | DECIMAL | Sim (`NOT NULL`) | Armazena o preço atual de venda do produto, utilizado como referência para calcular o valor dos pedidos.                   |
-| `qt_estoque`          | INT     | Sim (`NOT NULL`) | Registra a quantidade disponível do produto em estoque. Pode iniciar com valor `0` quando não houver unidades disponíveis. |
-| `id_setor`            | INT (FK)| Sim (`NOT NULL`) | Identifica o setor responsável pelo produto, relacionando-o à entidade SETOR por meio de uma chave estrangeira (FK).       |
+| `codigo_produto`(PK)  | INT          | Sim (`NOT NULL`) | Identificador único de cada produto cadastrado. É a chave primária (PK) e permite distinguir um produto dos demais.        |
+| `nome_produto`        | VARCHAR(100) | Sim (`NOT NULL`) | Armazena o nome do produto, permitindo identificá-lo nos pedidos e no cadastro do estabelecimento.                         |
+| `preco_atual`         | DECIMAL(10,2)| Sim (`NOT NULL`) | Armazena o preço atual de venda do produto, utilizado como referência para calcular o valor dos pedidos.                   |
+| `qt_estoque`          | INT          | Sim (`NOT NULL`) | Registra a quantidade disponível do produto em estoque. Pode iniciar com valor `0` quando não houver unidades disponíveis. |
+| `id_setor`(FK)        | INT          | Sim (`NOT NULL`) | Identifica o setor responsável pelo produto, relacionando-o à entidade SETOR por meio de uma chave estrangeira (FK).       |
 
 --- 
 
@@ -160,8 +160,8 @@ Esta seção apresenta as siglas, abreviações e convenções utilizadas na doc
 
 | Atributo        | Tipo    | Obrigatório      | Significado e relevância                                                                                                                                                                              |
 | --------------- | ------- | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id_setor`      | INT (PK)| Sim (`NOT NULL`) | Identificador único de cada setor do estabelecimento. É a chave primária (PK) e permite distinguir os setores cadastrados no sistema.                                                                 |
-| `nome_setor`    | VARCHAR | Sim (`NOT NULL`) | Armazena o nome do setor responsável pelo preparo ou atendimento dos produtos. No projeto, os setores definidos são Bar e Cozinha. Permite identificar para qual setor cada produto está direcionado. |
+| `id_setor`(PK)  | INT         | Sim (`NOT NULL`) | Identificador único de cada setor do estabelecimento. É a chave primária (PK) e permite distinguir os setores cadastrados no sistema.                                                                 |
+| `nome_setor`    | VARCHAR(50) | Sim (`NOT NULL`) | Armazena o nome do setor responsável pelo preparo ou atendimento dos produtos. No projeto, os setores definidos são Bar e Cozinha. Permite identificar para qual setor cada produto está direcionado. |
 
 ---
 
