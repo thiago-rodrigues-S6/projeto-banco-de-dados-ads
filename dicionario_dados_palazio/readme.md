@@ -246,6 +246,23 @@ A aplicação dos índices deve respeitar as características do sistema gerenci
 
 ---
 
+## 8. Proteção de Dados e LGPD
+
+O projeto Palazio del Chef considera a importância da proteção dos dados pessoais utilizados pelo sistema, tendo como referência a Lei Geral de Proteção de Dados Pessoais (LGPD — Lei nº 13.709/2018).
+
+### Diretrizes propostas
+
+- **Finalidade:** utilizar os dados armazenados somente para finalidades definidas e compatíveis com o funcionamento do sistema.
+- **Necessidade:** armazenar apenas as informações necessárias para o registro e o acompanhamento dos pedidos.
+- **Segurança:** propor medidas para impedir que pessoas não autorizadas acessem, alterem ou divulguem informações armazenadas.
+- **Privacidade:** evitar o armazenamento desnecessário de dados pessoais de clientes e atendentes.
+- **Dados fictícios:** utilizar informações fictícias nos exemplos e documentos acadêmicos, evitando a exposição de dados reais de clientes ou funcionários.
+
+### Observação
+
+As diretrizes descritas representam cuidados previstos para o projeto. A implementação efetiva das medidas de segurança e a avaliação da conformidade com a LGPD dependem do desenvolvimento do sistema e das práticas adotadas pelo estabelecimento.
+
+
 ## 📄 Arquivo disponível
 
 O dicionário está disponível em formato HTML, permitindo a visualização das tabelas e a consulta das informações por entidade.
