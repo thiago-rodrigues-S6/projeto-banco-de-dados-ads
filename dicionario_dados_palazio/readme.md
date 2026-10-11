@@ -193,11 +193,41 @@ Esta seção apresenta a representação formal preliminar do modelo de dados do
 
 ---
 
-## 6. Índices do Banco de Dados
+## 6. Log e auditoria de pedidos
+
+O log é um registro cronológico dos acontecimentos relacionados aos pedidos. Sua finalidade é permitir o acompanhamento das ações realizadas durante o atendimento, facilitando a consulta ao histórico e a identificação de possíveis problemas.
+
+**Esta funcionalidade é uma proposta de melhoria para o sistema, não uma funcionalidade confirmada como existente no estabelecimento.**
+
+### Eventos que poderão ser registrados
+
+| Evento | Informações que poderão ser registradas |
+|---|---|
+| Criação do pedido | Número do pedido, data e horário de criação e atendente responsável. |
+| Encaminhamento do pedido | Número do pedido, setor de destino (Bar ou Cozinha) e data e horário do encaminhamento. |
+| Registro do pagamento | Número do pedido, data e horário do pagamento e forma de pagamento. |
+
+### Regras propostas
+
+- Os registros deverão seguir uma ordem cronológica.
+- Cada evento deverá estar associado ao pedido correspondente.
+- Os registros deverão conter a data e o horário do acontecimento.
+- O histórico deverá permitir consultar os eventos registrados para um pedido.
+- Os registros deverão ser protegidos contra alterações indevidas, preservando a confiabilidade do histórico.
+
+### Observações
+
+O registro desses eventos depende da implementação de uma funcionalidade específica de log. O modelo de dados atual ainda não contempla uma estrutura própria para armazenar o histórico dos acontecimentos.
+
+O registro do encaminhamento aos setores também poderá exigir ajustes no modelo, pois um pedido pode envolver tanto a Cozinha quanto o Bar.
+
+---
+
+## 7. Índices do Banco de Dados
 
 Os índices são estruturas utilizadas para otimizar a localização e a recuperação de informações no banco de dados. Sua utilização contribui para melhorar o desempenho das consultas, principalmente em atributos frequentemente utilizados em pesquisas e relacionamentos entre entidades.
 
-### 6.1. Índices definidos
+### 7.1. Índices definidos
 
 | Índice | Entidade e atributo | Finalidade |
 |---|---|---|
@@ -206,7 +236,7 @@ Os índices são estruturas utilizadas para otimizar a localização e a recuper
 | `idx_produto_nome` | PRODUTO (`nome_produto`) | Facilitar a localização de produtos por meio de seu nome. |
 | `idx_produto_id_setor` | PRODUTO (`id_setor`) | Otimizar as consultas de produtos associados a um setor, como cozinha ou bar. |
 
-### 6.2. Critérios de utilização
+### 7.2. Critérios de utilização
 
 A definição dos índices considera as principais operações de consulta relacionadas ao funcionamento do Palazio del Chef, incluindo a localização de pedidos por mesa, a identificação dos pedidos registrados por atendentes, a pesquisa de produtos e a organização dos produtos por setor.
 
