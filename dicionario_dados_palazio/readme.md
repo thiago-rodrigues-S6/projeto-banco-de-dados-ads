@@ -58,7 +58,7 @@ As regras documentadas devem ser coerentes com as necessidades e os processos de
 
 ## FLUXO DE DADOS (DFD)
 
-### 1. Entidades documentadas 🏷️
+### 1. Modelo Conceitual 🏷️
 
 O documento contempla as seguintes entidades:
 
@@ -89,7 +89,9 @@ Esta seção apresenta as siglas, abreviações e convenções utilizadas na doc
 
 | Termo              | Significado                                    | Descrição                                                                                                                   |
 | ------------------ | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| **INT**            | Integer (inteiro)                              | Armazena números inteiros, sem casas decimais.                                                                              |
+| **id_**           | Número identificador                           | Serve para identificar um número individualmente. 
+| **qt_**           | Quantidade                                     | Serve para mostrar uma quantidade de alguma coisa ou de algum item. 
+| **INT**           | Integer (inteiro)                              | Armazena números inteiros, sem casas decimais.                                                                              | 
 | **VARCHAR**        | Variable Character (texto de tamanho variável) | Armazena textos com limite de caracteres definido.                                                                          |
 | **DECIMAL**        | Número decimal                                 | Armazena valores numéricos com precisão definida, sendo adequado para valores monetários.                                   |
 | **DATE**           | Data                                           | Armazena uma data, conforme o sistema gerenciador de banco de dados utilizado.                                              |
@@ -111,7 +113,7 @@ Esta seção apresenta as siglas, abreviações e convenções utilizadas na doc
 
 ---
 
-### 4????
+### 4. Estrutura técnica dos atributos
 
 ### Entidade: ATENDENTE
 
@@ -136,7 +138,7 @@ Esta seção apresenta as siglas, abreviações e convenções utilizadas na doc
 | -------------------- | ----------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `numero_pedido`  | INT (PK)        | Sim (`NOT NULL`)                      | Identificador único de cada pedido. É a chave primária (PK) e permite distinguir os pedidos registrados no sistema.                                 |
 | `data_pedido`        | DATETIME    | Sim (`NOT NULL`)                      | Registra a data e o horário em que o pedido foi realizado. Pode utilizar a data e a hora atuais como valor padrão.                                  |
-| `forma_pagamento`    | VARCHAR(20) | Não, enquanto o pedido estiver aberto | Armazena a forma de pagamento utilizada, como dinheiro, crédito, débito ou Pix. Pode permanecer vazia enquanto o pagamento não tiver sido definido. |
+| `forma_pagamento`    | VARCHAR     | Não, enquanto o pedido estiver aberto (Null permitido)| Armazena a forma de pagamento utilizada como dinheiro, crédito, débito ou pix. Deve ser preenchido quando o pagamento for definido. |
 | `id_atendente`   | INT (FK)         | Sim (`NOT NULL`)                      | Identifica o atendente responsável pelo pedido. É uma chave estrangeira (FK) relacionada ao atributo `id_atendente` da entidade ATENDENTE.          |
 | `numero_mesa`    | INT (FK)        | Sim (`NOT NULL`)                      | Identifica a mesa associada ao pedido. É uma chave estrangeira (FK) relacionada ao atributo `numero_mesa` da entidade MESA.                         |
 
