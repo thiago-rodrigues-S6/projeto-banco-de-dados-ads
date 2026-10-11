@@ -58,14 +58,14 @@ As regras documentadas devem ser coerentes com as necessidades e os processos de
 
 ## FLUXO DE DADOS (DFD)
 
-### 1. Modelo Conceitual 🏷️
+### 1. Fluxo de dados do sistema
 
 O documento contempla as seguintes entidades:
 
 | Entidade | Relaciona-se com | Cardinalidade |
 |---|---|---|
 | **Atendente** | Pedido | 1:N — Um atendente pode registrar vários pedidos, mas cada pedido é associado a um único atendente (**N:1 na visão de Pedido).**
-| **Mesa** | Pedido | 1:N — Uma mesa pode estar associada a vários pedidos ao longo do tempo, mas cada pedido é associado a uma única nesa(**N:1 na visão de Pedido).**
+| **Mesa** | Pedido | 1:N — Uma mesa pode estar associada a vários pedidos ao longo do tempo, mas cada pedido é associado a uma única mesa(**N:1 na visão de Pedido).**
 | **Pedido** | Atendente e Mesa |  N:1 — Cada pedido está associado a um único atendente e a uma única mesa. Um atendente e uma mesa podem estar associados a vários pedidos. 
 | **Produto** | Setor | N:1 — Vários produtos podem pertencer ao mesmo setor, mas cada produto está associado a um único setor: (**1:N na visão de Setor).**
 | **Setor** | Produto | 1:N — Um setor pode ser responsável por vários produtos, enquanto cada produto pertence a um único setor (**N:1 na visão de Produto).**
@@ -74,7 +74,7 @@ Cada entidade possui seus atributos documentados individualmente, acompanhados d
 
 ---
 
-### 2. Legenda e convenções do banco de dados
+### 2. Legendas e dados.
 
 Esta seção apresenta as siglas, abreviações e convenções utilizadas na documentação do banco de dados do **Palazio del Chef**, facilitando a compreensão das entidades, dos atributos e de suas respectivas regras.
 
@@ -85,12 +85,17 @@ Esta seção apresenta as siglas, abreviações e convenções utilizadas na doc
 | **FK**          | Foreign Key           | Chave estrangeira        | Atributo que referencia uma chave de outra tabela, permitindo estabelecer relacionamentos entre entidades.         |
 | **PK composta** | Composite Primary Key | Chave primária composta  | Chave primária formada por dois ou mais atributos, cuja combinação identifica exclusivamente um registro.          |
 
-### Tipos de dados
+### Prefixos utilizados na nomenclatura
 
 | Termo              | Significado                                    | Descrição                                                                                                                   |
 | ------------------ | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | **id_**           | Número identificador                           | Serve para identificar um número individualmente. 
 | **qt_**           | Quantidade                                     | Serve para mostrar uma quantidade de alguma coisa ou de algum item. 
+
+### Tipos de dados e Restrições 
+
+| Termo              | Significado                                    | Descrição                                                                                                                   |
+| ------------------ | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | **INT**           | Integer (inteiro)                              | Armazena números inteiros, sem casas decimais.                                                                              | 
 | **VARCHAR**        | Variable Character (texto de tamanho variável) | Armazena textos com limite de caracteres definido.                                                                          |
 | **DECIMAL**        | Número decimal                                 | Armazena valores numéricos com precisão definida, sendo adequado para valores monetários.                                   |
