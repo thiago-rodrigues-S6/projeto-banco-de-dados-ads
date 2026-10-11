@@ -193,6 +193,29 @@ Esta seção apresenta a representação formal preliminar do modelo de dados do
 
 ---
 
+## 6. Índices do Banco de Dados
+
+Os índices são estruturas utilizadas para otimizar a localização e a recuperação de informações no banco de dados. Sua utilização contribui para melhorar o desempenho das consultas, principalmente em atributos frequentemente utilizados em pesquisas e relacionamentos entre entidades.
+
+### 6.1. Índices definidos
+
+| Índice | Entidade e atributo | Finalidade |
+|---|---|---|
+| `idx_pedido_numero_mesa` | PEDIDO (`numero_mesa`) | Otimizar as consultas de pedidos associados a uma mesa específica. |
+| `idx_pedido_id_atendente` | PEDIDO (`id_atendente`) | Otimizar as consultas de pedidos registrados por um determinado atendente. |
+| `idx_produto_nome` | PRODUTO (`nome_produto`) | Facilitar a localização de produtos por meio de seu nome. |
+| `idx_produto_id_setor` | PRODUTO (`id_setor`) | Otimizar as consultas de produtos associados a um setor, como cozinha ou bar. |
+
+### 6.2. Critérios de utilização
+
+A definição dos índices considera as principais operações de consulta relacionadas ao funcionamento do Palazio del Chef, incluindo a localização de pedidos por mesa, a identificação dos pedidos registrados por atendentes, a pesquisa de produtos e a organização dos produtos por setor.
+
+As chaves primárias também possuem função de identificação única dos registros e, nos sistemas gerenciadores de banco de dados mais utilizados, normalmente recebem índices automaticamente. A criação de índices adicionais deve considerar as necessidades de consulta e evitar estruturas redundantes.
+
+A aplicação dos índices deve respeitar as características do sistema gerenciador de banco de dados utilizado e a estrutura física adotada na implementação.
+
+---
+
 ## 📄 Arquivo disponível
 
 O dicionário está disponível em formato HTML, permitindo a visualização das tabelas e a consulta das informações por entidade.
