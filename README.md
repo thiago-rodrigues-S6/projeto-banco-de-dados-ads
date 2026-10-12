@@ -100,7 +100,6 @@ O modelo de banco de dados relacional é composto pelas seguintes entidades prin
 - **Atendente**
 - **Mesa**
 - **Pedido**
-- **Item_pedido**
 - **Produto**
 - **Setor**
 
@@ -141,7 +140,7 @@ A partir do modelo conceitual, será desenvolvido o modelo relacional contendo a
 - `Produto`
 - `Mesa`
 - `Setor`
-- `Historico_Produto`
+
 
 **Status:** ⏳ Em desenvolvimento
 
