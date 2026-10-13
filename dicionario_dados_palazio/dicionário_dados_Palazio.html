@@ -123,7 +123,7 @@
         </thead>
         <tbody>
             <tr>
-                <td>numero_mesa</td>
+                <td>num_mesa</td>
                 <td>Número que identifica cada mesa no estabelecimento.</td>
                 <td>Deve ser único, obrigatório e corresponder a uma mesa existente no estabelecimento.</td>
             </tr>
@@ -142,7 +142,7 @@
         </thead>
         <tbody>
             <tr>
-                <td>numero_pedido</td>
+                <td>num_pedido</td>
                 <td>Número que identifica exclusivamente cada pedido no sistema.</td>
                 <td>Deve ser único e obrigatório. O número é gerado pelo sistema e não deve ser reutilizado.</td>
             </tr>
@@ -152,17 +152,12 @@
                 <td>Deve ser preenchida automaticamente pelo sistema no momento do registro do pedido.</td>
             </tr>
             <tr>
-                <td>forma_pagamento</td>
-                <td>Forma utilizada para realizar o pagamento do pedido.</td>
-                <td>Pode ser dinheiro, crédito, débito ou pix. Pode permanecer sem preenchimento enquanto o pedido estiver aberto e deve ser informada quando ele for quitado. </td>
-            </tr>
-            <tr>
                 <td>id_atendente</td>
                 <td>Identifica o atendente responsável pelo registro do pedido.</td>
                 <td>É obrigatório e deve corresponder a um atendente cadastrado.</td>
             </tr>
             <tr>
-                <td>numero_mesa</td>
+                <td>num_mesa</td>
                 <td>Identifica a mesa associada ao pedido. </td>
                 <td>É obrigatório e deve corresponder a uma mesa cadastrada no estabelecimento.</td>
             </tr>
@@ -197,9 +192,9 @@
                 <td>Deve ser informado e não pode ser negativo.</td>
             </tr>
             <tr>
-                <td>qt_estoque</td>
-                <td>Quantidade disponível do produto em estoque.</td>
-                <td>Deve ser um número inteiro igual ou superior a zero. Quando um produto for cadastrado sem estoque disponível, a quantidade será zero.</td>
+                <td>id_estoque</td>
+                <td>Identificador do estoque onde o produto está disponível.</td>
+                <td>Deve ser um número inteiro igual ou superior a zero. para identificar o estoque de determinado produto.</td>
             </tr>
             <tr>
                 <td>id_setor</td>
@@ -221,7 +216,7 @@
         </thead>
         <tbody>
             <tr>
-                <td>id_Setor</td>
+                <td>id_setor</td>
                 <td>Número que identifica cada setor dentro do estabelecimento.</td>
                 <td>Cada setor deve possuir um identificador único e obrigatório.</td>
             </tr>
@@ -233,8 +228,76 @@
         </tbody>
     </table>
 
+        <!-- TABELA PAGAMENTO -->
+    <h2>PAGAMENTO</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Atributo</th>
+                <th>Descrição</th>
+                <th>Regra de negócio associada</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>id_pagamento</td>
+                <td>Identificador único de cada pagamento registrado no sistema.</td>
+                <td>Deve ser único e obrigatório para cada pagamento.</td>
+            </tr>
+            <tr>
+                <td>num_pedido</td>
+                <td>Identifica o pedido ao qual o pagamento está associado.</td>
+                <td>Deve ser obrigatório e corresponder a um pedido cadastrado.</td>
+            </tr>
+            <tr>
+                <td>data_pagamento</td>
+                <td>Registra a data e o horário em que o pagamento foi realizado.</td>
+                <td>Deve ser registrada para cada pagamento concluído.</td>
+            </tr>
+            <tr>
+                <td>valor_pago</td>
+                <td>Valor correspondente ao pagamento registrado.</td>
+                <td>Deve ser maior que zero. A soma dos pagamentos concluídos não deve ultrapassar o valor total devido pelo pedido.</td>
+            </tr>
+            <tr>
+                <td>forma_pagamento</td>
+                <td>Forma utilizada para realizar o pagamento registrado.</td>
+                <td>Deve corresponder a uma forma aceita pelo estabelecimento, como dinheiro, crédito, débito ou Pix.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- TABELA ESTOQUE -->
+<h2>ESTOQUE</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Atributo</th>
+            <th>Descrição</th>
+            <th>Regra de negócio associada</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>id_estoque</td>
+            <td>Identifica exclusivamente cada registro de estoque.</td>
+            <td>Deve ser único e obrigatório.</td>
+        </tr>
+        <tr>
+            <td>codigo_produto</td>
+            <td>Identifica o produto cujo estoque está sendo controlado.</td>
+            <td>Deve corresponder a um produto cadastrado. Cada produto deve possuir apenas um registro de estoque.</td>
+        </tr>
+        <tr>
+            <td>quantidade_disponivel</td>
+            <td>Indica a quantidade disponível do produto em estoque.</td>
+            <td>Deve ser um número inteiro igual ou superior a zero. Quando não houver unidades disponíveis, o valor deve ser zero.</td>
+        </tr>
+    </tbody>
+</table>
+
     <footer>
-        <p> • Modelo Relacional - Palazio del Chef</p>
+        <p> • Palazio del Chef</p>
     </footer>
 
 </body>
