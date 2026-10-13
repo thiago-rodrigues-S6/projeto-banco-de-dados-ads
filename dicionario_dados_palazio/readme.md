@@ -67,8 +67,12 @@ O documento contempla as seguintes entidades:
 | **Atendente** | Pedido | 1:N — Um atendente pode registrar vários pedidos, mas cada pedido é associado a um único atendente (**N:1 na visão de Pedido).**
 | **Mesa** | Pedido | 1:N — Uma mesa pode estar associada a vários pedidos ao longo do tempo, mas cada pedido é associado a uma única mesa(**N:1 na visão de Pedido).**
 | **Pedido** | Atendente e Mesa |  N:1 — Cada pedido está associado a um único atendente e a uma única mesa. Um atendente e uma mesa podem estar associados a vários pedidos. 
+| **Pedido** | Pagamento | 1:N — Um pedido pode ter nenhum, um ou vários pagamentos registrados. |
 | **Produto** | Setor | N:1 — Vários produtos podem pertencer ao mesmo setor, mas cada produto está associado a um único setor: (**1:N na visão de Setor).**
+| **Produto** | Estoque | 1:1 — Cada produto possui um único registro de estoque, e cada registro de estoque corresponde a um único produto. |
 | **Setor** | Produto | 1:N — Um setor pode ser responsável por vários produtos, enquanto cada produto pertence a um único setor (**N:1 na visão de Produto).**
+| **Pagamento** | Pedido | N:1 — Cada pagamento pertence a um único pedido. |
+| **Estoque** | Produto | 1:1 — Cada registro de estoque está associado a um único produto. |
 
 Cada entidade possui seus atributos documentados individualmente, acompanhados de suas respectivas descrições e regras de negócio.
 
@@ -127,15 +131,20 @@ Esta seção apresenta a representação formal preliminar do modelo de dados do
 
 - **ATENDENTE** (`id_atendente` PK, `nome_atendente`)
 - **MESA** (`numero_mesa` PK)
-- **PEDIDO** (`numero_pedido` PK, `data_pedido`, `forma_pagamento`, `id_atendente` FK, `numero_mesa` FK)
-- **PRODUTO** (`codigo_produto` PK, `nome_produto`, `preco_atual`, `qt_estoque`, `id_setor` FK)
+- **PEDIDO** (`numero_pedido` PK, `data_pedido`, `id_atendente` FK, `numero_mesa` FK)
+- **PRODUTO** (`codigo_produto` PK, `nome_produto`, `preco_atual`, `id_estoque` FK ,  `id_setor` FK)
 - **SETOR** (`id_setor` PK, `nome_setor`)
+- **PAGAMENTO** (`id_pagamento`" PK, `numero_pedido` FK, `data_pagamento`, `valor_pago`, `forma_pagamento`)
+- **ESTOQUE** (`id_estoque` PK, `codigo_produto` FK, `quantidade_disponivel`)
+
 
 ### 4.2. Representação dos relacionamentos
 
 - **ATENDENTE — PEDIDO:** um atendente pode registrar vários pedidos, enquanto cada pedido é associado a um único atendente (1:N).
 - **MESA — PEDIDO:** uma mesa pode estar associada a vários pedidos ao longo do tempo, enquanto cada pedido é associado a uma única mesa (1:N).
 - **SETOR — PRODUTO:** um setor pode estar associado a vários produtos, enquanto cada produto é associado a um único setor (1:N).
+- **PEDIDO — PAGAMENTO:** um pedido pode ter zero ou vários pagamentos, enquanto cada pagamento está associado a um único pedido (1:N).
+- **PRODUTO — ESTOQUE:** cada produto possui um único registro de estoque, e cada registro de estoque corresponde a um único produto (1:1).
 
 ### 4.3. Restrições gerais
 
@@ -198,6 +207,28 @@ Esta seção apresenta a representação formal preliminar do modelo de dados do
 
 ---
 
+### Entidade: PAGAMENTO
+
+| Atributo | Tipo | Obrigatório | Significado e relevância
+| --------------- | ------- | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id_pagamento `(PK)  | INT          | Sim (`NOT NULL`)                            | Identificador único de cada pagamento registrado no sistema.. É a chave primária (PK) e permite distinguir os pagamentos cadastrados no sistema.                                    |
+| `numero_pedido`(FK)  | INT          | Sim (`NOT NULL`)                            | Identifica o pedido ao qual o pagamento pertence. Referencia "numero_pedido" na entidade **PEDIDO.** |
+| `data_pagamento `    | DATETIME     | Sim para pagamentos concluídos (`NOT NULL`) |  Registra a data e o horário em que o pagamento foi realizado.                                       |
+| `valor_pago`         | DECIMAL(10,2)| Sim (`NOT NULL`)                            | Armazena o valor correspondente ao pagamento registrado.                                   |
+| `forma_pagamento`    | VARCHAR(20   | Sim (`NOT NULL`)                            |  Indica a forma utilizada para realizar o pagamento, como dinheiro, crédito, débito ou Pix.|
+
+---
+
+### Entidade: ESTOQUE
+
+| Atributo        | Tipo    | Obrigatório      | Significado e relevância
+| --------------- | ------- | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id_estoque`(PK)        | INT | Sim (`NOT NULL`)  | Identificador único de cada registro de estoque.                                                  |
+| `codigo_produto`(FK)    | INT | Sim (`NOT NULL`)  | Identifica o produto cujo estoque está sendo controlado. Referencia "codigo_produto" na entidade PRODUTO. Deve ser único nesta entidade para garantir apenas um registro de estoque por produto. |
+| `quantidade_disponivel` | INT | Sim (`NOT NULL`)  |  Registra a quantidade disponível do produto em estoque. Pode ser zero, mas não pode ser negativa.|
+
+---
+
 ## 6. Log e auditoria de pedidos
 
 O log é um registro cronológico dos acontecimentos relacionados aos pedidos. Sua finalidade é permitir o acompanhamento das ações realizadas durante o atendimento, facilitando a consulta ao histórico e a identificação de possíveis problemas.
@@ -236,10 +267,13 @@ Os índices são estruturas utilizadas para otimizar a localização e a recuper
 
 | Índice | Entidade e atributo | Finalidade |
 |---|---|---|
-| `idx_pedido_numero_mesa` | PEDIDO (`numero_mesa`) | Otimizar as consultas de pedidos associados a uma mesa específica. |
+| `idx_pedido_numero_mesa` | PEDIDO (`numero_mesa`) | Otimizar as consultas de pedidos associados a uma mesa específica.           |
 | `idx_pedido_id_atendente` | PEDIDO (`id_atendente`) | Otimizar as consultas de pedidos registrados por um determinado atendente. |
-| `idx_produto_nome` | PRODUTO (`nome_produto`) | Facilitar a localização de produtos por meio de seu nome. |
-| `idx_produto_id_setor` | PRODUTO (`id_setor`) | Otimizar as consultas de produtos associados a um setor, como cozinha ou bar. |
+| `idx_produto_nome` | PRODUTO (`nome_produto`) | Facilitar a localização de produtos por meio de seu nome.                        |
+| `idx_produto_id_setor` | PRODUTO (`id_setor`) | Otimizar as consultas de produtos associados a um setor, como cozinha ou bar.    |
+| `idx_pagamento_numero_pedido` | PAGAMENTO (`numero_pedido`) | Facilitar a consulta dos pagamentos associados a um pedido.        |
+| `idx_estoque_codigo_produto` | ESTOQUE (`codigo_produto`) | Facilitar a localização do registro de estoque de um produto.        |
+
 
 ### 7.2. Critérios de utilização
 
