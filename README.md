@@ -18,6 +18,37 @@
 
 ## 📖 2. Contextualização e Visão Geral
 
+
+### 2.1 Identificação do estabelecimento
+
+— **Nome do estabelecimento:** Palazio del Chef
+
+— **Razão social:** Bar e Restaurante Palazio Del Chef Tatuape LTDA.
+
+— **CNPJ:** 58759116000199
+
+— **Endereço:** R.Apucarana, 480 - Tatuapé, São Paulo - (CEP 03311-000).
+
+— **Telefone:** (11) 2359-7134
+
+— **Google Maps:** https://www.google.com/maps/place/Palazio+Del+Chefe/@-23.5425015,-46.5644402,17z/data=!3m1!4b1!4m6!3m5!1s0x94ce5f0018afe5f5:0x3949505257c57a90!8m2!3d-23.5425015!4d-46.5644402!16s%2Fg%2F11x8cvzkzz?entry=ttu&g_ep=EgoyMDI2MTAxMy4wIKXMDSoASAFQAw%3D%3D
+
+— **Redes sociais oficiais:** https://www.instagram.com/palaziodelchef/?hl=en
+
+<p align="center">
+  <img src="./imagem_palazio.jpeg" alt="Imagem visual do estabelecimento do Palazio Del Chef" width="550">
+</p>
+
+--- 
+## 2.2 Entrevista e levantamento de requisitos
+
+A equipe realizou uma visita ao estabelecimento com o objtivo de conhecer melhor seu funcionamento e coletar informações que contribuíssem par ao desenvolvimento do projeto de modelagem de banco da dados.
+
+**Registro fotográfico:**
+
+*Fonte da imagem: [Informar a origem da fotografia.]*
+
+
 ### 📍 O Estabelecimento
 
 O **Palazio del Chef** é um estabelecimento do segmento de alimentação, com características de restaurante e bar. Possui médio porte e apresenta um fluxo considerável de clientes. Está situado na R. Apucarana, 480, no bairro do Tatuapé, em São Paulo - SP (CEP 03311-000), em uma localidade ótima pela facilidade de acesso, tanto a pé quanto de carro, moto ou outros meios motorizados. Além disso, o ambiente é arborizado, graças ao **Parque Municipal Sampaio Moreira**, localizado bem em frente ao restaurante, o que torna o entorno mais agradável para clientes e colaboradores.
