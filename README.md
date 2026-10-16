@@ -106,39 +106,73 @@ Foram mapeados os seguintes processos principais do estabelecimento:
 
 ### ⚠️ Identificação do Problema
 
-Durante a análise, foi identificado um problema relacionado ao **controle dos atendentes**, uma vez que atualmente a equipe não é registrada por meio de credenciais.
-
-Essa situação dificulta a identificação do responsável pelo registro dos pedidos e o controle das atividades realizadas no sistema.
-
 ### 💡 Solução Proposta
-
-Como solução, foi proposta a criação da entidade **Atendente**, que por sua vez tem um atributo chamado **id_atendente** responsável por identificar cada atendente individualmente que realiza o registro dos pedidos.
-
-Dessa forma, cada pedido poderá ser associado ao respectivo atendente responsável pelo seu registro.
 
 ---
 
-## ⚙️ 4. Requisitos e Regras
+## ⚙️ 4. Requisitos e Regras de Negócio
 
-### 🎯 Requisitos do Sistema
+Esta seção apresenta os requisitos funcionais e não funcionais e as regras de negócio consideradas no desenvolvimento do banco de dados do Palazio del Chef. Sua definição tem como base as informações levantadas durante a entrevista com um gerente do estabelecimento e as entidades e os relacionamentos representados no Diagrama Entidade-Relacionamento (DER).
 
-Para orientar o desenvolvimento, o escopo foi dividido em requisitos funcionais e não funcionais:
+### 4.1 Requisitos Funcionais
 
-| Tipo de Requisito | Descrição |
+Os requisitos funcionais descrevem as operações que o sistema deverá permitir para apoiar o funcionamento do restaurante.
+
+| Código | Requisito funcional |
 | :--- | :--- |
-| **🚀 Funcional** | O sistema deve permitir que o atendente registre um pedido de forma eficiente. |
-| **🔒 Não Funcional** | O sistema deve garantir que somente funcionários devidamente autorizados visualizem informações restritas referentes ao bar ou à cozinha. |
-| **🛡️ Não Funcional** | O sistema deve possuir controle de acesso, garantindo a segurança e a confidencialidade das informações de acordo com os níveis de permissão de cada usuário. |
+| RF01 | O sistema deve permitir o registro de pedidos, associando cada pedido a uma mesa e ao atendente responsável. |
+| RF02 | O sistema deve permitir a inclusão de produtos em um pedido, informando a quantidade e o preço unitário considerado para cada produto. |
+| RF03 | O sistema deve permitir o cadastro e a consulta dos produtos disponíveis, incluindo nome, código e preço atual. |
+| RF04 | O sistema deve permitir o cadastro e a identificação das mesas utilizadas no atendimento. |
+| RF05 | O sistema deve permitir o cadastro dos atendentes responsáveis pelo registro dos pedidos. |
+| RF06 | O sistema deve permitir a classificação dos produtos conforme o setor responsável por sua preparação, como cozinha ou bar. |
+| RF07 | O sistema deve permitir o registro dos pagamentos relacionados aos pedidos, incluindo data, valor pago e forma de pagamento. |
+| RF08 | O sistema deve permitir o registro e a consulta das quantidades de produtos disponíveis em estoque. |
 
-### 📜 Regras de Negócio
+### 4.2 Requisitos Não Funcionais
 
-As seguintes regras operacionais foram estabelecidas para garantir a integridade dos dados:
+Os requisitos não funcionais estabelecem condições de segurança, integridade e confiabilidade para o funcionamento do sistema.
 
-1. **Rastreabilidade de Pedidos:** Todo pedido deve estar obrigatoriamente associado a um atendente responsável pelo seu registro.
+| Código | Requisito não funcional |
+| :--- | :--- |
+| RNF01 | O sistema deve preservar a integridade referencial dos dados por meio de chaves primárias e estrangeiras, impedindo associações inválidas entre registros. |
+| RNF02 | O sistema deve garantir que os dados obrigatórios de pedidos, produtos, mesas e pagamentos sejam validados antes de sua gravação, conforme as restrições definidas no modelo. |
+| RNF03 | O sistema deve implementar mecanismos de autenticação e controle de acesso para restringir operações e informações conforme as permissões dos usuários autorizados. |
+| RNF04 | O sistema deve armazenar os valores monetários em tipos de dados apropriados para evitar perda indevida de precisão nos preços e pagamentos. |
 
-2. **Localização do Cliente:** Todo pedido deve estar vinculado a uma mesa. Não deve existir um pedido sem um número de mesa associado.
+### 4.3 Regras de Negócio
 
-3. **Identificação de Produtos:** Todos os produtos cadastrados devem possuir um código de barras para facilitar o registro e o controle de estoque.
+As regras de negócio definem condições que devem ser respeitadas para representar corretamente as operações do restaurante e manter a consistência das informações armazenadas.
+
+**RN01 — Rastreabilidade dos pedidos:** Todo pedido registrado deve estar associado a exatamente um atendente responsável pelo seu registro.
+
+**RN02 — Vinculação à mesa:** Todo pedido deve estar associado a exatamente uma mesa, conforme o modelo de atendimento presencial considerado no projeto.
+
+**RN03 — Identificação dos produtos:** Cada produto cadastrado deve possuir um código identificador único (`codigo_produto`), utilizado para diferenciá-lo dos demais produtos registrados no sistema.
+
+**RN04 — Composição dos pedidos:** Um pedido pode conter um ou mais produtos, e um mesmo produto pode estar presente em diferentes pedidos. A quantidade e o preço unitário devem ser registrados para cada associação entre pedido e produto.
+
+**RN05 — Encaminhamento por setor:** Cada produto deve estar associado ao setor responsável por sua preparação, como cozinha ou bar, de acordo com a classificação definida no cadastro.
+
+**RN06 — Registro de pagamentos:** Um pedido pode não possuir pagamentos registrados, possuir um único pagamento ou possuir vários pagamentos, permitindo que o valor seja quitado em etapas.
+
+**RN07 — Controle de estoque:** As informações de estoque devem estar relacionadas aos produtos correspondentes, permitindo identificar as quantidades registradas para cada produto.
+
+**RN08 — Integridade dos registros:** Os registros relacionados entre si devem respeitar as chaves e as restrições de integridade definidas no banco de dados, evitando referências a registros inexistentes.
+
+**RN09 — Validação de quantidades e valores:** As quantidades e os valores numéricos não podem assumir valores negativos quando representarem quantidades físicas, preços ou valores pagos. A obrigatoriedade de preenchimento deverá ser definida individualmente para cada atributo.
+
+**RN10 — Associação de produtos aos setores:** Cada produto deve possuir um setor responsável definido no cadastro, conforme a estrutura representada no DER.
+
+**RN11 — Identificação e data dos pedidos:** Cada pedido deve possuir um identificador próprio e uma data de registro, permitindo sua diferenciação e consulta posterior.
+
+**RN12 — Identificação dos pagamentos:** Cada registro de pagamento deve possuir um identificador próprio, possibilitando sua identificação individual no sistema.
+
+### 4.4 Relação com a Modelagem do Banco de Dados
+
+Os requisitos e as regras apresentados orientam a estruturação das entidades, dos atributos e dos relacionamentos do banco de dados. As regras referentes aos pedidos, produtos, mesas, atendentes, setores, estoque e pagamentos devem ser implementadas por meio de chaves, restrições e validações adequadas no modelo relacional.
+
+As regras que dependem de decisões operacionais ainda não confirmadas deverão ser validadas com o estabelecimento antes da implementação definitiva do sistema.
 
 ---
 
@@ -153,6 +187,8 @@ O modelo de banco de dados relacional é composto pelas seguintes entidades prin
 - **Pedido**
 - **Produto**
 - **Setor**
+- **estoque**
+- **pagamento**
 
 Cada entidade possui atributos específicos, identificadores e relacionamentos definidos de acordo com as necessidades levantadas durante a análise do estabelecimento.
 
