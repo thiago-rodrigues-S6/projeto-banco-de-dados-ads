@@ -40,13 +40,33 @@
 </p>
 
 --- 
-## 2.2 Entrevista e levantamento de requisitos
+### 2.2 Entrevista 
 
-A equipe realizou uma visita ao estabelecimento com o objtivo de conhecer melhor seu funcionamento e coletar informações que contribuíssem par ao desenvolvimento do projeto de modelagem de banco da dados.
 
-**Registro fotográfico:**
+Durante a visita ao restaurante, foi realizada uma entrevista com um gerente do estabelecimento, com o objetivo de compreender seu funcionamento e levantar informações relevantes para o desenvolvimento do projeto de modelagem de banco de dados.
 
-*Fonte da imagem: [Informar a origem da fotografia.]*
+A conversa permitiu identificar características da operação, incluindo o atendimento aos clientes, o registro dos pedidos, o encaminhamento dos pedidos aos setores responsáveis e o gerenciamento do estoque.
+
+Como evidência da visita realizada, apresenta-se a fotografia registrada pela equipe durante o encontro com o gerente do estabelecimento.
+
+![Registro da visita ao restaurante com o gerente](caminho/da/imagem.jpg)
+
+*Figura 2 — Registro fotográfico da equipe durante a visita ao estabelecimento.*
+
+---
+
+### 2.3 Levantamento de requisitos durante a entrevista. 
+
+Durante a entrevista, foram identificadas as seguintes características do funcionamento do restaurante:
+
+- **Modalidade de atendimento:** o restaurante não realiza entregas por delivery.
+- **Registro de pedidos:** os funcionários utilizam um aplicativo para registrar os pedidos dos clientes.
+- **Encaminhamento dos pedidos:** após o registro no aplicativo, os pedidos são encaminhados à cozinha ou ao bar, conforme o setor responsável por sua preparação.
+- **Acesso ao aplicativo:** segundo as informações obtidas, os funcionários não possuem credenciais individuais de acesso.
+- **Gerenciamento de compras e estoque:** o proprietário é responsável pelas compras dos produtos destinados ao estoque.
+
+Essas informações servem como base para compreender os processos operacionais do restaurante e orientar a identificação dos requisitos e das regras de negócio considerados no projeto do banco de dados.
+
 
 
 ### 📍 O Estabelecimento
