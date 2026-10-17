@@ -160,13 +160,17 @@ As regras de negócio definem condições que devem ser respeitadas para represe
 
 **RN08 — Integridade dos registros:** Os registros relacionados entre si devem respeitar as chaves e as restrições de integridade definidas no banco de dados, evitando referências a registros inexistentes.
 
-**RN09 — Validação de quantidades e valores:** As quantidades e os valores numéricos não podem assumir valores negativos quando representarem quantidades físicas, preços ou valores pagos. A obrigatoriedade de preenchimento deverá ser definida individualmente para cada atributo.
+**RN09 — Validação de quantidades e valores:** A quantidade de produtos em um pedido deve ser maior que zero. Os atributos `preco_unitario`, `preco_atual` e `valor_pago` não podem assumir valores negativos. Os atributos `qt_produto`, `preco_unitario` e `preco_atual` são obrigatórios, enquanto `valor_pago` pode permanecer nulo quando não houver valor de pagamento registrado.
 
 **RN10 — Associação de produtos aos setores:** Cada produto deve possuir um setor responsável definido no cadastro, conforme a estrutura representada no DER.
 
 **RN11 — Identificação e data dos pedidos:** Cada pedido deve possuir um identificador próprio e uma data de registro, permitindo sua diferenciação e consulta posterior.
 
 **RN12 — Identificação dos pagamentos:** Cada registro de pagamento deve possuir um identificador próprio, possibilitando sua identificação individual no sistema.
+
+**RN13 — Disponibilidade em estoque:** O atributo `qt_disponivel` pode permanecer nulo quando a quantidade disponível não estiver informada. Quando preenchido, seu valor não pode ser negativo.
+
+**RN14 — Data de pagamento:** A data de pagamento pode permanecer nula enquanto o pagamento não tiver sido realizado. Quando preenchida, deve representar uma data válida.
 
 ### 4.4 Relação com a Modelagem do Banco de Dados
 
