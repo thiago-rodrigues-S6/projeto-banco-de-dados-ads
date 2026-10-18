@@ -69,44 +69,116 @@ Essas informações servem como base para compreender os processos operacionais 
 
 
 
-### 📍 O Estabelecimento
-
-O **Palazio del Chef** é um estabelecimento do segmento de alimentação, com características de restaurante e bar. Possui médio porte e apresenta um fluxo considerável de clientes. Está situado na R. Apucarana, 480, no bairro do Tatuapé, em São Paulo - SP (CEP 03311-000), em uma localidade ótima pela facilidade de acesso, tanto a pé quanto de carro, moto ou outros meios motorizados. Além disso, o ambiente é arborizado, graças ao **Parque Municipal Sampaio Moreira**, localizado bem em frente ao restaurante, o que torna o entorno mais agradável para clientes e colaboradores.
-
-A escolha do estabelecimento para o desenvolvimento do projeto ocorreu devido à sua estrutura operacional e aos processos envolvidos em seu funcionamento, possibilitando a aplicação dos conceitos de modelagem de banco de dados.
-
-<p align="center">
-  <img src="./imagem_palazio.jpeg" alt="Imagem visual do estabelecimento do Palazio Del Chef" width="550">
-</p>
-
-
-### 🎯 Objetivo do Projeto
-
-O projeto tem como objetivo analisar os processos do estabelecimento e desenvolver uma modelagem de banco de dados capaz de organizar as principais informações relacionadas ao atendimento, pedidos, produtos, mesas, setores e atendentes.
 
 ---
 
 ## 🔍 3. Análise e Modelagem
 
-### 🗺️ Mapeamento de Processos
+Esta etapa apresenta a análise do funcionamento do Palazio del Chef, considerando as informações obtidas durante a visita ao estabelecimento e a entrevista realizada com um gerente. A partir desse levantamento, são descritos os principais processos de negócio, a necessidade de organização das informações e a solução proposta por meio da modelagem de um banco de dados relacional.
 
+### 3.1 Caracterização do estabelecimento
 
-Foram mapeados os seguintes processos principais do estabelecimento:
+O Palazio del Chef é um estabelecimento do segmento de alimentação, com características de restaurante e bar, localizado no bairro do Tatuapé, em São Paulo - SP. Seu funcionamento envolve atividades relacionadas ao atendimento presencial dos clientes, ao registro de pedidos, à preparação de produtos e ao gerenciamento de informações operacionais.
 
+Durante a visita ao estabelecimento, foi realizada uma entrevista com um gerente para compreender aspectos de sua operação. Conforme as informações obtidas, os atendentes utilizam um aplicativo para registrar os pedidos dos clientes. Após o registro, os pedidos são encaminhados à cozinha ou ao bar, de acordo com o setor responsável pela preparação dos produtos.
 
-- 🛎️ Atendimento ao cliente
-- 📝 Registro do pedido
-- 🍳 Preparação do pedido
-- 🏃 Encaminhamento para a cozinha/bar
-- 💳 Pagamento
-- 📦 Controle de estoque
-- 🧑‍🍳 Cadastro e controle de atendentes
+Em relação ao gerenciamento de estoque, foi informado que o proprietário é responsável pelas compras dos produtos destinados ao abastecimento do estabelecimento. O controle das quantidades é realizado manualmente, por meio de planilhas, anotações ou contagem física, conforme as práticas utilizadas no gerenciamento do estoque.
 
----
+Também foi informado que os funcionários não possuem credenciais individuais de acesso ao aplicativo utilizado para registrar os pedidos. Essa característica foi considerada no levantamento das informações relevantes para o projeto.
 
-### ⚠️ Identificação do Problema
+O restaurante realiza atendimento presencial e não oferece serviço de delivery, conforme informado durante a entrevista. Essas características contribuem para delimitar os processos considerados na modelagem e identificar as informações que deverão ser representadas no banco de dados proposto.
 
-### 💡 Solução Proposta
+### 3.2 Objetivo do projeto
+
+O projeto tem como objetivo desenvolver a modelagem de um banco de dados relacional capaz de organizar e relacionar as principais informações envolvidas nas operações do Palazio del Chef.
+
+A proposta contempla a representação dos dados relacionados aos pedidos, produtos, mesas, atendentes, setores, pagamentos e estoque, considerando os processos identificados durante a análise do estabelecimento.
+
+Por meio da definição de entidades, atributos, relacionamentos, cardinalidades e restrições de integridade, busca-se estruturar os dados de maneira consistente, permitindo representar as relações entre os elementos envolvidos nas operações do restaurante.
+
+A modelagem também servirá de base para a construção do modelo relacional e para a futura implementação utilizando PostgreSQL e SQL, conforme as etapas previstas no projeto acadêmico.
+
+### 3.3 Mapeamento dos processos de negócio
+
+O mapeamento dos processos de negócio busca representar as principais atividades realizadas no estabelecimento, identificando as etapas conhecidas, os participantes envolvidos e as informações relacionadas a cada operação.
+
+Com base nas informações levantadas durante a entrevista, foram identificados os seguintes processos:
+
+**a) Atendimento ao cliente**
+
+O atendimento ocorre presencialmente, com os clientes utilizando as mesas do estabelecimento e sendo atendidos pelos atendentes responsáveis. Na modelagem proposta, a associação entre mesas, pedidos e atendentes permitirá representar as informações relacionadas ao atendimento.
+
+**b) Registro do pedido**
+
+Os atendentes utilizam um aplicativo para registrar os pedidos realizados pelos clientes. No banco de dados proposto, esse processo será representado pelas entidades Pedido, Produto, Mesa e Atendente, permitindo relacionar cada pedido à mesa correspondente, identificar o atendente responsável pelo registro e armazenar os produtos solicitados, suas quantidades e seus preços unitários.
+
+**c) Encaminhamento e preparação dos pedidos**
+
+Após o registro no aplicativo, os pedidos são encaminhados à cozinha ou ao bar, conforme o setor responsável pela preparação dos produtos. Para representar essa característica, a modelagem considera a entidade Setor, relacionada aos produtos de acordo com sua classificação.
+
+O fluxo detalhado de preparação, incluindo a ordem das atividades e os procedimentos utilizados para acompanhar o andamento dos pedidos, ainda deverá ser confirmado com o estabelecimento.
+
+**d) Fechamento da conta e pagamento**
+
+O processo de pagamento pode envolver a divisão da conta entre diferentes pessoas ou a realização de vários pagamentos para quitar uma mesma conta. Essa característica deve ser considerada na modelagem para permitir que um pedido possua mais de um registro de pagamento.
+
+A entidade Pagamento será utilizada para armazenar informações como o valor pago, a data e a forma de pagamento. A associação entre os pedidos e seus pagamentos permitirá representar a quitação em etapas, conforme as regras definidas para o projeto.
+
+Os procedimentos específicos utilizados pelo restaurante para dividir as contas e registrar os pagamentos ainda precisam ser detalhados para que o modelo represente integralmente o processo atual.
+
+**e) Controle de estoque e compras**
+
+O gerenciamento do estoque envolve o acompanhamento das quantidades disponíveis dos produtos utilizados pelo estabelecimento. Conforme informado durante a entrevista, o controle é realizado manualmente, por meio de planilhas, anotações ou contagem física, e o proprietário é responsável pelas compras destinadas ao abastecimento.
+
+Na modelagem proposta, a entidade Estoque permitirá representar as quantidades registradas dos produtos. A estrutura deverá considerar a necessidade de organizar essas informações no banco de dados, sem pressupor que o estabelecimento já utiliza um sistema integrado para essa finalidade.
+
+**f) Cadastro e controle de atendentes**
+
+O cadastro de atendentes será considerado na modelagem para identificar os atendentes responsáveis pelo registro dos pedidos. A associação entre Pedido e Atendente permitirá relacionar cada pedido ao atendente correspondente, conforme as regras de negócio estabelecidas no projeto.
+
+Durante a entrevista, também foi informado que os funcionários não possuem credenciais individuais de acesso ao aplicativo utilizado no registro dos pedidos. Essa informação deverá ser considerada na análise dos requisitos de identificação e controle de acesso, sem pressupor funcionalidades que ainda não foram confirmadas.
+
+O detalhamento desses processos servirá de base para a construção do fluxograma e para a definição dos requisitos funcionais, das regras de negócio e dos relacionamentos representados no Diagrama Entidade-Relacionamento (DER).
+
+### 3.4 Identificação do problema
+
+A análise do funcionamento do Palazio del Chef permitiu identificar diferentes elementos envolvidos nas operações do estabelecimento, incluindo pedidos, produtos, mesas, atendentes, setores de preparação, pagamentos e estoque.
+
+Esses elementos possuem relações entre si que precisam ser consideradas na construção de um modelo de dados consistente. Além disso, as informações levantadas demonstram que diferentes atividades possuem características próprias de registro e controle, como o encaminhamento dos pedidos aos setores responsáveis, a possibilidade de realizar vários pagamentos para quitar uma conta e o controle manual do estoque.
+
+No âmbito deste projeto acadêmico, a necessidade identificada consiste em estruturar essas informações em um banco de dados relacional, definindo como os registros serão identificados, relacionados e submetidos às restrições de integridade. Essa estrutura deverá permitir representar adequadamente os processos considerados no escopo do projeto.
+
+É importante destacar que, durante a entrevista, não foi relatada uma dificuldade operacional específica que pudesse ser apresentada como um problema comprovado do estabelecimento. Portanto, a proposta não parte da afirmação de que o restaurante apresenta falhas no atendimento, erros nos pedidos ou inconsistências no estoque.
+
+O foco está na elaboração de uma modelagem que organize as informações selecionadas para o projeto e estabeleça uma estrutura adequada para seu armazenamento e relacionamento. A identificação de possíveis dificuldades adicionais dependerá de um levantamento complementar sobre os procedimentos de pagamento, controle de estoque, compras e acompanhamento dos pedidos.
+
+### 3.5 Solução proposta
+
+Como solução para a necessidade identificada, propõe-se desenvolver um modelo de banco de dados relacional que represente as principais informações e relações envolvidas nas operações do Palazio del Chef.
+
+A estrutura será organizada em entidades específicas, com atributos definidos conforme a finalidade de cada uma. As chaves primárias permitirão identificar individualmente os registros, enquanto as chaves estrangeiras estabelecerão os vínculos entre as entidades e contribuirão para a integridade referencial dos dados.
+
+O modelo contemplará as seguintes estruturas principais:
+
+- **Atendente:** identificação dos funcionários responsáveis pelo registro dos pedidos.
+- **Mesa:** identificação das mesas utilizadas no atendimento presencial.
+- **Pedido:** registro dos pedidos e de suas informações principais.
+- **Produto:** cadastro dos produtos, incluindo seus códigos e preços.
+- **Setor:** representação dos setores responsáveis pela preparação dos produtos, como cozinha e bar.
+- **Estoque:** representação das quantidades registradas dos produtos.
+- **Pagamento:** armazenamento dos registros de pagamento associados aos pedidos.
+
+O relacionamento entre Pedido e Produto será representado por uma associação que permita registrar a quantidade solicitada e o preço unitário considerado para cada produto em determinado pedido. Essa estrutura permitirá representar pedidos compostos por diferentes produtos e a presença de um mesmo produto em vários pedidos.
+
+A estrutura de pagamentos deverá permitir múltiplos registros associados a um mesmo pedido, contemplando a possibilidade de dividir a conta entre pessoas ou realizar pagamentos em etapas. A necessidade de identificar individualmente cada pagador deverá ser avaliada conforme os requisitos efetivamente definidos para o projeto.
+
+Para o estoque, a proposta consiste em organizar os dados das quantidades registradas dos produtos em uma estrutura relacional. O detalhamento de movimentações, compras, fornecedores e recebimento de mercadorias dependerá da confirmação do escopo e dos procedimentos que deverão ser representados.
+
+A modelagem também deverá considerar restrições para preservar a consistência dos registros, como a identificação única dos produtos, a validação de quantidades e valores monetários e a utilização de referências válidas entre as entidades relacionadas.
+
+Após a conclusão e a validação do modelo conceitual, será desenvolvido o modelo relacional, seguido da análise de normalização e da implementação prevista em PostgreSQL. Essa etapa contemplará a criação das tabelas, a definição das restrições, a inserção de dados e a execução de consultas SQL.
+
+Dessa maneira, a solução proposta estabelecerá uma estrutura organizada para representar as informações consideradas no projeto, servindo como base para as etapas posteriores de desenvolvimento e documentação do banco de dados.
 
 ---
 
