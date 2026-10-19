@@ -49,7 +49,7 @@ A conversa permitiu identificar características da operação, incluindo o aten
 
 Como evidência da visita realizada, apresenta-se a fotografia registrada pela equipe durante o encontro com o gerente do estabelecimento.
 
-![Registro da visita ao restaurante com o gerente](caminho/da/imagem.jpg)
+![Registro da visita ao restaurante com o gerente](visita_palazio.jpg)
 
 *Figura 2 — Registro fotográfico da equipe durante a visita ao estabelecimento.*
 
