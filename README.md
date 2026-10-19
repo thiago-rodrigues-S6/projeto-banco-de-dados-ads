@@ -50,7 +50,7 @@ A conversa permitiu identificar características da operação, incluindo o aten
 Como evidência da visita realizada, apresenta-se a fotografia registrada pela equipe durante o encontro com o gerente do estabelecimento.
 
 <p align="center">
-  <img src="./visita_palazio.jpeg" alt="Imagem visual do estabelecimento do Palazio Del Chef" width="550">
+  <img src="./visita_palazio.jpeg" alt="Imagem da visita ao estabelecimento" width="800">
 </p>
 
 *Figura 2 — Registro fotográfico da equipe durante a visita ao estabelecimento.*
