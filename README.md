@@ -142,6 +142,14 @@ Durante a entrevista, também foi informado que os funcionários não possuem cr
 
 O detalhamento desses processos servirá de base para a construção do fluxograma e para a definição dos requisitos funcionais, das regras de negócio e dos relacionamentos representados no Diagrama Entidade-Relacionamento (DER).
 
+**g) Cadastro de cardápio e preços**
+
+O cardápio do estabelecimento apresenta os produtos comercializados, organizados por categorias e acompanhados de seus respectivos preços. Esse material serve como referência para a identificação dos produtos que poderão ser representados na modelagem do banco de dados.
+
+Na estrutura proposta, a entidade Produto será responsável pelo cadastro das informações dos produtos, incluindo sua identificação e seu preço atual. O preço unitário aplicado a cada produto também será registrado no respectivo item do pedido, permitindo manter o histórico do valor considerado no momento da venda.
+
+📄 **Documento de referência:** [Consultar cardápio do Palazio del Chef (PDF)](./docs/cardapio_palazio_diurno.pdf)
+
 ### 3.4 Identificação do problema
 
 A análise do funcionamento do Palazio del Chef permitiu identificar diferentes elementos envolvidos nas operações do estabelecimento, incluindo pedidos, produtos, mesas, atendentes, setores de preparação, pagamentos e estoque.
