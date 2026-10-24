@@ -150,7 +150,19 @@ Na estrutura proposta, a entidade Produto será responsável pelo cadastro das i
 
 📄 **Documento de referência:** [Consultar cardápio do Palazio del Chef (PDF)](./cardapio_palazio_diurno.pdf)
 
-### 3.4 Identificação do problema
+### 3.4 Fluxograma do processo de atendimento
+
+O fluxograma a seguir representa o fluxo de atendimento do Palazio del Chef, desde a chegada do cliente ao estabelecimento até o fechamento da conta e sua saída. O objetivo é apresentar visualmente as principais etapas do processo, incluindo o registro do pedido, o encaminhamento dos produtos aos setores responsáveis pela preparação e a realização do pagamento.
+
+O fluxo foi elaborado com base nas informações levantadas durante a entrevista com o estabelecimento. As etapas operacionais que ainda não foram confirmadas deverão ser validadas para garantir que a representação corresponda ao funcionamento real do restaurante.
+
+<p align="center">
+  <img src="./Fluxograma_Palazio_del_Chef/fluxograma_palazio_del_chef.png" alt="Fluxograma do processo de atendimento do Palazio del Chef" width="900">
+</p>
+
+*Figura X — Fluxo do processo de atendimento, registro de pedidos, preparação e pagamento.*
+
+### 3.5 Identificação do problema
 
 A análise do funcionamento do Palazio del Chef permitiu identificar diferentes elementos envolvidos nas operações do estabelecimento, incluindo pedidos, produtos, mesas, atendentes, setores de preparação, pagamentos e estoque.
 
@@ -162,7 +174,7 @@ No âmbito deste projeto acadêmico, a necessidade identificada consiste em estr
 
 O foco está na elaboração de uma modelagem que organize as informações selecionadas para o projeto e estabeleça uma estrutura adequada para seu armazenamento e relacionamento. A identificação de possíveis dificuldades adicionais dependerá de um levantamento complementar sobre os procedimentos de pagamento, controle de estoque, compras e acompanhamento dos pedidos.
 
-### 3.5 Solução proposta
+### 3.6 Solução proposta
 
 Como solução para a necessidade identificada, propõe-se desenvolver um modelo de banco de dados relacional que represente as principais informações e relações envolvidas nas operações do Palazio del Chef.
 
