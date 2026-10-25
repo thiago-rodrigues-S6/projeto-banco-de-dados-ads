@@ -113,7 +113,9 @@ O atendimento ocorre presencialmente, com os clientes utilizando as mesas do est
 
 **b) Registro do pedido**
 
-Os atendentes utilizam um aplicativo para registrar os pedidos realizados pelos clientes. No banco de dados proposto, esse processo será representado pelas entidades Pedido, Produto, Mesa e Atendente, permitindo relacionar cada pedido à mesa correspondente, identificar o atendente responsável pelo registro e armazenar os produtos solicitados, suas quantidades e seus preços unitários. Na venda de bebidas alcoólicas, a modelagem propõe que o produto seja identificado como bebida alcoólica (atributo bebida_alcoolica da entidade Produto) e que o pedido registre se a maioridade do cliente foi confirmada (atributo maioridade_confirmada da entidade Pedido). Pela regra proposta, antes de registrar um item alcoólico, o atendente solicita ao cliente um documento oficial com foto e confere se ele tem 18 anos ou mais. O documento é apenas visualizado e nenhum dado dele é armazenado, em respeito ao princípio da necessidade previsto na LGPD. Esse procedimento é uma hipótese de modelagem, e a forma como o estabelecimento realiza essa conferência ainda deverá ser confirmada com o gerente.
+Os atendentes utilizam um aplicativo para registrar os pedidos realizados pelos clientes. No banco de dados proposto, esse processo será representado pelas entidades Pedido, Produto, Mesa e Atendente, permitindo relacionar cada pedido à mesa correspondente, identificar o atendente responsável pelo registro e armazenar os produtos solicitados, suas quantidades e seus preços unitários.
+
+Na venda de bebidas alcoólicas, a modelagem propõe que o produto seja identificado como bebida alcoólica (atributo `bebida_alcoolica` da entidade Produto) e que o pedido registre se a maioridade do cliente foi confirmada (atributo `maioridade_confirmada` da entidade Pedido). Pela regra proposta, antes de registrar um item alcoólico, o atendente solicita ao cliente um documento oficial com foto e confere se ele tem 18 anos ou mais. O documento é apenas visualizado e nenhum dado dele é armazenado, em respeito ao princípio da necessidade previsto na LGPD. Esse procedimento é uma hipótese de modelagem, e a forma como o estabelecimento realiza essa conferência ainda deverá ser confirmada com o gerente.
 
 **c) Encaminhamento e preparação dos pedidos**
 
@@ -125,13 +127,11 @@ O fluxo detalhado de preparação, incluindo a ordem das atividades e os procedi
 
 O processo de pagamento pode envolver a divisão da conta entre diferentes pessoas ou a realização de vários pagamentos para quitar uma mesma conta. Essa característica deve ser considerada na modelagem para permitir que um pedido possua mais de um registro de pagamento.
 
-A entidade Pagamento armazenará o valor pago e a data e o horário de cada pagamento, e se relaciona com a entidade Forma_Pagamento, que cadastra de forma padronizada as formas aceitas pelo estabelecimento (como dinheiro, crédito, débito e Pix). A associação entre os pedidos e seus pagamentos permitirá representar a quitação em etapas, conforme as regras definidas para o projeto.
+A entidade Pagamento armazenará o valor pago e a data e o horário de cada pagamento, e se relaciona com a entidade Forma_Pagamento, que cadastra de forma padronizada as formas aceitas pelo estabelecimento (como dinheiro, crédito, débito e Pix). A associação entre os pedidos e seus pagamentos permitirá representar a quitação em etapas, conforme as regras definidas para o projeto. Enquanto o cliente não paga, o pedido permanece em aberto, sem nenhum pagamento registrado.
 
 O modelo também prevê a entidade Nota_Fiscal, que armazena os dados do cupom fiscal (número, série, data de emissão, valor total e chave de acesso). Como hipótese de modelagem, considera-se que a emissão é feita por um sistema externo ao banco de dados e que a nota se relaciona ao pedido, e não ao pagamento, porque o pagamento e a emissão do cupom podem ocorrer em momentos diferentes. Cada pedido possui no máximo uma nota fiscal.
 
 Os procedimentos específicos utilizados pelo restaurante para dividir as contas, registrar os pagamentos e emitir o cupom fiscal, assim como a eventual cobrança de taxa de serviço ou couvert, ainda precisam ser detalhados para que o modelo represente integralmente o processo atual.
-
-Os procedimentos específicos utilizados pelo restaurante para dividir as contas e registrar os pagamentos ainda precisam ser detalhados para que o modelo represente integralmente o processo atual.
 
 **e) Controle de estoque e compras**
 
@@ -149,11 +149,13 @@ O detalhamento desses processos servirá de base para a construção do fluxogra
 
 **g) Cadastro de cardápio e preços**
 
-O cardápio do estabelecimento apresenta os produtos comercializados, organizados por categorias e acompanhados de seus respectivos preços. Esse material serve como referência para a identificação dos produtos que poderão ser representados na modelagem do banco de dados. 
+O cardápio do estabelecimento apresenta os produtos comercializados, organizados por categorias e acompanhados de seus respectivos preços. Esse material serve como referência para a identificação dos produtos que poderão ser representados na modelagem do banco de dados.
 
 Na estrutura proposta, a entidade Produto será responsável pelo cadastro das informações dos produtos, incluindo sua identificação e seu preço atual. O preço unitário aplicado a cada produto também será registrado no respectivo item do pedido, permitindo manter o histórico do valor considerado no momento da venda. O cadastro do produto também identifica se ele é uma bebida alcoólica, informação utilizada na regra de conferência de maioridade.
 
 📄 *Documento de referência:* [Consultar cardápio do Palazio del Chef (PDF)](./cardapio_palazio_diurno.pdf)
+
+---
 
 ### 3.4 Fluxograma do processo de atendimento
 
@@ -235,7 +237,8 @@ Dessa maneira, a solução proposta estabelecerá uma estrutura organizada para 
 
 Esta seção apresenta os requisitos funcionais e não funcionais e as regras de negócio consideradas no desenvolvimento do banco de dados do Palazio del Chef. Sua definição tem como base as informações levantadas durante a entrevista com um gerente do estabelecimento e as entidades e os relacionamentos representados no Diagrama Entidade-Relacionamento (DER).
 
-### 4.1 Requisitos Funcionais
+
+## 4.1 Requisitos Funcionais
 
 Os requisitos funcionais descrevem as operações que o sistema deverá permitir para apoiar o funcionamento do restaurante.
 
@@ -249,6 +252,9 @@ Os requisitos funcionais descrevem as operações que o sistema deverá permitir
 | RF06 | O sistema deve permitir a classificação dos produtos conforme o setor responsável por sua preparação, como cozinha ou bar. |
 | RF07 | O sistema deve permitir o registro de um ou mais pagamentos para cada pedido (divisão da conta), incluindo data e hora, valor pago e a forma de pagamento escolhida entre as formas cadastradas. |
 | RF08 | O sistema deve permitir o registro e a consulta das quantidades de produtos disponíveis em estoque. |
+| RF09 | O sistema deve permitir o cancelamento de itens de um pedido, registrando o motivo e a data e hora do cancelamento, sem excluir o item. |
+| RF10 | O sistema deve permitir o registro dos dados da nota fiscal emitida para um pedido. |
+| RF11 | O sistema deve permitir registrar a confirmação de maioridade do cliente no pedido, antes do registro de itens de bebida alcoólica. |
 
 ### 4.2 Requisitos Não Funcionais
 
@@ -258,58 +264,38 @@ Os requisitos não funcionais estabelecem condições de segurança, integridade
 | :--- | :--- |
 | RNF01 | O sistema deve preservar a integridade referencial dos dados por meio de chaves primárias e estrangeiras, impedindo associações inválidas entre registros. |
 | RNF02 | O sistema deve garantir que os dados obrigatórios de pedidos, produtos, mesas e pagamentos sejam validados antes de sua gravação, conforme as restrições definidas no modelo. |
-| RNF03 | O sistema deve implementar mecanismos de autenticação e controle de acesso para restringir operações e informações conforme as permissões dos usuários autorizados. |
+| RNF03 | O sistema deverá prever mecanismos de controle de acesso para restringir operações e informações conforme as permissões dos usuários autorizados. Trata-se de proposta do grupo: segundo a entrevista, os funcionários não possuem atualmente credenciais individuais de acesso ao aplicativo. |
 | RNF04 | O sistema deve armazenar os valores monetários em tipos de dados apropriados para evitar perda indevida de precisão nos preços e pagamentos. |
 
 ### 4.3 Regras de Negócio
 
 As regras de negócio definem condições que devem ser respeitadas para representar corretamente as operações do restaurante e manter a consistência das informações armazenadas.
 
-**RN01 — Rastreabilidade dos pedidos:** Todo pedido registrado deve estar associado a exatamente um atendente responsável pelo seu registro.
-
-**RN02 — Vinculação à mesa:** Todo pedido deve estar associado a exatamente uma mesa, conforme o modelo de atendimento presencial considerado no projeto.
-
-**RN03 — Identificação dos produtos:** Cada produto cadastrado deve possuir um código identificador único (`codigo_produto`), utilizado para diferenciá-lo dos demais produtos registrados no sistema.
-
-**RN04 — Composição dos pedidos:** Um pedido pode conter um ou mais produtos, e um mesmo produto pode estar presente em diferentes pedidos. A quantidade e o preço unitário devem ser registrados para cada associação entre pedido e produto.
-
-**RN05 — Encaminhamento por setor:** Cada produto deve estar associado ao setor responsável por sua preparação, como cozinha ou bar, de acordo com a classificação definida no cadastro.
-
-**RN06 — Registro de pagamentos:** Um pedido pode não possuir pagamentos registrados, possuir um único pagamento ou possuir vários pagamentos, permitindo que o valor seja quitado em etapas. Enquanto o cliente não pagar, o pedido permanece em aberto, sem nenhum pagamento registrado.
-
-**RN07 — Controle de estoque:** As informações de estoque devem estar relacionadas aos produtos correspondentes, permitindo identificar as quantidades registradas para cada produto.
-
-**RN08 — Integridade dos registros:** Os registros relacionados entre si devem respeitar as chaves e as restrições de integridade definidas no banco de dados, evitando referências a registros inexistentes.
-
-**RN09 — Validação de quantidades e valores:** A quantidade de produtos em um pedido deve ser maior que zero. Os atributos preco_unitario e preco_atual não podem assumir valores negativos, e valor_pago deve ser maior que zero. Os atributos qt_produto, preco_unitario, preco_atual e valor_pago são obrigatórios.
-
-**RN10 — Associação de produtos aos setores:** Cada produto deve possuir um setor responsável definido no cadastro, conforme a estrutura representada no DER.
-
-**RN11 — Identificação e data dos pedidos:** Cada pedido deve possuir um identificador próprio e uma data de registro, permitindo sua diferenciação e consulta posterior.
-
-**RN12 — Identificação dos pagamentos:** Cada registro de pagamento deve possuir um identificador próprio, possibilitando sua identificação individual no sistema.
-
-**RN13 — Disponibilidade em estoque:** O atributo qt_disponivel é obrigatório e seu valor não pode ser negativo. Quando não houver unidades disponíveis, o valor deve ser zero.
-
-**RN14 — Data e hora do pagamento:** O atributo data_hora_pagamento é obrigatório e registra o momento em que o pagamento foi realizado. Um pagamento só é registrado depois de realizado.
-
-**RN15 —  produto indisponível:** produto com limite diário não pode ser pedido além do limite no dia.
-
-**RN16 —  Cancelamento:** o item só pode ser cancelado enquanto o setor não iniciou o preparo.
-
-**RN17 —  Cancelamento - pedido:** item cancelado não é excluído; fica registrado com motivo e não conta no limite.
-
-**RN18 — Bebida Alcoólicas:**  Produtos cadastrados como bebida alcoólica só podem ser vendidos a pessoas maiores de 18 anos.
-
-**RN19 — Conferência da idade**: Antes de registrar um item alcoólico, o atendente deve conferir a maioridade do cliente por meio de documento oficial com foto. Nenhum dado do documento (nome, RG, CPF ou data de nascimento) é registrado no sistema.
-
-**RN20 — Quitação do pedido:** A soma dos pagamentos de um pedido não pode ultrapassar o valor total do pedido, calculado pela soma de qt_produto × preco_unitario dos itens não cancelados. O pedido é considerado quitado quando a soma dos pagamentos é igual a esse valor.
-
-**RN21 — Forma de pagamento:** Todo pagamento deve utilizar uma forma de pagamento previamente cadastrada (como dinheiro, crédito, débito ou Pix).
-
-**RN22 — Nota fiscal:** Cada pedido possui no máximo uma nota fiscal. O registro da nota é independente do registro dos pagamentos e pode ocorrer depois deles.
-
-**RN23 — Confirmação de maioridade:** Um item de bebida alcoólica só pode ser registrado em um pedido cujo campo maioridade_confirmada esteja preenchido como confirmado.
+| Código | Regra | Descrição |
+| :--- | :--- | :--- |
+| RN01 | Rastreabilidade dos pedidos | Todo pedido registrado deve estar associado a exatamente um atendente responsável pelo seu registro. |
+| RN02 | Vinculação à mesa | Todo pedido deve estar associado a exatamente uma mesa, conforme o modelo de atendimento presencial considerado no projeto. |
+| RN03 | Identificação dos produtos | Cada produto cadastrado deve possuir um código identificador único (`codigo_produto`), utilizado para diferenciá-lo dos demais produtos registrados no sistema. |
+| RN04 | Composição dos pedidos | Um pedido pode conter um ou mais produtos, e um mesmo produto pode estar presente em diferentes pedidos. A quantidade e o preço unitário devem ser registrados para cada associação entre pedido e produto. |
+| RN05 | Encaminhamento por setor | Cada produto deve estar associado ao setor responsável por sua preparação, como cozinha ou bar, de acordo com a classificação definida no cadastro. |
+| RN06 | Registro de pagamentos | Um pedido pode não possuir pagamentos registrados, possuir um único pagamento ou possuir vários pagamentos, permitindo que o valor seja quitado em etapas. Enquanto o cliente não pagar, o pedido permanece em aberto, sem nenhum pagamento registrado. |
+| RN07 | Controle de estoque | As informações de estoque devem estar relacionadas aos produtos correspondentes, permitindo identificar as quantidades registradas para cada produto. |
+| RN08 | Integridade dos registros | Os registros relacionados entre si devem respeitar as chaves e as restrições de integridade definidas no banco de dados, evitando referências a registros inexistentes. |
+| RN09 | Validação de quantidades e valores | A quantidade de produtos em um pedido deve ser maior que zero. Os atributos `preco_unitario` e `preco_atual` não podem assumir valores negativos, e `valor_pago` deve ser maior que zero. Os atributos `qt_produto`, `preco_unitario`, `preco_atual` e `valor_pago` são obrigatórios. |
+| RN10 | Associação de produtos aos setores | Cada produto deve possuir um setor responsável definido no cadastro, conforme a estrutura representada no DER. |
+| RN11 | Identificação e data dos pedidos | Cada pedido deve possuir um identificador próprio e uma data e hora de registro, permitindo sua diferenciação e consulta posterior. |
+| RN12 | Identificação dos pagamentos | Cada registro de pagamento deve possuir um identificador próprio, possibilitando sua identificação individual no sistema. |
+| RN13 | Disponibilidade em estoque | O atributo `qt_disponivel` é obrigatório e seu valor não pode ser negativo. Quando não houver unidades disponíveis, o valor deve ser zero. |
+| RN14 | Data e hora do pagamento | O atributo `data_hora_pagamento` é obrigatório e registra o momento em que o pagamento foi realizado. Um pagamento só é registrado depois de realizado. |
+| RN15 | Produto indisponível | Produto com limite diário não pode ser pedido além do limite no dia. |
+| RN16 | Cancelamento de item | O item só pode ser cancelado enquanto o setor não iniciou o preparo. |
+| RN17 | Registro do cancelamento | Item cancelado não é excluído; fica registrado com motivo e não conta no limite. |
+| RN18 | Bebidas alcoólicas | Produtos cadastrados como bebida alcoólica só podem ser vendidos a pessoas maiores de 18 anos. |
+| RN19 | Conferência da idade | Antes de registrar um item alcoólico, o atendente deve conferir a maioridade do cliente por meio de documento oficial com foto. Nenhum dado do documento (nome, RG, CPF ou data de nascimento) é registrado no sistema. |
+| RN20 | Quitação do pedido | A soma dos pagamentos de um pedido não pode ultrapassar o valor total do pedido, calculado pela soma de `qt_produto` × `preco_unitario` dos itens não cancelados. O pedido é considerado quitado quando a soma dos pagamentos é igual a esse valor. |
+| RN21 | Forma de pagamento | Todo pagamento deve utilizar uma forma de pagamento previamente cadastrada (como dinheiro, crédito, débito ou Pix). |
+| RN22 | Nota fiscal | Cada pedido possui no máximo uma nota fiscal. O registro da nota é independente do registro dos pagamentos e pode ocorrer depois deles (hipótese de modelagem, a confirmar na segunda entrevista). |
+| RN23 | Confirmação de maioridade | Um item de bebida alcoólica só pode ser registrado em um pedido cujo campo `maioridade_confirmada` esteja preenchido como confirmado. |
 
 ### 4.4 Relação com a Modelagem do Banco de Dados
 
