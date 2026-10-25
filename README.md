@@ -177,9 +177,13 @@ flowchart TD
     M --> N["Registro do pagamento em uma ou mais formas"]
     N --> O(["Pedido fechado - Mesa livre"])
 ```
-
-
 *— Fluxo do processo de atendimento, registro de pedidos, preparação e pagamento.*
+
+> **Nota sobre o fluxograma:** o desenho mostra a sequência do atendimento (da chegada do cliente até a mesa ser liberada). Dois pontos são **hipóteses de modelagem da equipe**, e não fatos confirmados pelo gerente:
+>
+> - **Identificação do atendente:** o gerente informou que os funcionários não têm login individual no aplicativo. Por isso, o atendente se identifica escolhendo seu nome na tela, e não entrando com usuário e senha.
+> - **Baixa no estoque (seta pontilhada):** o gerente informou que o estoque é controlado manualmente (planilha, anotação ou contagem). A baixa automática a cada item pedido é uma proposta nossa para o sistema.
+
 
 ### 3.5 Identificação do problema
 
