@@ -243,11 +243,11 @@ Os requisitos funcionais descrevem as operações que o sistema deverá permitir
 | :--- | :--- |
 | RF01 | O sistema deve permitir o registro de pedidos, associando cada pedido a uma mesa e ao atendente responsável. |
 | RF02 | O sistema deve permitir a inclusão de produtos em um pedido, informando a quantidade e o preço unitário considerado para cada produto. |
-| RF03 | O sistema deve permitir o cadastro e a consulta dos produtos disponíveis, incluindo nome, código e preço atual. |
+| RF03 | O sistema deve permitir o cadastro e a consulta dos produtos disponíveis, incluindo nome, código, preço atual, limite diário de porções (opcional) e a indicação de bebida alcoólica. |
 | RF04 | O sistema deve permitir o cadastro e a identificação das mesas utilizadas no atendimento. |
 | RF05 | O sistema deve permitir o cadastro dos atendentes responsáveis pelo registro dos pedidos. |
 | RF06 | O sistema deve permitir a classificação dos produtos conforme o setor responsável por sua preparação, como cozinha ou bar. |
-| RF07 | O sistema deve permitir o registro dos pagamentos relacionados aos pedidos, incluindo data, valor pago e forma de pagamento. |
+| RF07 | O sistema deve permitir o registro de um ou mais pagamentos para cada pedido (divisão da conta), incluindo data e hora, valor pago e a forma de pagamento escolhida entre as formas cadastradas. |
 | RF08 | O sistema deve permitir o registro e a consulta das quantidades de produtos disponíveis em estoque. |
 
 ### 4.2 Requisitos Não Funcionais
@@ -275,13 +275,13 @@ As regras de negócio definem condições que devem ser respeitadas para represe
 
 **RN05 — Encaminhamento por setor:** Cada produto deve estar associado ao setor responsável por sua preparação, como cozinha ou bar, de acordo com a classificação definida no cadastro.
 
-**RN06 — Registro de pagamentos:** Um pedido pode não possuir pagamentos registrados, possuir um único pagamento ou possuir vários pagamentos, permitindo que o valor seja quitado em etapas.
+**RN06 — Registro de pagamentos:** Um pedido pode não possuir pagamentos registrados, possuir um único pagamento ou possuir vários pagamentos, permitindo que o valor seja quitado em etapas. Enquanto o cliente não pagar, o pedido permanece em aberto, sem nenhum pagamento registrado.
 
 **RN07 — Controle de estoque:** As informações de estoque devem estar relacionadas aos produtos correspondentes, permitindo identificar as quantidades registradas para cada produto.
 
 **RN08 — Integridade dos registros:** Os registros relacionados entre si devem respeitar as chaves e as restrições de integridade definidas no banco de dados, evitando referências a registros inexistentes.
 
-**RN09 — Validação de quantidades e valores:** A quantidade de produtos em um pedido deve ser maior que zero. Os atributos `preco_unitario`, `preco_atual` e `valor_pago` não podem assumir valores negativos. Os atributos `qt_produto`, `preco_unitario` e `preco_atual` são obrigatórios, enquanto `valor_pago` pode permanecer nulo quando não houver valor de pagamento registrado.
+**RN09 — Validação de quantidades e valores:** A quantidade de produtos em um pedido deve ser maior que zero. Os atributos preco_unitario e preco_atual não podem assumir valores negativos, e valor_pago deve ser maior que zero. Os atributos qt_produto, preco_unitario, preco_atual e valor_pago são obrigatórios.
 
 **RN10 — Associação de produtos aos setores:** Cada produto deve possuir um setor responsável definido no cadastro, conforme a estrutura representada no DER.
 
@@ -289,9 +289,9 @@ As regras de negócio definem condições que devem ser respeitadas para represe
 
 **RN12 — Identificação dos pagamentos:** Cada registro de pagamento deve possuir um identificador próprio, possibilitando sua identificação individual no sistema.
 
-**RN13 — Disponibilidade em estoque:** O atributo `qt_disponivel` pode permanecer nulo quando a quantidade disponível não estiver informada. Quando preenchido, seu valor não pode ser negativo.
+**RN13 — Disponibilidade em estoque:** O atributo qt_disponivel é obrigatório e seu valor não pode ser negativo. Quando não houver unidades disponíveis, o valor deve ser zero.
 
-**RN14 — Data de pagamento:** A data de pagamento pode permanecer nula enquanto o pagamento não tiver sido realizado. Quando preenchida, deve representar uma data válida.
+**RN14 — Data e hora do pagamento:** O atributo data_hora_pagamento é obrigatório e registra o momento em que o pagamento foi realizado. Um pagamento só é registrado depois de realizado.
 
 **RN15 —  produto indisponível:** produto com limite diário não pode ser pedido além do limite no dia.
 
@@ -303,9 +303,17 @@ As regras de negócio definem condições que devem ser respeitadas para represe
 
 **RN19 — Conferência da idade**: Antes de registrar um item alcoólico, o atendente deve conferir a maioridade do cliente por meio de documento oficial com foto. Nenhum dado do documento (nome, RG, CPF ou data de nascimento) é registrado no sistema.
 
+**RN20 — Quitação do pedido:** A soma dos pagamentos de um pedido não pode ultrapassar o valor total do pedido, calculado pela soma de qt_produto × preco_unitario dos itens não cancelados. O pedido é considerado quitado quando a soma dos pagamentos é igual a esse valor.
+
+**RN21 — Forma de pagamento:** Todo pagamento deve utilizar uma forma de pagamento previamente cadastrada (como dinheiro, crédito, débito ou Pix).
+
+**RN22 — Nota fiscal:** Cada pedido possui no máximo uma nota fiscal. O registro da nota é independente do registro dos pagamentos e pode ocorrer depois deles.
+
+**RN23 — Confirmação de maioridade:** Um item de bebida alcoólica só pode ser registrado em um pedido cujo campo maioridade_confirmada esteja preenchido como confirmado.
+
 ### 4.4 Relação com a Modelagem do Banco de Dados
 
-Os requisitos e as regras apresentados orientam a estruturação das entidades, dos atributos e dos relacionamentos do banco de dados. As regras referentes aos pedidos, produtos, mesas, atendentes, setores, estoque e pagamentos devem ser implementadas por meio de chaves, restrições e validações adequadas no modelo relacional.
+Os requisitos e as regras apresentados orientam a estruturação das entidades, dos atributos e dos relacionamentos do banco de dados. As regras referentes aos pedidos, produtos, mesas, atendentes, setores, estoque, pagamento, forma pagamento, nota fiscal devem ser implementadas por meio de chaves, restrições e validações adequadas no modelo relacional.
 
 As regras que dependem de decisões operacionais ainda não confirmadas deverão ser validadas com o estabelecimento antes da implementação definitiva do sistema.
 
