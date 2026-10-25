@@ -148,7 +148,7 @@ O cardápio do estabelecimento apresenta os produtos comercializados, organizado
 
 Na estrutura proposta, a entidade Produto será responsável pelo cadastro das informações dos produtos, incluindo sua identificação e seu preço atual. O preço unitário aplicado a cada produto também será registrado no respectivo item do pedido, permitindo manter o histórico do valor considerado no momento da venda.
 
-📄 **Documento de referência:** [Consultar cardápio do Palazio del Chef (PDF)](./cardapio_palazio_diurno.pdf)
+📄 *Documento de referência:* [Consultar cardápio do Palazio del Chef (PDF)](./cardapio_palazio_diurno.pdf)
 
 ### 3.4 Fluxograma do processo de atendimento
 
@@ -177,11 +177,8 @@ flowchart TD
     N --> O(["Pedido fechado - Mesa livre"])
 ```
 
-<p align="center">
-  <img src="./Fluxograma_Palazio_del_Chef/fluxograma_palazio_del_chef.png" alt="Fluxograma do processo de atendimento do Palazio del Chef" width="900">
-</p>
 
-*Figura X — Fluxo do processo de atendimento, registro de pedidos, preparação e pagamento.*
+*— Fluxo do processo de atendimento, registro de pedidos, preparação e pagamento.*
 
 ### 3.5 Identificação do problema
 
