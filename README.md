@@ -32,7 +32,9 @@
 — **Telefone:** (11) 2359-7134
 
 — **Google Maps:** https://acesse.one/PalazioDelChefe
+
 — **Redes sociais oficiais:** https://www.instagram.com/palaziodelchef/?hl=en
+
 
 <p align="center">
   <img src="./imagem_palazio.jpeg" alt="Imagem visual do estabelecimento do Palazio Del Chef" width="550">
