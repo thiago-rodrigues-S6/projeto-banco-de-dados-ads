@@ -155,14 +155,16 @@ As chaves estrangeiras listadas aqui resultam das relações do DER conceitual e
 
 ### 5.2. Representação dos relacionamentos
 
-- **ATENDENTE — PEDIDO:** um atendente pode registrar vários pedidos, enquanto cada pedido é associado a um único atendente (1:N).
-- **MESA — PEDIDO:** uma mesa pode estar associada a vários pedidos ao longo do tempo, enquanto cada pedido é associado a uma única mesa (1:N).
-- **PEDIDO — PRODUTO:** um pedido pode ter vários produtos e um produto pode estar em vários pedidos (N:M), resolvido pela tabela ITEM_PEDIDO.
-- **SETOR — PRODUTO:** um setor pode estar associado a vários produtos, enquanto cada produto é associado a um único setor (1:N).
-- **PRODUTO — ESTOQUE:** cada produto possui um único registro de estoque, e cada registro de estoque corresponde a um único produto (1:1).
-- **PEDIDO — PAGAMENTO:** um pedido pode ter zero ou vários pagamentos, enquanto cada pagamento está associado a um único pedido (1:N).
-- **FORMA_PAGAMENTO — PAGAMENTO:** uma forma de pagamento pode ser usada em vários pagamentos, enquanto cada pagamento usa uma única forma (1:N).
-- **PEDIDO — NOTA_FISCAL:** um pedido tem no máximo uma nota fiscal, e cada nota pertence a um único pedido (1:0..1).
+| Entidades | Cardinalidade | Descrição | Chave estrangeira no modelo relacional |
+|---|---|---|---|
+| **ATENDENTE — PEDIDO** | 1:N | Um atendente pode registrar vários pedidos, enquanto cada pedido é associado a um único atendente. | `id_atendente` em PEDIDO |
+| **MESA — PEDIDO** | 1:N | Uma mesa pode estar associada a vários pedidos ao longo do tempo, enquanto cada pedido é associado a uma única mesa. | `nmr_mesa` em PEDIDO |
+| **PEDIDO — PRODUTO** | N:M | Um pedido pode ter vários produtos e um produto pode estar em vários pedidos. | Tabela ITEM_PEDIDO, com `num_pedido` e `codigo_produto` |
+| **SETOR — PRODUTO** | 1:N | Um setor pode estar associado a vários produtos, enquanto cada produto é associado a um único setor. | `id_setor` em PRODUTO |
+| **PRODUTO — ESTOQUE** | 1:1 | Cada produto possui um único registro de estoque, e cada registro de estoque corresponde a um único produto. | `codigo_produto` (único) em ESTOQUE |
+| **PEDIDO — PAGAMENTO** | 1:N | Um pedido pode ter zero ou vários pagamentos, enquanto cada pagamento está associado a um único pedido. | `num_pedido` em PAGAMENTO |
+| **FORMA_PAGAMENTO — PAGAMENTO** | 1:N | Uma forma de pagamento pode ser usada em vários pagamentos, enquanto cada pagamento usa uma única forma. | `id_forma_pagamento` em PAGAMENTO |
+| **PEDIDO — NOTA_FISCAL** | 1:(0,1) | Um pedido tem no máximo uma nota fiscal, e cada nota pertence a um único pedido. | `num_pedido` (único) em NOTA_FISCAL |
 
 ### 5.3. Restrições gerais
 
