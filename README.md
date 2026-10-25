@@ -156,6 +156,27 @@ O fluxograma a seguir representa o fluxo de atendimento do Palazio del Chef, des
 
 O fluxo foi elaborado com base nas informações levantadas durante a entrevista com o estabelecimento. As etapas operacionais que ainda não foram confirmadas deverão ser validadas para garantir que a representação corresponda ao funcionamento real do restaurante.
 
+```mermaid
+%%{init: {"flowchart": {"htmlLabels": false}}}%%
+flowchart TD
+    A([Cliente chega]) --> B["Cliente é acomodado em uma mesa"]
+    B --> C["Atendente faz login no aplicativo"]
+    C --> D["Atendente abre pedido vinculado à mesa"]
+    D --> E["Atendente registra o item no pedido"]
+    E --> F{"Setor do produto?"}
+    E -.->|baixa| G[("Estoque do produto")]
+    F -->|Cozinha| H["Cozinha recebe e prepara"]
+    F -->|Bar| I["Bar recebe e prepara"]
+    H --> J["Item pronto"]
+    I --> J
+    J --> K["Atendente entrega ao cliente"]
+    K --> L{"Cliente pede mais algo?"}
+    L -->|Sim| E
+    L -->|Não| M["Cliente solicita a conta"]
+    M --> N["Registro do pagamento em uma ou mais formas"]
+    N --> O(["Pedido fechado - Mesa livre"])
+```
+
 <p align="center">
   <img src="./Fluxograma_Palazio_del_Chef/fluxograma_palazio_del_chef.png" alt="Fluxograma do processo de atendimento do Palazio del Chef" width="900">
 </p>
