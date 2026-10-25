@@ -31,8 +31,7 @@
 
 — **Telefone:** (11) 2359-7134
 
-— **Google Maps:** https://www.google.com/maps/place/Palazio+Del+Chefe/@-23.5425015,-46.5644402,17z/data=!3m1!4b1!4m6!3m5!1s0x94ce5f0018afe5f5:0x3949505257c57a90!8m2!3d-23.5425015!4d-46.5644402!16s%2Fg%2F11x8cvzkzz?entry=ttu&g_ep=EgoyMDI2MTAxMy4wIKXMDSoASAFQAw%3D%3D
-
+— **Google Maps:** https://acesse.one/PalazioDelChefe
 — **Redes sociais oficiais:** https://www.instagram.com/palaziodelchef/?hl=en
 
 <p align="center">
