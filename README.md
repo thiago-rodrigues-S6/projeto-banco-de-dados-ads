@@ -289,6 +289,12 @@ As regras de negócio definem condições que devem ser respeitadas para represe
 
 **RN14 — Data de pagamento:** A data de pagamento pode permanecer nula enquanto o pagamento não tiver sido realizado. Quando preenchida, deve representar uma data válida.
 
+**RN15 —  Limite diário:** produto com limite diário não pode ser pedido além do limite no dia.
+
+**RN16 —  Cancelamento:** o item só pode ser cancelado enquanto o setor não iniciou o preparo.
+
+**RN17 —  Cancelamento - pedido:** item cancelado não é excluído; fica registrado com motivo e não conta no limite.
+
 ### 4.4 Relação com a Modelagem do Banco de Dados
 
 Os requisitos e as regras apresentados orientam a estruturação das entidades, dos atributos e dos relacionamentos do banco de dados. As regras referentes aos pedidos, produtos, mesas, atendentes, setores, estoque e pagamentos devem ser implementadas por meio de chaves, restrições e validações adequadas no modelo relacional.
