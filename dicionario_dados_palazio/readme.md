@@ -146,7 +146,7 @@ As chaves estrangeiras listadas aqui resultam das relações do DER conceitual e
 - **MESA** (`nmr_mesa` PK)
 - **PEDIDO** (`num_pedido` PK, `data_hora_pedido`, `id_atendente` FK, `nmr_mesa` FK)
 - **ITEM_PEDIDO** (`num_pedido` PK/FK, `codigo_produto` PK/FK, `qt_produto`, `preco_unitario`, `status`, `motivo_cancelamento`, `data_hora_cancelamento`)
-- **PRODUTO** (`codigo_produto` PK, `nome_produto`, `preco_atual`, `limite_diario`, `id_setor` FK)
+- **PRODUTO** (`codigo_produto` PK, `nome_produto`, `preco_atual`, `limite_diario`, `bebida_alcoólica` , `id_setor` FK)
 - **SETOR** (`id_setor` PK, `nome_setor`)
 - **ESTOQUE** (`id_estoque` PK, `codigo_produto` FK, `qt_disponivel`)
 - **FORMA_PAGAMENTO** (`id_forma_pagamento` PK, `descricao`)
@@ -230,6 +230,7 @@ As chaves estrangeiras desta seção são uma projeção preliminar para o model
 | `nome_produto`         | VARCHAR(100)  | Sim (`NOT NULL`)       | Armazena o nome do produto, permitindo identificá-lo nos pedidos e no cadastro do estabelecimento.                                                             |
 | `preco_atual`          | DECIMAL(10,2) | Sim (`NOT NULL`)       | Armazena o preço atual de venda do produto, utilizado como referência para calcular o valor dos pedidos.                                                       |
 | `limite_diario`        | INT           | Não (`NULL` permitido) | Quantidade máxima de porções vendidas por dia. Valor nulo significa sem limite. As vendas do dia são calculadas a partir dos itens de pedido, sem duplicar dado. |
+| `bebida_alcoolica`     | BOOLEAN       | Sim (`NOT NULL`)       | Indica se o produto é uma bebida alcoólica. Produtos marcados como alcoólicos exigem a conferência de maioridade do cliente antes do registro no pedido. |
 | `id_setor` (FK)        | INT           | Sim (`NOT NULL`)       | Identifica o setor responsável pelo produto, relacionando-o à entidade SETOR por meio de uma chave estrangeira (FK).                                           |
 
 ---
