@@ -144,7 +144,7 @@ As chaves estrangeiras listadas aqui resultam das relações do DER conceitual e
 
 - **ATENDENTE** (`id_atendente` PK, `nome_atendente`)
 - **MESA** (`nmr_mesa` PK)
-- **PEDIDO** (`num_pedido` PK, `data_hora_pedido`, `id_atendente` FK, `nmr_mesa` FK)
+- **PEDIDO** (`num_pedido` PK, `data_hora_pedido`, `maioridade_confirmada` ,  `id_atendente` FK, `nmr_mesa` FK)
 - **ITEM_PEDIDO** (`num_pedido` PK/FK, `codigo_produto` PK/FK, `qt_produto`, `preco_unitario`, `status`, `motivo_cancelamento`, `data_hora_cancelamento`)
 - **PRODUTO** (`codigo_produto` PK, `nome_produto`, `preco_atual`, `limite_diario`, `bebida_alcoólica` , `id_setor` FK)
 - **SETOR** (`id_setor` PK, `nome_setor`)
@@ -202,7 +202,8 @@ As chaves estrangeiras desta seção são uma projeção preliminar para o model
 | Atributo             | Tipo     | Obrigatório      | Significado e relevância                                                                                                                   |
 | -------------------- | -------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | `num_pedido` (PK)    | INT      | Sim (`NOT NULL`) | Identificador único de cada pedido. É a chave primária (PK) e permite distinguir os pedidos registrados no sistema.                        |
-| `data_hora_pedido`   | DATETIME | Sim (`NOT NULL`) | Registra a data e o horário em que o pedido foi realizado. Pode utilizar a data e a hora atuais como valor padrão.                        |
+| `data_hora_pedido`   | DATETIME | Sim (`NOT NULL`) | Registra a data e o horário em que o pedido foi realizado. Pode utilizar a data e a hora atuais como valor padrão.  
+| `maioridade_confirmada` | BOOLEAN  | Sim (`NOT NULL`) | Indica se o atendente confirmou a maioridade do cliente para itens alcoólicos. É só uma marcação (sim ou não) e não guarda dados do documento. ||
 | `id_atendente` (FK)  | INT      | Sim (`NOT NULL`) | Identifica o atendente responsável pelo pedido. É uma chave estrangeira (FK) relacionada ao atributo `id_atendente` da entidade ATENDENTE. |
 | `nmr_mesa` (FK)      | INT      | Sim (`NOT NULL`) | Identifica a mesa associada ao pedido. É uma chave estrangeira (FK) relacionada ao atributo `nmr_mesa` da entidade MESA.                   |
 
