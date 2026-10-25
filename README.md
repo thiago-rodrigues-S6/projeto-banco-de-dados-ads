@@ -167,9 +167,20 @@ O fluxo foi elaborado com base nas informações levantadas durante a entrevista
 %%{init: {"flowchart": {"htmlLabels": false}}}%%
 flowchart TD
     A([Cliente chega]) --> B["Cliente é acomodado em uma mesa"]
-    B --> C["Atendente faz login no aplicativo"]
+    B --> C["Atendente se identifica no aplicativo (seleciona seu nome)"]
     C --> D["Atendente abre pedido vinculado à mesa"]
-    D --> E["Atendente registra o item no pedido"]
+    D --> S["Cliente solicita um item"]
+    S --> DISP{"Produto disponível hoje?"}
+    DISP -->|Não| NI["Atendente informa que o produto está indisponível"]
+    DISP -->|Sim| AL{"Item é bebida alcoólica?"}
+    NI --> L{"O que o cliente deseja?"}
+    AL -->|Não| E["Atendente registra o item no pedido"]
+    AL -->|Sim| DOC["Atendente confere documento oficial com foto"]
+    DOC --> ID{"Cliente tem 18 anos ou mais?"}
+    ID -->|Sim| MC["Atendente marca a maioridade confirmada no pedido"]
+    ID -->|Não| REC["Item não é registrado"]
+    MC --> E
+    REC --> L
     E --> F{"Setor do produto?"}
     E -.->|baixa| G[("Estoque do produto")]
     F -->|Cozinha| H["Cozinha recebe e prepara"]
@@ -177,19 +188,28 @@ flowchart TD
     H --> J["Item pronto"]
     I --> J
     J --> K["Atendente entrega ao cliente"]
-    K --> L{"Cliente pede mais algo?"}
-    L -->|Sim| E
-    L -->|Não| M["Cliente solicita a conta"]
-    M --> N["Registro do pagamento em uma ou mais formas"]
-    N --> O(["Pedido fechado - Mesa livre"])
+    K --> L
+    L -->|Pedir mais algo| S
+    L -->|Cancelar um item| CAN["Atendente cancela o item e registra o motivo"]
+    CAN --> L
+    L -->|Pedir a conta| M["Cliente solicita a conta"]
+    M --> N["Atendente registra o pagamento (forma e valor)"]
+    N --> P{"Pagamentos cobrem o total?"}
+    P -->|Não, falta pagar| N
+    P -->|Sim| O(["Pedido fechado - Mesa livre"])
+    P -.->|quando emitido| R["Dados do cupom fiscal são registrados"]
 ```
 *— Fluxo do processo de atendimento, registro de pedidos, preparação e pagamento.*
 
-> **Nota sobre o fluxograma:** o desenho mostra a sequência do atendimento (da chegada do cliente até a mesa ser liberada). Dois pontos são **hipóteses de modelagem da equipe**, e não fatos confirmados pelo gerente:
+> **Nota sobre o fluxograma:** o desenho mostra a sequência do atendimento (da chegada do cliente até a mesa ser liberada). Os pontos abaixo são **hipóteses de modelagem da equipe**, e não fatos confirmados pelo gerente:
 >
 > - **Identificação do atendente:** o gerente informou que os funcionários não têm login individual no aplicativo. Por isso, o atendente se identifica escolhendo seu nome na tela, e não entrando com usuário e senha.
 > - **Baixa no estoque (seta pontilhada):** o gerente informou que o estoque é controlado manualmente (planilha, anotação ou contagem). A baixa automática a cada item pedido é uma proposta nossa para o sistema.
+> - **Conferência de maioridade:** o gerente não informou como a idade é conferida na venda de bebida alcoólica. O fluxo representa a decisão do grupo (conferência de documento sem armazenar dados) e será validado na segunda entrevista.
+> - **Cancelamento de item e pagamento:** o cancelamento de item, a divisão da conta em vários pagamentos e o registro do cupom fiscal (emitido por sistema externo, seta pontilhada) também são hipóteses a validar.
+> - **Produto indisponível:** o limite diário de porções por produto é uma proposta do grupo (não foi informada pelo gerente). Quando o limite do dia é atingido, o produto fica indisponível para novos pedidos.
 
+---
 
 ### 3.5 Identificação do problema
 
