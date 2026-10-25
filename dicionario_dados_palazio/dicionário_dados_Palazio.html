@@ -41,6 +41,7 @@
         }
         .pk { color: var(--secondary-color); font-weight: bold; }
         .fk { color: #2980b9; font-weight: bold; }
+        .nota { font-size: 0.95em; color: #555; margin-top: 8px; }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -86,6 +87,7 @@
 
     <h1>Dicionário de Dados - Palazio del Chef</h1>
     <p>Documentação oficial de metadados e modelagem do sistema Palazio del Chef.</p>
+    <p class="nota">Este dicionário descreve o <strong>modelo conceitual</strong>. Por isso, as chaves estrangeiras não aparecem aqui: os vínculos entre as entidades são representados pelas relações do DER e serão detalhados no modelo relacional.</p>
 
     <!-- TABELA ATENDENTE -->
     <h2>ATENDENTE</h2>
@@ -100,7 +102,7 @@
         <tbody>
             <tr>
                 <td>id_atendente</td>
-                <td>Identifica de forma única para cada atendente cadastrado no sistema.</td>
+                <td>Identifica de forma única cada atendente cadastrado no sistema.</td>
                 <td>Deve ser único e obrigatório para cada atendente.</td>
             </tr>
             <tr>
@@ -116,14 +118,14 @@
     <table>
         <thead>
             <tr>
-                <th>atributo</th>
+                <th>Atributo</th>
                 <th>Descrição</th>
                 <th>Regra de negócio associada</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>num_mesa</td>
+                <td>nmr_mesa</td>
                 <td>Número que identifica cada mesa no estabelecimento.</td>
                 <td>Deve ser único, obrigatório e corresponder a uma mesa existente no estabelecimento.</td>
             </tr>
@@ -142,27 +144,55 @@
         </thead>
         <tbody>
             <tr>
-                <td>num_pedido</td>
+                <td>Num_pedido</td>
                 <td>Número que identifica exclusivamente cada pedido no sistema.</td>
                 <td>Deve ser único e obrigatório. O número é gerado pelo sistema e não deve ser reutilizado.</td>
             </tr>
             <tr>
-                <td>data_pedido</td>
+                <td>data_hora_pedido</td>
                 <td>Registra a data e o horário em que o pedido foi realizado.</td>
                 <td>Deve ser preenchida automaticamente pelo sistema no momento do registro do pedido.</td>
             </tr>
+        </tbody>
+    </table>
+
+    <!-- RELAÇÃO POSSUI (ITEM DO PEDIDO) -->
+    <h2>ITEM DO PEDIDO (relação "Possui": Pedido x Produto)</h2>
+    <table>
+        <thead>
             <tr>
-                <td>id_atendente</td>
-                <td>Identifica o atendente responsável pelo registro do pedido.</td>
-                <td>É obrigatório e deve corresponder a um atendente cadastrado.</td>
+                <th>Atributo</th>
+                <th>Descrição</th>
+                <th>Regra de negócio associada</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>qt_produto</td>
+                <td>Quantidade do produto solicitada no pedido.</td>
+                <td>Deve ser um número inteiro maior que zero.</td>
             </tr>
             <tr>
-                <td>num_mesa</td>
-                <td>Identifica a mesa associada ao pedido. </td>
-                <td>É obrigatório e deve corresponder a uma mesa cadastrada no estabelecimento.</td>
+                <td>preco_unitario</td>
+                <td>Preço do produto no momento em que foi pedido.</td>
+                <td>Deve ser copiado do preço atual do produto no registro do item e não muda se o preço do produto for alterado depois. Não pode ser negativo.</td>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>Situação do item dentro do pedido (por exemplo, ativo ou cancelado).</td>
+                <td>Deve ser obrigatório. Um item cancelado não entra no valor total a pagar.</td>
+            </tr>
+            <tr>
+                <td>motivo_cancelamento</td>
+                <td>Motivo pelo qual o item foi cancelado.</td>
+                <td>Opcional. Deve ser preenchido apenas quando o item for cancelado.</td>
+            </tr>
+            <tr>
+                <td>data_hora_cancelamento</td>
+                <td>Data e horário em que o item foi cancelado.</td>
+                <td>Opcional. Deve ser preenchida automaticamente apenas quando o item for cancelado.</td>
             </tr>
         </tbody>
-    
     </table>
 
     <!-- TABELA PRODUTO -->
@@ -177,7 +207,7 @@
         </thead>
         <tbody>
             <tr>
-                <td>código_produto</td>
+                <td>codigo_produto</td>
                 <td>Código que identifica exclusivamente cada produto cadastrado no sistema.</td>
                 <td>Deve ser único e obrigatório para cada produto.</td>
             </tr>
@@ -192,14 +222,9 @@
                 <td>Deve ser informado e não pode ser negativo.</td>
             </tr>
             <tr>
-                <td>id_estoque</td>
-                <td>Identificador do estoque onde o produto está disponível.</td>
-                <td>Deve ser um número inteiro igual ou superior a zero. para identificar o estoque de determinado produto.</td>
-            </tr>
-            <tr>
-                <td>id_setor</td>
-                <td>Identificador do setor responsável pela preparação ou atendimento do produto.</td>
-                <td>Deve corresponder a um setor cadastrado, como Bar ou Cozinha.</td>
+                <td>limite_diario</td>
+                <td>Quantidade máxima de porções do produto que podem ser vendidas por dia.</td>
+                <td>Opcional: quando não preenchido, o produto não tem limite diário. Quando as vendas do dia atingirem o limite, o produto fica indisponível para novos pedidos.</td>
             </tr>
         </tbody>
     </table>
@@ -223,12 +248,12 @@
             <tr>
                 <td>nome_setor</td>
                 <td>Nome do setor responsável pela preparação ou atendimento dos produtos.</td>
-                <td>Os setores cadastrados no projetoa são Bar e Cozinha. Cada setor deve possuir um nome obrigatório.</td>
+                <td>Os setores cadastrados no projeto são Bar e Cozinha. Cada setor deve possuir um nome obrigatório.</td>
             </tr>
         </tbody>
     </table>
 
-        <!-- TABELA PAGAMENTO -->
+    <!-- TABELA PAGAMENTO -->
     <h2>PAGAMENTO</h2>
     <table>
         <thead>
@@ -245,56 +270,109 @@
                 <td>Deve ser único e obrigatório para cada pagamento.</td>
             </tr>
             <tr>
-                <td>num_pedido</td>
-                <td>Identifica o pedido ao qual o pagamento está associado.</td>
-                <td>Deve ser obrigatório e corresponder a um pedido cadastrado.</td>
-            </tr>
-            <tr>
-                <td>data_pagamento</td>
+                <td>data_hora_pagamento</td>
                 <td>Registra a data e o horário em que o pagamento foi realizado.</td>
                 <td>Deve ser registrada para cada pagamento concluído.</td>
             </tr>
             <tr>
                 <td>valor_pago</td>
                 <td>Valor correspondente ao pagamento registrado.</td>
-                <td>Deve ser maior que zero. A soma dos pagamentos concluídos não deve ultrapassar o valor total devido pelo pedido.</td>
+                <td>Deve ser maior que zero. Um pedido pode ter vários pagamentos (divisão da conta), e a soma deles não deve ultrapassar o valor total devido pelo pedido.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- TABELA FORMA DE PAGAMENTO -->
+    <h2>FORMA_PAGAMENTO</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Atributo</th>
+                <th>Descrição</th>
+                <th>Regra de negócio associada</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>id_forma_pagamento</td>
+                <td>Identifica de forma única cada forma de pagamento aceita pelo estabelecimento.</td>
+                <td>Deve ser único e obrigatório.</td>
             </tr>
             <tr>
-                <td>forma_pagamento</td>
-                <td>Forma utilizada para realizar o pagamento registrado.</td>
-                <td>Deve corresponder a uma forma aceita pelo estabelecimento, como dinheiro, crédito, débito ou Pix.</td>
+                <td>descricao</td>
+                <td>Nome da forma de pagamento, como dinheiro, crédito, débito ou Pix.</td>
+                <td>Obrigatória e sem repetição. Todo pagamento deve usar uma forma de pagamento cadastrada.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- TABELA NOTA FISCAL -->
+    <h2>NOTA_FISCAL</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Atributo</th>
+                <th>Descrição</th>
+                <th>Regra de negócio associada</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>id_nota_fiscal</td>
+                <td>Identifica de forma única cada registro de nota fiscal no sistema.</td>
+                <td>Deve ser único e obrigatório.</td>
+            </tr>
+            <tr>
+                <td>numero_nota</td>
+                <td>Número do cupom ou nota fiscal emitido.</td>
+                <td>Obrigatório. A emissão é feita por sistema externo; o banco apenas armazena os dados.</td>
+            </tr>
+            <tr>
+                <td>serie</td>
+                <td>Série da nota fiscal emitida.</td>
+                <td>Obrigatória.</td>
+            </tr>
+            <tr>
+                <td>data_emissao</td>
+                <td>Data em que a nota fiscal foi emitida.</td>
+                <td>Obrigatória. A nota é registrada depois da emissão, e não impede o registro do pagamento.</td>
+            </tr>
+            <tr>
+                <td>valor_total</td>
+                <td>Valor total que consta na nota fiscal emitida.</td>
+                <td>Obrigatório e maior que zero.</td>
+            </tr>
+            <tr>
+                <td>chave_acesso</td>
+                <td>Chave de acesso que identifica a nota fiscal perante o órgão fiscal.</td>
+                <td>Obrigatória e única.</td>
             </tr>
         </tbody>
     </table>
 
     <!-- TABELA ESTOQUE -->
-<h2>ESTOQUE</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Atributo</th>
-            <th>Descrição</th>
-            <th>Regra de negócio associada</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>id_estoque</td>
-            <td>Identifica exclusivamente cada registro de estoque.</td>
-            <td>Deve ser único e obrigatório.</td>
-        </tr>
-        <tr>
-            <td>codigo_produto</td>
-            <td>Identifica o produto cujo estoque está sendo controlado.</td>
-            <td>Deve corresponder a um produto cadastrado. Cada produto deve possuir apenas um registro de estoque.</td>
-        </tr>
-        <tr>
-            <td>quantidade_disponivel</td>
-            <td>Indica a quantidade disponível do produto em estoque.</td>
-            <td>Deve ser um número inteiro igual ou superior a zero. Quando não houver unidades disponíveis, o valor deve ser zero.</td>
-        </tr>
-    </tbody>
-</table>
+    <h2>ESTOQUE</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Atributo</th>
+                <th>Descrição</th>
+                <th>Regra de negócio associada</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>id_estoque</td>
+                <td>Identifica exclusivamente cada registro de estoque.</td>
+                <td>Deve ser único e obrigatório.</td>
+            </tr>
+            <tr>
+                <td>qt_disponivel</td>
+                <td>Indica a quantidade disponível do produto em estoque.</td>
+                <td>Deve ser um número inteiro igual ou superior a zero. Quando não houver unidades disponíveis, o valor deve ser zero.</td>
+            </tr>
+        </tbody>
+    </table>
 
     <footer>
         <p> • Palazio del Chef</p>
