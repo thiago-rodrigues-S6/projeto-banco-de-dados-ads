@@ -1,72 +1,107 @@
-# Sistema de Gerenciamento de Pedidos
-
-Projeto desenvolvido para representar o banco de dados de um sistema de gerenciamento de pedidos.
+# Sistema de Gerenciamento de Pedidos — Palazio del Chef
 
 ## Sobre o projeto
 
-O sistema tem como objetivo organizar informações relacionadas aos pedidos realizados no estabelecimento, permitindo relacionar funcionários, mesas, produtos, setores e itens dos pedidos.
+Projeto de modelagem de banco de dados para um sistema de gerenciamento de pedidos de um restaurante. O objetivo é organizar as informações relacionadas aos pedidos, funcionários, mesas, produtos, pagamentos, notas fiscais, estoque e fornecedores.
 
-O banco de dados foi desenvolvido a partir de um modelo entidade-relacionamento (DER).
+O banco de dados foi desenvolvido a partir de um **Modelo-Entidade-Relacionamento (DER)**, representando as entidades, seus atributos, os relacionamentos e as respectivas cardinalidades.
 
 ## Modelo do Banco de Dados
 
 O sistema possui as seguintes entidades:
 
-- **Funcionário**: armazena os dados dos funcionários.
-- **Mesa**: representa as mesas disponíveis no estabelecimento.
-- **Produto**: contém as informações dos produtos cadastrados.
-- **Setor**: identifica o setor ao qual um produto pertence.
-- **Pedido**: armazena as informações dos pedidos realizados.
-- **Item Pedido**: representa os produtos incluídos em cada pedido.
+- **Atendente:** armazena os dados dos funcionários responsáveis pelo registro dos pedidos.
+- **Mesa:** representa as mesas disponíveis no estabelecimento.
+- **Pedido:** registra os pedidos realizados, incluindo data, horário, status e informações sobre cancelamentos.
+- **Produto:** contém os produtos cadastrados, preços, limite diário de vendas e identificação de bebidas alcoólicas.
+- **Setor:** identifica o setor ao qual cada produto pertence.
+- **Estoque:** controla a quantidade disponível dos produtos armazenados.
+- **Fornecedor:** armazena informações sobre os fornecedores do restaurante.
+- **Pagamento:** registra os pagamentos realizados, incluindo valor, data, horário e forma de pagamento.
+- **Nota Fiscal:** armazena os dados relacionados à NFC-e (Nota Fiscal de Consumidor Eletrônica).
 
 ## Principais relacionamentos
 
 ### Funcionário → Pedido
-Um funcionário pode registrar vários pedidos, enquanto cada pedido é registrado por um funcionário.
+Um Funcionário pode registrar vários pedidos, enquanto cada pedido é registrado por um único funcionário.
 
 ### Mesa → Pedido
-Uma mesa pode estar relacionada a vários pedidos, enquanto cada pedido está associado a uma mesa.
+Uma mesa pode estar relacionada a vários pedidos ao longo do tempo, enquanto cada pedido está associado a uma mesa.
 
-### Pedido → Item Pedido
-Um pedido pode possuir vários itens, e cada item pertence a um pedido.
-
-### Produto → Item Pedido
-Um produto pode aparecer em vários itens de pedidos.
+### Pedido → Produto
+Um pedido pode conter vários produtos, e um produto pode aparecer em diferentes pedidos. O relacionamento registra a quantidade de cada produto e seu preço unitário.
 
 ### Produto → Setor
 Cada produto é designado a um setor, e um setor pode possuir vários produtos.
 
+### Produto → Estoque
+O relacionamento controla as informações referentes ao estoque dos produtos, incluindo as quantidades disponíveis.
+
+### Fornecedor → Estoque
+Representa o fornecimento de produtos ao estoque do restaurante, permitindo relacionar fornecedores e registros de estoque.
+
+### Pedido → Pagamento
+Um pedido pode receber vários pagamentos, enquanto cada pagamento está associado a um único pedido.
+
+### Pedido → Nota Fiscal
+A nota fiscal refere-se ao pedido correspondente. O modelo prevê uma NFC-e para a venda, independentemente da quantidade de formas de pagamento utilizadas.
+
 ## Principais atributos
 
-### Funcionário
-- `id_funcionario`
-- `funcao`
-- `funcao_funcionario`
+### Atendente
+- `id_atendente`
+- `nome_atendente`
 
 ### Mesa
-- `Num_mesa`
+- `nmr_mesa`
+
+### Pedido
+- `Num_pedido`
+- `data_hora_pedido`
+- `status`
+- `motivo_cancelamento`
+- `data_hora_cancelamento`
+- `maior_idade`
 
 ### Produto
-- `cd_barra`
-- `Nome_produto`
-- `valor_produto`
-- `qt_produto`
+- `codigo_produto`
+- `nome_produto`
+- `preço_atual`
+- `limite_diario`
+- `bebida_alcoolica`
 
 ### Setor
 - `id_setor`
 - `nome_setor`
 
-### Pedido
-- `Num_pedido`
-- `data_pedido`
-- `forma_pagamento`
-- `Num_mesa`
+### Estoque
+- `id_estoque`
+- `qt_produto_estoque`
+- `qt_disponível`
 
-### Item Pedido
-- `Num_pedido`
-- `cd_produto`
-- `qt_produto`
-- `valor_unitario`
+### Fornecedor
+- `id_fornecedor`
+- `razão_social`
+- `CNPJ`
+- `telefone`
+- `endereço`
+- `prazo_entrega`
+- `prazo_custo`
+
+### Pagamento
+- `id_pagamento`
+- `data_hora_pagamento`
+- `valor_pago`
+- `id_formas_pagamento`
+
+### Nota Fiscal
+- `id_nota_fiscal`
+- `numero_nota`
+- `serie`
+- `data_emissão`
+- `valor_total`
+- `chave_acesso`
+- `CPF_consumidor`
 
 ## Tecnologias
 
