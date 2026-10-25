@@ -289,11 +289,15 @@ As regras de negócio definem condições que devem ser respeitadas para represe
 
 **RN14 — Data de pagamento:** A data de pagamento pode permanecer nula enquanto o pagamento não tiver sido realizado. Quando preenchida, deve representar uma data válida.
 
-**RN15 —  Limite diário:** produto com limite diário não pode ser pedido além do limite no dia.
+**RN15 —  produto indisponível:** produto com limite diário não pode ser pedido além do limite no dia.
 
 **RN16 —  Cancelamento:** o item só pode ser cancelado enquanto o setor não iniciou o preparo.
 
 **RN17 —  Cancelamento - pedido:** item cancelado não é excluído; fica registrado com motivo e não conta no limite.
+
+**RN18 — Bebida Alcoólicas:**  Produtos cadastrados como bebida alcoólica só podem ser vendidos a pessoas maiores de 18 anos.
+
+**RN19 — Conferência da idade**: Antes de registrar um item alcoólico, o atendente deve conferir a maioridade do cliente por meio de documento oficial com foto. Nenhum dado do documento (nome, RG, CPF ou data de nascimento) é registrado no sistema.
 
 ### 4.4 Relação com a Modelagem do Banco de Dados
 
