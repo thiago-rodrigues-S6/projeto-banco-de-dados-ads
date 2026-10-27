@@ -18,6 +18,8 @@
 
 ## Sumário
 
+---
+
 <table>
 <tr>
 <td valign="top" width="50%">
@@ -28,6 +30,8 @@
   - [2.1 Identificação do estabelecimento](#21-identificação-do-estabelecimento)
   - [2.2 Entrevista](#22-entrevista)
   - [2.3 Levantamento de requisitos](#23-levantamento-de-requisitos-durante-a-entrevista)
+
+<hr>
 
 ### Análise
 - [3. Análise e Modelagem](#-3-análise-e-modelagem)
@@ -43,6 +47,8 @@
   - [4.3 Regras de negócio](#43-regras-de-negócio)
   - [4.4 Relação com a modelagem](#44-relação-com-a-modelagem-do-banco-de-dados)
 
+<hr>
+
 ### Modelagem
 - [5. Dicionário de Dados](#-5-dicionário-de-dados)
 - [6. Diagrama Entidade-Relacionamento](#-6-diagrama-entidade-relacionamento)
@@ -56,10 +62,14 @@
 - [9. Implementação do Banco de Dados](#-9-implementação-do-banco-de-dados)
 - [10. Consultas SQL](#-10-consultas-sql)
 
+<hr>
+
 ### Projeto
 - [11. Estrutura do Projeto](#-11-estrutura-do-projeto)
 - [12. Status do Projeto](#-12-status-do-projeto)
 - [13. Justificativa Técnica da Modelagem](#-13-justificativa-técnica-da-modelagem)
+
+<hr>
 
 ### Inteligência Artificial
 - [14. Uso de Inteligência Artificial](#-14-uso-de-inteligência-artificial)
@@ -72,12 +82,16 @@
   - [14.7 Verificação crítica](#147-verificação-crítica-das-respostas-e-limitações)
   - [14.8 Responsabilidade do grupo](#148-responsabilidade-dos-integrantes-e-resultado-final)
 
+<hr>
+
 ### Encerramento
 - [15. Contexto Acadêmico](#-15-contexto-acadêmico)
 
 </td>
 </tr>
 </table>
+
+<hr>
 
 <p align="center">
   <a href="#-1-integrantes">Início</a> ·
