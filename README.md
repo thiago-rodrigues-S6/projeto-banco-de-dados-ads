@@ -466,7 +466,7 @@ Palazio-del-Chef/
 | Regras de negócio | ✅ Concluído |
 | Dicionário de dados | ✅ Concluído |
 | Diagrama Entidade-Relacionamento | ✅ Concluído |
-| Fluxograma do processo | 🔄 Em Desenvolvimento |
+| Fluxograma do processo | ✅ Concluído |
 | Modelo relacional | ⏳ Pendente |
 | Normalização | ⏳ Pendente |
 | Implementação SQL | ⏳ Pendente |
