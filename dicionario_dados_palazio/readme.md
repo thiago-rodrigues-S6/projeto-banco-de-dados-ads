@@ -74,6 +74,7 @@ O documento contempla as seguintes entidades: **Atendente, Mesa, Pedido, Produto
 | **Quita** | Pedido — Pagamento | 1:N | Um pedido pode ter nenhum, um ou vários pagamentos (divisão da conta). Cada pagamento pertence a um único pedido. |
 | **Usa** | Forma_Pagamento — Pagamento | 1:N | Uma forma de pagamento pode estar em vários pagamentos, mas cada pagamento usa uma única forma. |
 | **Gera** | Pedido — Nota_Fiscal | 1:(0,1) | Um pedido tem no máximo uma nota fiscal, que pode ser registrada depois do pagamento. Cada nota pertence a um único pedido. |
+| **fornece** | Fornecedor — Estoque | N:M | Um fornecedor pode fornecer vários itens de estoque, e um item de estoque pode ter vários fornecedores. A relação guarda prazo de entrega e preço de custo (Fornecimento). |
 
 Cada entidade possui seus atributos documentados individualmente, acompanhados de suas respectivas descrições e regras de negócio.
 
@@ -152,6 +153,8 @@ As chaves estrangeiras listadas aqui resultam das relações do DER conceitual e
 - **FORMA_PAGAMENTO** (`id_forma_pagamento` PK, `descricao`)
 - **PAGAMENTO** (`id_pagamento` PK, `num_pedido` FK, `id_forma_pagamento` FK, `data_hora_pagamento`, `valor_pago`)
 - **NOTA_FISCAL** (`id_nota_fiscal` PK, `num_pedido` FK, `numero_nota`, `serie`, `data_emissao`, `valor_total`, `chave_acesso`)
+- **FORNECEDOR** (`id_fornecedor` PK, `razao_social`, `cnpj`, `endereco`, `telefone`)
+- **FORNECIMENTO** (`id_fornecedor` PK/FK, `id_estoque` PK/FK, `prazo_entrega`, `preco_custo`)
 
 ### 5.2. Representação dos relacionamentos
 
@@ -165,6 +168,7 @@ As chaves estrangeiras listadas aqui resultam das relações do DER conceitual e
 | **PEDIDO — PAGAMENTO** | 1:N | Um pedido pode ter zero ou vários pagamentos, enquanto cada pagamento está associado a um único pedido. | `num_pedido` em PAGAMENTO |
 | **FORMA_PAGAMENTO — PAGAMENTO** | 1:N | Uma forma de pagamento pode ser usada em vários pagamentos, enquanto cada pagamento usa uma única forma. | `id_forma_pagamento` em PAGAMENTO |
 | **PEDIDO — NOTA_FISCAL** | 1:(0,1) | Um pedido tem no máximo uma nota fiscal, e cada nota pertence a um único pedido. | `num_pedido` (único) em NOTA_FISCAL |
+| **FORNECEDOR — ESTOQUE** | N:M | Um fornecedor pode fornecer vários itens de estoque, e um item de estoque pode ter vários fornecedores. | Tabela FORNECIMENTO, com `id_fornecedor` e `id_estoque` |
 
 ### 5.3. Restrições gerais
 
@@ -288,6 +292,27 @@ As chaves estrangeiras desta seção são uma projeção preliminar para o model
 | `valor_total`             | DECIMAL(10,2) | Sim (`NOT NULL`)           | Valor total que consta na nota emitida.                                                                                                                   |
 | `chave_acesso`            | VARCHAR(44)   | Sim (`NOT NULL`, `UNIQUE`) | Chave de acesso que identifica a nota perante o órgão fiscal.                                                                                             |
 
+### Entidade: FORNECEDOR
+
+| Atributo               | Tipo         | Obrigatório                | Significado e relevância                                                                                       |
+| ---------------------- | ------------ | -------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `id_fornecedor` (PK)   | INT          | Sim (`NOT NULL`)           | Identificador único de cada fornecedor cadastrado no sistema.                                                  |
+| `razao_social`         | VARCHAR(150) | Sim (`NOT NULL`)           | Nome empresarial do fornecedor.                                                                                |
+| `cnpj`                 | VARCHAR(14)  | Sim (`NOT NULL`, `UNIQUE`) | CNPJ do fornecedor, sem pontuação. Garante que o mesmo fornecedor não seja cadastrado duas vezes.              |
+| `endereco`             | VARCHAR(200) | Não (`NULL` permitido)     | Endereço do fornecedor.                                                                                        |
+| `telefone`             | VARCHAR(20)  | Não (`NULL` permitido)     | Telefone de contato do fornecedor.                                                                             |
+
+---
+
+### Entidade: FORNECIMENTO (relação fornece)
+
+| Atributo                    | Tipo          | Obrigatório            | Significado e relevância                                                                                             |
+| --------------------------- | ------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `id_fornecedor` (PK, FK)    | INT           | Sim (`NOT NULL`)       | Identifica o fornecedor. Faz parte da chave primária composta e referencia `id_fornecedor` em FORNECEDOR.            |
+| `id_estoque` (PK, FK)       | INT           | Sim (`NOT NULL`)       | Identifica o item de estoque fornecido. Faz parte da chave primária composta e referencia `id_estoque` em ESTOQUE.   |
+| `prazo_entrega`             | INT           | Não (`NULL` permitido) | Prazo de entrega, em dias. Quando informado, deve ser igual ou superior a zero.                                      |
+| `preco_custo`               | DECIMAL(10,2) | Sim (`NOT NULL`)       | Preço de compra cobrado pelo fornecedor. Não pode ser negativo.                                                      |
+
 ---
 
 ## 7. Log e auditoria de pedidos
@@ -337,12 +362,13 @@ Os índices são estruturas utilizadas para otimizar a localização e a recuper
 | `idx_produto_id_setor` | PRODUTO (`id_setor`) | Otimizar as consultas de produtos associados a um setor, como cozinha ou bar. |
 | `idx_pagamento_num_pedido` | PAGAMENTO (`num_pedido`) | Facilitar a consulta dos pagamentos associados a um pedido. |
 | `idx_pagamento_id_forma_pagamento` | PAGAMENTO (`id_forma_pagamento`) | Facilitar relatórios de pagamentos por forma, como o fechamento do caixa. |
+| `idx_fornecimento_id_estoque` | FORNECIMENTO (`id_estoque`) | Facilitar a consulta dos fornecedores de um item de estoque. A chave composta já cobre as buscas por fornecedor. |
 
 ### 8.2. Critérios de utilização
 
 A definição dos índices considera as principais operações de consulta relacionadas ao funcionamento do Palazio del Chef, incluindo a localização de pedidos por mesa, a identificação dos pedidos registrados por atendentes, a pesquisa de produtos, a organização dos produtos por setor e a consulta de pagamentos.
 
-As chaves primárias também possuem função de identificação única dos registros e, nos sistemas gerenciadores de banco de dados mais utilizados, normalmente recebem índices automaticamente. O mesmo costuma acontecer com atributos marcados como `UNIQUE` (como `codigo_produto` em ESTOQUE e `num_pedido` em NOTA_FISCAL), por isso não foram criados índices adicionais para eles. A criação de índices adicionais deve considerar as necessidades de consulta e evitar estruturas redundantes.
+As chaves primárias também possuem função de identificação única dos registros e, nos sistemas gerenciadores de banco de dados mais utilizados, normalmente recebem índices automaticamente. O mesmo costuma acontecer com atributos marcados como `UNIQUE` (como `codigo_produto` em ESTOQUE, `num_pedido` em NOTA_FISCAL e `cnpj` em FORNECEDOR), por isso não foram criados índices adicionais para eles. A criação de índices adicionais deve considerar as necessidades de consulta e evitar estruturas redundantes.
 
 A aplicação dos índices deve respeitar as características do sistema gerenciador de banco de dados utilizado e a estrutura física adotada na implementação.
 
