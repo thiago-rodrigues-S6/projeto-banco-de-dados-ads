@@ -384,6 +384,69 @@
         </tbody>
     </table>
 
+        <!-- TABELA FORNECEDOR -->
+    <h2>FORNECEDOR</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Atributo</th>
+                <th>Descrição</th>
+                <th>Regra de negócio associada</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>id_fornecedor</td>
+                <td>Identifica de forma única cada fornecedor cadastrado no sistema.</td>
+                <td>Deve ser único e obrigatório para cada fornecedor.</td>
+            </tr>
+            <tr>
+                <td>razao_social</td>
+                <td>Nome empresarial do fornecedor.</td>
+                <td>Obrigatório para o cadastro do fornecedor.</td>
+            </tr>
+            <tr>
+                <td>cnpj</td>
+                <td>Número do CNPJ do fornecedor.</td>
+                <td>Obrigatório e único. Deve conter 14 caracteres, sem pontos, barras ou traços.</td>
+            </tr>
+            <tr>
+                <td>endereco</td>
+                <td>Endereço do fornecedor.</td>
+                <td>Opcional.</td>
+            </tr>
+            <tr>
+                <td>telefone</td>
+                <td>Telefone de contato do fornecedor.</td>
+                <td>Opcional.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- RELAÇÃO FORNECE (FORNECIMENTO) -->
+    <h2>FORNECIMENTO (relação "fornece": Fornecedor x Estoque)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Atributo</th>
+                <th>Descrição</th>
+                <th>Regra de negócio associada</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>prazo_entrega</td>
+                <td>Prazo, em dias, que o fornecedor leva para entregar o item.</td>
+                <td>Opcional. Quando informado, deve ser um número inteiro igual ou superior a zero.</td>
+            </tr>
+            <tr>
+                <td>preco_custo</td>
+                <td>Valor que o fornecedor cobra pelo item, usado como custo de compra.</td>
+                <td>Obrigatório e não pode ser negativo. É o preço de compra, diferente do preço de venda do produto.</td>
+            </tr>
+        </tbody>
+    </table>
+
     <footer>
         <p> • Palazio del Chef</p>
     </footer>
