@@ -9,10 +9,14 @@
 
 ## 👥 1. Integrantes
 
-- **Victor Anjos**
-- **Thiago Rodrigues**
-- **Ricardo Santos**
-- **Raphael Luiz**
+| Integrante | RGM | GitHub |
+|---|---|---|
+| Raphael Luiz Lima de Araujo | 46995773 | [Raphael186](https://github.com/Raphael186) |
+| Ricardo Santos Marcelino | 47023708 | [Ricardo-Sm1](https://github.com/Ricardo-Sm1) |
+| Thiago Rodrigues Ribeiro | 47188049 | [thiago-rodrigues-S6](https://github.com/thiago-rodrigues-S6) |
+| Victor Sousa dos Anjos | 47333235 | [Victin7](https://github.com/Victin7) |
+
+**Curso / Disciplina:** Análise e Desenvolvimento de Sistemas — Modelagem de Banco de Dados (UNICID) · Prof. Cid Andrade.
 
 ---
 
