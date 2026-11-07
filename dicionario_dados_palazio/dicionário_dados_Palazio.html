@@ -360,8 +360,8 @@
         </tbody>
     </table>
 
-    <!-- TABELA ESTOQUE -->
-    <h2>ESTOQUE</h2>
+     <!-- TABELA INSUMO -->
+    <h2>INSUMO</h2>
     <table>
         <thead>
             <tr>
@@ -372,14 +372,29 @@
         </thead>
         <tbody>
             <tr>
-                <td>id_estoque</td>
-                <td>Identifica exclusivamente cada registro de estoque.</td>
+                <td>id_insumo</td>
+                <td>Identifica de forma única cada insumo cadastrado no sistema.</td>
                 <td>Deve ser único e obrigatório.</td>
             </tr>
             <tr>
-                <td>qt_disponivel</td>
-                <td>Indica a quantidade disponível do produto em estoque.</td>
-                <td>Deve ser um número inteiro igual ou superior a zero. Quando não houver unidades disponíveis, o valor deve ser zero.</td>
+                <td>nome_insumo</td>
+                <td>Nome do insumo, como aparece no estoque (por exemplo, coca-cola lata ou arroz).</td>
+                <td>Obrigatório.</td>
+            </tr>
+            <tr>
+                <td>qt_insumo</td>
+                <td>Quantidade do insumo disponível no estoque.</td>
+                <td>Deve ser igual ou superior a zero. Quando não houver nada disponível, o valor deve ser zero.</td>
+            </tr>
+            <tr>
+                <td>unidade_insumo</td>
+                <td>Unidade em que o insumo é medido (por exemplo, unidade, kg ou litro).</td>
+                <td>Obrigatória.</td>
+            </tr>
+            <tr>
+                <td>qt_minima_insumo</td>
+                <td>Quantidade mínima que o estabelecimento quer manter em estoque.</td>
+                <td>Obrigatória e igual ou superior a zero. Quando <code>qt_insumo</code> ficar abaixo desse valor, o insumo precisa ser reposto.</td>
             </tr>
         </tbody>
     </table>
