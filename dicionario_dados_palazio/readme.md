@@ -74,6 +74,7 @@ O documento contempla as seguintes entidades: **Atendente, Mesa, Pedido, Produto
 | **Quita** | Pedido — Pagamento | 1:N | Um pedido pode ter nenhum, um ou vários pagamentos (divisão da conta). Cada pagamento pertence a um único pedido. |
 | **Usa** | Forma_Pagamento — Pagamento | 1:N | Uma forma de pagamento pode estar em vários pagamentos, mas cada pagamento usa uma única forma. |
 | **Gera** | Pedido — Nota_Fiscal | 1:(0,1) | Um pedido tem no máximo uma nota fiscal, que pode ser registrada depois do pagamento. Cada nota pertence a um único pedido. |
+| **recebe** | Nota_Fiscal — Pagamento | 1:N | Uma nota fiscal pode estar ligada a vários pagamentos do mesmo pedido (divisão da conta), e cada pagamento está ligado a no máximo uma nota. O pagamento pode ser registrado antes da nota. |
 | **refere-se** | Insumo — Compra | 1:N | Um insumo pode aparecer em várias compras, mas cada compra se refere a um único insumo. |
 | **contém** | Nota_Fiscal_Compra — Compra | 1:N | Uma nota fiscal de compra contém uma ou mais compras, e cada compra pertence a uma única nota. |
 | **emite** | Fornecedor — Nota_Fiscal_Compra | 1:N | Um fornecedor pode emitir várias notas fiscais de compra, mas cada nota é emitida por um único fornecedor. |
@@ -87,6 +88,7 @@ Parte do modelo é hipótese de modelagem, e não informação confirmada na ent
 - **Nota fiscal (cupom):** assume-se que a emissão é feita por sistema externo e que o banco apenas armazena os dados da nota.
 - **CPF na nota (`cpf_consumidor`):** assume-se que o CPF é opcional e só é informado quando o cliente pede.
 - **Divisão da conta:** o modelo permite vários pagamentos por pedido, divididos por valor (não por item).
+- **Ligação da nota com os pagamentos:** assume-se que a nota fiscal de um pedido pode ser ligada aos pagamentos desse pedido, inclusive quando a conta é dividida. O pagamento pode ser registrado antes da nota.
 - **Limite diário de porções (`limite_diario`):** proposta do grupo para controlar a disponibilidade de pratos.
 - **Receita:** por orientação do professor, não há receita no modelo. Pratos como a feijoada são cadastrados como Produto, e o consumo de insumos por prato não é calculado.
 - **Estoque mínimo (`qt_minima_insumo`):** proposta do grupo para saber quando repor os insumos. O gerente informou apenas que o estoque é controlado manualmente.
@@ -157,7 +159,7 @@ As chaves estrangeiras listadas aqui resultam das relações do DER conceitual e
 - **SETOR** (`id_setor` PK, `nome_setor`)
 - **INSUMO** (`id_insumo` PK, `nome_insumo`, `qt_insumo`, `unidade_insumo`, `qt_minima_insumo`)
 - **FORMA_PAGAMENTO** (`id_forma_pagamento` PK, `descricao`)
-- **PAGAMENTO** (`id_pagamento` PK, `num_pedido` FK, `id_forma_pagamento` FK, `data_hora_pagamento`, `valor_pago`)
+- **PAGAMENTO** (`id_pagamento` PK, `num_pedido` FK, `id_forma_pagamento` FK, `id_nota_fiscal` FK, `data_hora_pagamento`, `valor_pago`)
 - **NOTA_FISCAL** (`id_nota_fiscal` PK, `num_pedido` FK, `numero_nota`, `serie`, `data_emissao`, `valor_total`, `chave_acesso`, `cpf_consumidor`)
 - **FORNECEDOR** (`id_fornecedor` PK, `razao_social`, `cnpj`, `endereco`, `telefone`)
 - **COMPRA** (`id_compra` PK, `id_insumo` FK, `id_nota_compra` FK, `quantidade`, `valor_unitario`, `desconto`)
@@ -177,6 +179,7 @@ A chave estrangeira da relação **referente** (Produto — Insumo) ainda não a
 | **PEDIDO — PAGAMENTO** | 1:N | Um pedido pode ter zero ou vários pagamentos, enquanto cada pagamento está associado a um único pedido. | `num_pedido` em PAGAMENTO |
 | **FORMA_PAGAMENTO — PAGAMENTO** | 1:N | Uma forma de pagamento pode ser usada em vários pagamentos, enquanto cada pagamento usa uma única forma. | `id_forma_pagamento` em PAGAMENTO |
 | **PEDIDO — NOTA_FISCAL** | 1:(0,1) | Um pedido tem no máximo uma nota fiscal, e cada nota pertence a um único pedido. | `num_pedido` (único) em NOTA_FISCAL |
+| **NOTA_FISCAL — PAGAMENTO** | 1:N | Uma nota fiscal pode estar ligada a vários pagamentos do mesmo pedido, enquanto cada pagamento está ligado a no máximo uma nota. | `id_nota_fiscal` em PAGAMENTO |
 | **INSUMO — COMPRA** | 1:N | Um insumo pode aparecer em várias compras, enquanto cada compra se refere a um único insumo. | `id_insumo` em COMPRA |
 | **NOTA_FISCAL_COMPRA — COMPRA** | 1:N | Uma nota fiscal de compra contém uma ou mais compras, enquanto cada compra pertence a uma única nota. | `id_nota_compra` em COMPRA |
 | **FORNECEDOR — NOTA_FISCAL_COMPRA** | 1:N | Um fornecedor pode emitir várias notas fiscais de compra, enquanto cada nota é emitida por um único fornecedor. | `id_fornecedor` em NOTA_FISCAL_COMPRA |
@@ -188,6 +191,7 @@ A chave estrangeira da relação **referente** (Produto — Insumo) ainda não a
 - Os relacionamentos devem respeitar as cardinalidades definidas no modelo conceitual.
 - A obrigatoriedade e os valores permitidos para cada atributo são detalhados no dicionário de dados.
 - A soma dos pagamentos de um pedido não deve ultrapassar o valor total devido por ele (itens não cancelados).
+-  Um pagamento ligado a uma nota fiscal deve pertencer ao mesmo pedido da nota.
 
 ---
 
@@ -290,6 +294,7 @@ A chave estrangeira da relação **referente** (Produto — Insumo) será acresc
 | `id_pagamento` (PK)           | INT           | Sim (`NOT NULL`)                           | Identificador único de cada pagamento registrado no sistema. É a chave primária (PK).                                     |
 | `num_pedido` (FK)             | INT           | Sim (`NOT NULL`)                           | Identifica o pedido ao qual o pagamento pertence. Referencia `num_pedido` na entidade PEDIDO.                             |
 | `id_forma_pagamento` (FK)     | INT           | Sim (`NOT NULL`)                           | Identifica a forma utilizada no pagamento. Referencia `id_forma_pagamento` na entidade FORMA_PAGAMENTO.                   |
+| `id_nota_fiscal` (FK)         | INT           | Não (`NULL` permitido)                     | Identifica a nota fiscal à qual o pagamento está ligado. Referencia `id_nota_fiscal` em NOTA_FISCAL. Fica vazio enquanto a nota não for registrada. O pagamento deve ser do mesmo pedido da nota. |
 | `data_hora_pagamento`         | DATETIME      | Sim para pagamentos concluídos (`NOT NULL`) | Registra a data e o horário em que o pagamento foi realizado.                                                             |
 | `valor_pago`                  | DECIMAL(10,2) | Sim (`NOT NULL`)                           | Armazena o valor correspondente ao pagamento registrado. Deve ser maior que zero.                                         |
 
@@ -397,6 +402,7 @@ Os índices são estruturas utilizadas para otimizar a localização e a recuper
 | `idx_produto_id_setor` | PRODUTO (`id_setor`) | Otimizar as consultas de produtos associados a um setor, como cozinha ou bar. |
 | `idx_pagamento_num_pedido` | PAGAMENTO (`num_pedido`) | Facilitar a consulta dos pagamentos associados a um pedido. |
 | `idx_pagamento_id_forma_pagamento` | PAGAMENTO (`id_forma_pagamento`) | Facilitar relatórios de pagamentos por forma, como o fechamento do caixa. |
+| `idx_pagamento_id_nota_fiscal` | PAGAMENTO (`id_nota_fiscal`) | Facilitar a consulta dos pagamentos ligados a uma nota fiscal. |
 | `idx_compra_id_insumo` | COMPRA (`id_insumo`) | Facilitar a consulta das compras de um determinado insumo. |
 | `idx_compra_id_nota_compra` | COMPRA (`id_nota_compra`) | Facilitar a consulta das compras que fazem parte de uma nota fiscal de compra. |
 | `idx_nota_fiscal_compra_id_fornecedor` | NOTA_FISCAL_COMPRA (`id_fornecedor`) | Facilitar a consulta das notas de compra emitidas por um fornecedor. |
