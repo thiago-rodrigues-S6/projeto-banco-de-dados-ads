@@ -400,7 +400,7 @@ A partir do modelo conceitual, será desenvolvido o modelo relacional contendo a
   <img src="./modelo_relacional/modelo_relacional.jpeg" alt="Modelo Relacional do Palazio del Chef" width="900">
 </p>
 
-> [Ver Diagrama](./modelo_relacional/).
+> [Ver Modelo](./modelo_relacional/).
 ---
 
 ## 🧹 8. Normalização
