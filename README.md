@@ -156,7 +156,7 @@ O processo de pagamento pode envolver a divisão da conta entre diferentes pesso
 
 A entidade Pagamento armazenará o valor pago e a data e o horário de cada pagamento, e se relaciona com a entidade Forma_Pagamento, que cadastra de forma padronizada as formas aceitas pelo estabelecimento (como dinheiro, crédito, débito e Pix). A associação entre os pedidos e seus pagamentos permitirá representar a quitação em etapas, conforme as regras definidas para o projeto. Enquanto o cliente não paga, o pedido permanece em aberto, sem nenhum pagamento registrado.
 
-O modelo também prevê a entidade Nota_Fiscal, que armazena os dados do cupom fiscal (número, série, data de emissão, valor total e chave de acesso) e, quando o cliente pede, o CPF do consumidor (campo opcional). Como hipótese de modelagem, considera-se que a emissão é feita por um sistema externo ao banco de dados e que a nota se relaciona ao pedido, e não ao pagamento, porque o pagamento e a emissão do cupom podem ocorrer em momentos diferentes. Cada pedido possui no máximo uma nota fiscal.
+O modelo também prevê a entidade Nota_Fiscal, que armazena os dados do cupom fiscal (número, série, data de emissão, valor total e chave de acesso) e, quando o cliente pede, o CPF do consumidor (campo opcional). Como hipótese de modelagem, considera-se que a emissão é feita por um sistema externo ao banco de dados e que a nota se relaciona ao pedido e aos pagamentos dele. Como o pagamento e a emissão do cupom podem ocorrer em momentos diferentes, o pagamento pode ser registrado antes da nota e ligado a ela depois. Cada pedido possui no máximo uma nota fiscal.
 
 Os procedimentos específicos utilizados pelo restaurante para dividir as contas, registrar os pagamentos e emitir o cupom fiscal, assim como a eventual cobrança de taxa de serviço ou couvert, ainda precisam ser detalhados para que o modelo represente integralmente o processo atual.
 
@@ -227,7 +227,7 @@ flowchart TD
     N --> P{"Pagamentos cobrem o total?"}
     P -->|Não, falta pagar| N
     P -->|Sim| O(["Pedido fechado - Mesa livre"])
-    P -.->|quando emitido| R["Dados do cupom fiscal são registrados"]
+    P -.->|quando emitido| R["Dados do cupom fiscal são registrados e ligados ao pedido e aos pagamentos"]
 ```
 *— Fluxo do processo de atendimento, registro de pedidos, preparação e pagamento.*
 
@@ -269,7 +269,7 @@ O modelo contemplará as seguintes estruturas principais:
 - **Insumo:** representação do estoque, com quantidade disponível, unidade de medida e quantidade mínima.
 - **Pagamento:** armazenamento dos registros de pagamento associados aos pedidos.
 - **Forma_Pagamento:** cadastro padronizado das formas de pagamento aceitas (dinheiro, crédito, débito e Pix).
-- **Nota_Fiscal:** dados do cupom fiscal emitido, com o CPF do consumidor quando informado.
+- **Nota_Fiscal:** dados do cupom fiscal emitido, ligado ao pedido e aos pagamentos dele, com o CPF do consumidor quando informado.
 - **Fornecedor:** cadastro dos fornecedores dos insumos.
 - **Compra e Nota_Fiscal_Compra:** registro das compras de insumos e das notas fiscais de compra emitidas pelos fornecedores.
 
@@ -307,7 +307,7 @@ Os requisitos funcionais descrevem as operações que o sistema deverá permitir
 | RF07 | O sistema deve permitir o registro de um ou mais pagamentos para cada pedido (divisão da conta), incluindo data e hora, valor pago e a forma de pagamento escolhida entre as formas cadastradas. |
 | RF08 | O sistema deve permitir o registro e a consulta dos insumos em estoque, com a quantidade disponível, a unidade de medida e a quantidade mínima. |
 | RF09 | O sistema deve permitir o cancelamento de itens de um pedido, registrando o motivo e a data e hora do cancelamento, sem excluir o item. |
-| RF10 | O sistema deve permitir o registro dos dados da nota fiscal emitida para um pedido, incluindo o CPF do consumidor quando ele for informado. |
+| RF10 | O sistema deve permitir o registro dos dados da nota fiscal emitida para um pedido, incluindo o CPF do consumidor quando ele for informado, e a ligação da nota aos pagamentos desse pedido. |
 | RF11 | O sistema deve permitir registrar a confirmação de maioridade do cliente no pedido, antes do registro de itens de bebida alcoólica. |
 | RF12 | O sistema deve permitir o cadastro dos fornecedores, com razão social, CNPJ, endereço e telefone. |
 | RF13 | O sistema deve permitir o registro das notas fiscais de compra emitidas pelos fornecedores e das compras de insumos que fazem parte de cada nota, informando quantidade, valor unitário e desconto. |
@@ -351,13 +351,16 @@ As regras de negócio definem condições que devem ser respeitadas para represe
 | RN19 | Conferência da idade | Antes de registrar um item alcoólico, o atendente deve conferir a maioridade do cliente por meio de documento oficial com foto. Nenhum dado do documento (nome, RG, CPF ou data de nascimento) é registrado no sistema. |
 | RN20 | Quitação do pedido | A soma dos pagamentos de um pedido não pode ultrapassar o valor total do pedido, calculado pela soma de `qt_produto` × `preco_unitario` dos itens não cancelados. O pedido é considerado quitado quando a soma dos pagamentos é igual a esse valor. |
 | RN21 | Forma de pagamento | Todo pagamento deve utilizar uma forma de pagamento previamente cadastrada (como dinheiro, crédito, débito ou Pix). |
-| RN22 | Nota fiscal | Cada pedido possui no máximo uma nota fiscal. O registro da nota é independente do registro dos pagamentos e pode ocorrer depois deles (hipótese de modelagem, a confirmar na segunda entrevista). |
+| RN22 | Nota fiscal | Cada pedido possui no máximo uma nota fiscal, que pode ser ligada aos pagamentos desse pedido. O pagamento não depende da nota: ele pode ser registrado antes, e a nota é ligada a ele depois (hipótese de modelagem, a confirmar na segunda entrevista). |
 | RN23 | Confirmação de maioridade | Um item de bebida alcoólica só pode ser registrado em um pedido cujo campo `maioridade_confirmada` esteja preenchido como confirmado. |
 | RN24 | Estoque mínimo | Quando a quantidade disponível de um insumo (`qt_insumo`) ficar abaixo da quantidade mínima (`qt_minima_insumo`), o insumo deve ser sinalizado para reposição. A quantidade mínima é obrigatória e não pode ser negativa. |
 | RN25 | Compra de fornecedor cadastrado | Toda nota fiscal de compra deve estar associada a um fornecedor previamente cadastrado. |
 | RN26 | Composição da compra | Cada compra se refere a um único insumo e pertence a uma única nota fiscal de compra, e uma nota contém uma ou mais compras. Em cada compra, `quantidade` deve ser maior que zero, `valor_unitario` não pode ser negativo e `desconto`, que é opcional, não pode ser negativo nem maior que `quantidade` × `valor_unitario`. |
 | RN27 | Nota fiscal de compra | Os atributos `numero_nota`, `serie`, `chave_acesso`, `data_emissao`, `data_entrada` e `valor_total` são obrigatórios. A `chave_acesso` deve ser única, o `valor_total` deve ser maior que zero e a `data_entrada` não pode ser anterior à `data_emissao`. |
 | RN28 | CPF na nota | O CPF do consumidor (`cpf_consumidor`) é opcional e só é registrado quando o cliente pede. Se o cliente não quiser o CPF na nota, a venda segue normalmente. |
+| RN29 | Pagamento e nota do mesmo pedido | Um pagamento só pode ser ligado à nota fiscal do próprio pedido. |
+
+--- 
 
 ### 4.4 Relação com a Modelagem do Banco de Dados
 
