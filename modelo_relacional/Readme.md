@@ -200,4 +200,4 @@ Entre os principais conceitos trabalhados estão:
 - Definição de tipos de dados.
 - Representação de regras de negócio por meio da estrutura do banco de dados.
 
-O resultado é um modelo lógico estruturado para representar as principais operações do restaurante Palazio del Chef.
+[🔝 Voltar ao início](https://github.com/thiago-rodrigues-S6/projeto-banco-de-dados-ads)
