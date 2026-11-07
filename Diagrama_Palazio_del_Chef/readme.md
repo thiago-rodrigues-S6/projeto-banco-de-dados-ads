@@ -122,8 +122,5 @@ Este projeto foi desenvolvido com o objetivo de praticar conceitos de:
 - Cardinalidade
 - Organização de bancos de dados relacionais
 
-## Status
-
-🚧 Projeto em desenvolvimento.
 
 [🔝 Voltar ao início](https://github.com/thiago-rodrigues-S6/projeto-banco-de-dados-ads)
