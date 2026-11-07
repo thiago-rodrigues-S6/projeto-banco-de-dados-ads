@@ -28,7 +28,7 @@ Essa documentação contribui para:
 
 O dicionário está organizado por entidades. Cada entidade possui uma tabela com três colunas, seguindo o padrão definido para a atividade acadêmica.
 
-Como o dicionário descreve o **modelo conceitual**, as tabelas em HTML trazem apenas os atributos que aparecem no DER. As chaves estrangeiras não são listadas ali, porque os vínculos entre as entidades são representados pelas relações do diagrama. As chaves estrangeiras aparecem nas seções 4, 5 e 7 deste documento, como projeção preliminar para o modelo relacional.
+Como o dicionário descreve o **modelo conceitual**, as tabelas em HTML trazem apenas os atributos que aparecem no DER. As chaves estrangeiras não são listadas ali, porque os vínculos entre as entidades são representados pelas relações do diagrama. As chaves estrangeiras aparecem nas seções 5 e 6 deste documento, como projeção preliminar para o modelo relacional.
 
 ### 1. Atributo
 
@@ -62,7 +62,7 @@ As regras documentadas devem ser coerentes com as necessidades e os processos de
 
 ### 1. Entidades e relações do modelo
 
-O documento contempla as seguintes entidades: **Atendente, Mesa, Pedido, Produto, Setor, Estoque, Pagamento, Forma_Pagamento e Nota_Fiscal**. A relação **Possui**, entre Pedido e Produto, carrega atributos próprios e por isso é documentada como **Item do Pedido**.
+O documento contempla as seguintes entidades: **Atendente, Mesa, Pedido, Produto, Setor, Insumo, Pagamento, Forma_Pagamento, Nota_Fiscal, Fornecedor, Compra e Nota_Fiscal_Compra**. A relação **Possui**, entre Pedido e Produto, carrega atributos próprios e por isso é documentada como **Item do Pedido**.
 
 | Relação | Entidades | Cardinalidade | Leitura |
 |---|---|---|---|
@@ -70,11 +70,13 @@ O documento contempla as seguintes entidades: **Atendente, Mesa, Pedido, Produto
 | **Atende** | Mesa — Pedido | 1:N | Uma mesa pode estar associada a vários pedidos ao longo do tempo, mas cada pedido pertence a uma única mesa. |
 | **Possui** | Pedido — Produto | N:M | Um pedido pode ter vários produtos e um produto pode aparecer em vários pedidos. A relação guarda quantidade, preço unitário e dados de cancelamento (Item do Pedido). |
 | **Designado** | Setor — Produto | 1:N | Um setor pode ser responsável por vários produtos, mas cada produto pertence a um único setor. |
-| **Controla** | Produto — Estoque | 1:1 | Cada produto possui um único registro de estoque, e cada registro de estoque corresponde a um único produto. |
+| **referente** | Produto — Insumo | A definir | Relação do DER entre Produto e Insumo. O significado e a cardinalidade ainda serão fechados pelo grupo. |
 | **Quita** | Pedido — Pagamento | 1:N | Um pedido pode ter nenhum, um ou vários pagamentos (divisão da conta). Cada pagamento pertence a um único pedido. |
 | **Usa** | Forma_Pagamento — Pagamento | 1:N | Uma forma de pagamento pode estar em vários pagamentos, mas cada pagamento usa uma única forma. |
 | **Gera** | Pedido — Nota_Fiscal | 1:(0,1) | Um pedido tem no máximo uma nota fiscal, que pode ser registrada depois do pagamento. Cada nota pertence a um único pedido. |
-| **fornece** | Fornecedor — Estoque | N:M | Um fornecedor pode fornecer vários itens de estoque, e um item de estoque pode ter vários fornecedores. A relação guarda prazo de entrega e preço de custo (Fornecimento). |
+| **refere-se** | Insumo — Compra | 1:N | Um insumo pode aparecer em várias compras, mas cada compra se refere a um único insumo. |
+| **contém** | Nota_Fiscal_Compra — Compra | 1:N | Uma nota fiscal de compra contém uma ou mais compras, e cada compra pertence a uma única nota. |
+| **emite** | Fornecedor — Nota_Fiscal_Compra | 1:N | Um fornecedor pode emitir várias notas fiscais de compra, mas cada nota é emitida por um único fornecedor. |
 
 Cada entidade possui seus atributos documentados individualmente, acompanhados de suas respectivas descrições e regras de negócio.
 
@@ -83,8 +85,12 @@ Cada entidade possui seus atributos documentados individualmente, acompanhados d
 Parte do modelo é hipótese de modelagem, e não informação confirmada na entrevista. Os pontos abaixo serão validados na próxima entrevista:
 
 - **Nota fiscal (cupom):** assume-se que a emissão é feita por sistema externo e que o banco apenas armazena os dados da nota.
+- **CPF na nota (`cpf_consumidor`):** assume-se que o CPF é opcional e só é informado quando o cliente pede.
 - **Divisão da conta:** o modelo permite vários pagamentos por pedido, divididos por valor (não por item).
 - **Limite diário de porções (`limite_diario`):** proposta do grupo para controlar a disponibilidade de pratos.
+- **Receita:** por orientação do professor, não há receita no modelo. Pratos como a feijoada são cadastrados como Produto, e o consumo de insumos por prato não é calculado.
+- **Estoque mínimo (`qt_minima_insumo`):** proposta do grupo para saber quando repor os insumos. O gerente informou apenas que o estoque é controlado manualmente.
+- **Compras e notas de compra:** o gerente informou que o proprietário faz as compras. Quem registra as compras no sistema e como isso é feito ainda será validado.
 - **Taxa de serviço e couvert:** não foram modelados, por não terem sido confirmados. Se existirem, serão acrescentados ao pedido.
 - **Situação do item (`status`):** os valores possíveis ainda serão definidos.
 
@@ -145,16 +151,19 @@ As chaves estrangeiras listadas aqui resultam das relações do DER conceitual e
 
 - **ATENDENTE** (`id_atendente` PK, `nome_atendente`)
 - **MESA** (`nmr_mesa` PK)
-- **PEDIDO** (`num_pedido` PK, `data_hora_pedido`, `maioridade_confirmada` ,  `id_atendente` FK, `nmr_mesa` FK)
+- **PEDIDO** (`num_pedido` PK, `data_hora_pedido`, `maioridade_confirmada`, `id_atendente` FK, `nmr_mesa` FK)
 - **ITEM_PEDIDO** (`num_pedido` PK/FK, `codigo_produto` PK/FK, `qt_produto`, `preco_unitario`, `status`, `motivo_cancelamento`, `data_hora_cancelamento`)
-- **PRODUTO** (`codigo_produto` PK, `nome_produto`, `preco_atual`, `limite_diario`, `bebida_alcoólica` , `id_setor` FK)
+- **PRODUTO** (`codigo_produto` PK, `nome_produto`, `preco_atual`, `limite_diario`, `bebida_alcoolica`, `id_setor` FK)
 - **SETOR** (`id_setor` PK, `nome_setor`)
-- **ESTOQUE** (`id_estoque` PK, `codigo_produto` FK, `qt_disponivel`)
+- **INSUMO** (`id_insumo` PK, `nome_insumo`, `qt_insumo`, `unidade_insumo`, `qt_minima_insumo`)
 - **FORMA_PAGAMENTO** (`id_forma_pagamento` PK, `descricao`)
 - **PAGAMENTO** (`id_pagamento` PK, `num_pedido` FK, `id_forma_pagamento` FK, `data_hora_pagamento`, `valor_pago`)
-- **NOTA_FISCAL** (`id_nota_fiscal` PK, `num_pedido` FK, `numero_nota`, `serie`, `data_emissao`, `valor_total`, `chave_acesso`)
+- **NOTA_FISCAL** (`id_nota_fiscal` PK, `num_pedido` FK, `numero_nota`, `serie`, `data_emissao`, `valor_total`, `chave_acesso`, `cpf_consumidor`)
 - **FORNECEDOR** (`id_fornecedor` PK, `razao_social`, `cnpj`, `endereco`, `telefone`)
-- **FORNECIMENTO** (`id_fornecedor` PK/FK, `id_estoque` PK/FK, `prazo_entrega`, `preco_custo`)
+- **COMPRA** (`id_compra` PK, `id_insumo` FK, `id_nota_compra` FK, `quantidade`, `valor_unitario`, `desconto`)
+- **NOTA_FISCAL_COMPRA** (`id_nota_compra` PK, `id_fornecedor` FK, `numero_nota`, `serie`, `chave_acesso`, `data_emissao`, `data_entrada`, `valor_total`)
+
+A chave estrangeira da relação **referente** (Produto — Insumo) ainda não aparece nesta lista, porque depende da cardinalidade, que será definida pelo grupo.
 
 ### 5.2. Representação dos relacionamentos
 
@@ -164,11 +173,13 @@ As chaves estrangeiras listadas aqui resultam das relações do DER conceitual e
 | **MESA — PEDIDO** | 1:N | Uma mesa pode estar associada a vários pedidos ao longo do tempo, enquanto cada pedido é associado a uma única mesa. | `nmr_mesa` em PEDIDO |
 | **PEDIDO — PRODUTO** | N:M | Um pedido pode ter vários produtos e um produto pode estar em vários pedidos. | Tabela ITEM_PEDIDO, com `num_pedido` e `codigo_produto` |
 | **SETOR — PRODUTO** | 1:N | Um setor pode estar associado a vários produtos, enquanto cada produto é associado a um único setor. | `id_setor` em PRODUTO |
-| **PRODUTO — ESTOQUE** | 1:1 | Cada produto possui um único registro de estoque, e cada registro de estoque corresponde a um único produto. | `codigo_produto` (único) em ESTOQUE |
+| **PRODUTO — INSUMO** | A definir | Relação **referente** do DER. O significado e a cardinalidade ainda serão fechados pelo grupo. | A definir |
 | **PEDIDO — PAGAMENTO** | 1:N | Um pedido pode ter zero ou vários pagamentos, enquanto cada pagamento está associado a um único pedido. | `num_pedido` em PAGAMENTO |
 | **FORMA_PAGAMENTO — PAGAMENTO** | 1:N | Uma forma de pagamento pode ser usada em vários pagamentos, enquanto cada pagamento usa uma única forma. | `id_forma_pagamento` em PAGAMENTO |
 | **PEDIDO — NOTA_FISCAL** | 1:(0,1) | Um pedido tem no máximo uma nota fiscal, e cada nota pertence a um único pedido. | `num_pedido` (único) em NOTA_FISCAL |
-| **FORNECEDOR — ESTOQUE** | N:M | Um fornecedor pode fornecer vários itens de estoque, e um item de estoque pode ter vários fornecedores. | Tabela FORNECIMENTO, com `id_fornecedor` e `id_estoque` |
+| **INSUMO — COMPRA** | 1:N | Um insumo pode aparecer em várias compras, enquanto cada compra se refere a um único insumo. | `id_insumo` em COMPRA |
+| **NOTA_FISCAL_COMPRA — COMPRA** | 1:N | Uma nota fiscal de compra contém uma ou mais compras, enquanto cada compra pertence a uma única nota. | `id_nota_compra` em COMPRA |
+| **FORNECEDOR — NOTA_FISCAL_COMPRA** | 1:N | Um fornecedor pode emitir várias notas fiscais de compra, enquanto cada nota é emitida por um único fornecedor. | `id_fornecedor` em NOTA_FISCAL_COMPRA |
 
 ### 5.3. Restrições gerais
 
@@ -203,13 +214,13 @@ As chaves estrangeiras desta seção são uma projeção preliminar para o model
 
 ### Entidade: PEDIDO
 
-| Atributo             | Tipo     | Obrigatório      | Significado e relevância                                                                                                                   |
-| -------------------- | -------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `num_pedido` (PK)    | INT      | Sim (`NOT NULL`) | Identificador único de cada pedido. É a chave primária (PK) e permite distinguir os pedidos registrados no sistema.                        |
-| `data_hora_pedido`   | DATETIME | Sim (`NOT NULL`) | Registra a data e o horário em que o pedido foi realizado. Pode utilizar a data e a hora atuais como valor padrão.  
-| `maioridade_confirmada` | BOOLEAN  | Sim (`NOT NULL`) | Indica se o atendente confirmou a maioridade do cliente para itens alcoólicos. É só uma marcação (sim ou não) e não guarda dados do documento. ||
-| `id_atendente` (FK)  | INT      | Sim (`NOT NULL`) | Identifica o atendente responsável pelo pedido. É uma chave estrangeira (FK) relacionada ao atributo `id_atendente` da entidade ATENDENTE. |
-| `nmr_mesa` (FK)      | INT      | Sim (`NOT NULL`) | Identifica a mesa associada ao pedido. É uma chave estrangeira (FK) relacionada ao atributo `nmr_mesa` da entidade MESA.                   |
+| Atributo                | Tipo     | Obrigatório      | Significado e relevância                                                                                                                   |
+| ----------------------- | -------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `num_pedido` (PK)       | INT      | Sim (`NOT NULL`) | Identificador único de cada pedido. É a chave primária (PK) e permite distinguir os pedidos registrados no sistema.                        |
+| `data_hora_pedido`      | DATETIME | Sim (`NOT NULL`) | Registra a data e o horário em que o pedido foi realizado. Pode utilizar a data e a hora atuais como valor padrão.                         |
+| `maioridade_confirmada` | BOOLEAN  | Sim (`NOT NULL`) | Indica se o atendente confirmou a maioridade do cliente para itens alcoólicos. É só uma marcação (sim ou não) e não guarda dados do documento. |
+| `id_atendente` (FK)     | INT      | Sim (`NOT NULL`) | Identifica o atendente responsável pelo pedido. É uma chave estrangeira (FK) relacionada ao atributo `id_atendente` da entidade ATENDENTE. |
+| `nmr_mesa` (FK)         | INT      | Sim (`NOT NULL`) | Identifica a mesa associada ao pedido. É uma chave estrangeira (FK) relacionada ao atributo `nmr_mesa` da entidade MESA.                   |
 
 ---
 
@@ -249,13 +260,17 @@ As chaves estrangeiras desta seção são uma projeção preliminar para o model
 
 ---
 
-### Entidade: ESTOQUE
+### Entidade: INSUMO
 
-| Atributo                  | Tipo | Obrigatório                       | Significado e relevância                                                                                                                                                                        |
-| ------------------------- | ---- | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id_estoque` (PK)         | INT  | Sim (`NOT NULL`)                  | Identificador único de cada registro de estoque.                                                                                                                                                |
-| `codigo_produto` (FK)     | INT  | Sim (`NOT NULL`, `UNIQUE`)        | Identifica o produto cujo estoque está sendo controlado. Referencia `codigo_produto` na entidade PRODUTO. Deve ser único para garantir apenas um registro de estoque por produto.               |
-| `qt_disponivel`           | INT  | Sim (`NOT NULL`)                  | Registra a quantidade disponível do produto em estoque. Pode ser zero, mas não pode ser negativa.                                                                                               |
+A chave estrangeira da relação **referente** (Produto — Insumo) será acrescentada aqui quando a cardinalidade for definida.
+
+| Atributo              | Tipo          | Obrigatório      | Significado e relevância                                                                                                                                                     |
+| --------------------- | ------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id_insumo` (PK)      | INT           | Sim (`NOT NULL`) | Identificador único de cada insumo cadastrado no sistema. É a chave primária (PK).                                                                                           |
+| `nome_insumo`         | VARCHAR(100)  | Sim (`NOT NULL`) | Nome do insumo, como aparece no estoque (por exemplo, coca-cola lata ou arroz).                                                                                              |
+| `qt_insumo`           | DECIMAL(10,2) | Sim (`NOT NULL`) | Quantidade do insumo disponível no estoque. Pode ser zero, mas não pode ser negativa. Aceita casas decimais por causa de unidades como kg e litro.                          |
+| `unidade_insumo`      | VARCHAR(20)   | Sim (`NOT NULL`) | Unidade em que o insumo é medido (por exemplo, unidade, kg ou litro).                                                                                                        |
+| `qt_minima_insumo`    | DECIMAL(10,2) | Sim (`NOT NULL`) | Quantidade mínima que o estabelecimento quer manter em estoque. Quando `qt_insumo` ficar abaixo desse valor, o insumo precisa ser reposto. Não pode ser negativa.            |
 
 ---
 
@@ -291,6 +306,9 @@ As chaves estrangeiras desta seção são uma projeção preliminar para o model
 | `data_emissao`            | DATE          | Sim (`NOT NULL`)           | Data em que a nota foi emitida. A nota é registrada depois da emissão e não impede o registro do pagamento.                                               |
 | `valor_total`             | DECIMAL(10,2) | Sim (`NOT NULL`)           | Valor total que consta na nota emitida.                                                                                                                   |
 | `chave_acesso`            | VARCHAR(44)   | Sim (`NOT NULL`, `UNIQUE`) | Chave de acesso que identifica a nota perante o órgão fiscal.                                                                                             |
+| `cpf_consumidor`          | VARCHAR(11)   | Não (`NULL` permitido)     | CPF do consumidor, informado na nota apenas quando o cliente pede. Sem pontos ou traços. É um dado pessoal e só deve ser guardado a pedido do cliente.   |
+
+---
 
 ### Entidade: FORNECEDOR
 
@@ -304,14 +322,31 @@ As chaves estrangeiras desta seção são uma projeção preliminar para o model
 
 ---
 
-### Entidade: FORNECIMENTO (relação fornece)
+### Entidade: COMPRA
 
-| Atributo                    | Tipo          | Obrigatório            | Significado e relevância                                                                                             |
-| --------------------------- | ------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `id_fornecedor` (PK, FK)    | INT           | Sim (`NOT NULL`)       | Identifica o fornecedor. Faz parte da chave primária composta e referencia `id_fornecedor` em FORNECEDOR.            |
-| `id_estoque` (PK, FK)       | INT           | Sim (`NOT NULL`)       | Identifica o item de estoque fornecido. Faz parte da chave primária composta e referencia `id_estoque` em ESTOQUE.   |
-| `prazo_entrega`             | INT           | Não (`NULL` permitido) | Prazo de entrega, em dias. Quando informado, deve ser igual ou superior a zero.                                      |
-| `preco_custo`               | DECIMAL(10,2) | Sim (`NOT NULL`)       | Preço de compra cobrado pelo fornecedor. Não pode ser negativo.                                                      |
+| Atributo                 | Tipo          | Obrigatório            | Significado e relevância                                                                                                                              |
+| ------------------------ | ------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id_compra` (PK)         | INT           | Sim (`NOT NULL`)       | Identificador único de cada compra de insumo registrada no sistema.                                                                                   |
+| `id_insumo` (FK)         | INT           | Sim (`NOT NULL`)       | Identifica o insumo comprado. Referencia `id_insumo` em INSUMO. Cada compra se refere a um único insumo.                                              |
+| `id_nota_compra` (FK)    | INT           | Sim (`NOT NULL`)       | Identifica a nota fiscal de compra à qual a compra pertence. Referencia `id_nota_compra` em NOTA_FISCAL_COMPRA.                                       |
+| `quantidade`             | DECIMAL(10,2) | Sim (`NOT NULL`)       | Quantidade do insumo comprada. Deve ser maior que zero.                                                                                               |
+| `valor_unitario`         | DECIMAL(10,2) | Sim (`NOT NULL`)       | Valor pago por unidade do insumo no momento da compra. Não pode ser negativo. É o preço de compra, diferente do preço de venda do produto.            |
+| `desconto`               | DECIMAL(10,2) | Não (`NULL` permitido) | Valor de desconto concedido pelo fornecedor. Quando informado, não pode ser negativo nem maior que `quantidade` × `valor_unitario`.                   |
+
+---
+
+### Entidade: NOTA_FISCAL_COMPRA
+
+| Atributo                    | Tipo          | Obrigatório                | Significado e relevância                                                                                                           |
+| --------------------------- | ------------- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `id_nota_compra` (PK)       | INT           | Sim (`NOT NULL`)           | Identificador único de cada nota fiscal de compra registrada no sistema.                                                           |
+| `id_fornecedor` (FK)        | INT           | Sim (`NOT NULL`)           | Identifica o fornecedor que emitiu a nota. Referencia `id_fornecedor` em FORNECEDOR. Toda nota deve ter um fornecedor cadastrado.  |
+| `numero_nota`               | INT           | Sim (`NOT NULL`)           | Número da nota fiscal emitida pelo fornecedor.                                                                                     |
+| `serie`                     | INT           | Sim (`NOT NULL`)           | Série da nota fiscal emitida pelo fornecedor.                                                                                      |
+| `chave_acesso`              | VARCHAR(44)   | Sim (`NOT NULL`, `UNIQUE`) | Chave de acesso que identifica a nota perante o órgão fiscal.                                                                      |
+| `data_emissao`              | DATE          | Sim (`NOT NULL`)           | Data em que o fornecedor emitiu a nota.                                                                                            |
+| `data_entrada`              | DATE          | Sim (`NOT NULL`)           | Data em que os insumos da nota chegaram ao estabelecimento. Não pode ser anterior à data de emissão.                               |
+| `valor_total`               | DECIMAL(10,2) | Sim (`NOT NULL`)           | Valor total que consta na nota fiscal de compra. Deve ser maior que zero.                                                          |
 
 ---
 
@@ -362,13 +397,15 @@ Os índices são estruturas utilizadas para otimizar a localização e a recuper
 | `idx_produto_id_setor` | PRODUTO (`id_setor`) | Otimizar as consultas de produtos associados a um setor, como cozinha ou bar. |
 | `idx_pagamento_num_pedido` | PAGAMENTO (`num_pedido`) | Facilitar a consulta dos pagamentos associados a um pedido. |
 | `idx_pagamento_id_forma_pagamento` | PAGAMENTO (`id_forma_pagamento`) | Facilitar relatórios de pagamentos por forma, como o fechamento do caixa. |
-| `idx_fornecimento_id_estoque` | FORNECIMENTO (`id_estoque`) | Facilitar a consulta dos fornecedores de um item de estoque. A chave composta já cobre as buscas por fornecedor. |
+| `idx_compra_id_insumo` | COMPRA (`id_insumo`) | Facilitar a consulta das compras de um determinado insumo. |
+| `idx_compra_id_nota_compra` | COMPRA (`id_nota_compra`) | Facilitar a consulta das compras que fazem parte de uma nota fiscal de compra. |
+| `idx_nota_fiscal_compra_id_fornecedor` | NOTA_FISCAL_COMPRA (`id_fornecedor`) | Facilitar a consulta das notas de compra emitidas por um fornecedor. |
 
 ### 8.2. Critérios de utilização
 
-A definição dos índices considera as principais operações de consulta relacionadas ao funcionamento do Palazio del Chef, incluindo a localização de pedidos por mesa, a identificação dos pedidos registrados por atendentes, a pesquisa de produtos, a organização dos produtos por setor e a consulta de pagamentos.
+A definição dos índices considera as principais operações de consulta relacionadas ao funcionamento do Palazio del Chef, incluindo a localização de pedidos por mesa, a identificação dos pedidos registrados por atendentes, a pesquisa de produtos, a organização dos produtos por setor, a consulta de pagamentos e a consulta de compras e notas de compra.
 
-As chaves primárias também possuem função de identificação única dos registros e, nos sistemas gerenciadores de banco de dados mais utilizados, normalmente recebem índices automaticamente. O mesmo costuma acontecer com atributos marcados como `UNIQUE` (como `codigo_produto` em ESTOQUE, `num_pedido` em NOTA_FISCAL e `cnpj` em FORNECEDOR), por isso não foram criados índices adicionais para eles. A criação de índices adicionais deve considerar as necessidades de consulta e evitar estruturas redundantes.
+As chaves primárias também possuem função de identificação única dos registros e, nos sistemas gerenciadores de banco de dados mais utilizados, normalmente recebem índices automaticamente. O mesmo costuma acontecer com atributos marcados como `UNIQUE` (como `num_pedido` em NOTA_FISCAL, `chave_acesso` em NOTA_FISCAL_COMPRA e `cnpj` em FORNECEDOR), por isso não foram criados índices adicionais para eles. A criação de índices adicionais deve considerar as necessidades de consulta e evitar estruturas redundantes.
 
 A aplicação dos índices deve respeitar as características do sistema gerenciador de banco de dados utilizado e a estrutura física adotada na implementação.
 
@@ -384,6 +421,7 @@ O projeto Palazio del Chef considera a importância da proteção dos dados pess
 - **Necessidade:** armazenar apenas as informações necessárias para o registro e o acompanhamento dos pedidos.
 - **Segurança:** propor medidas para impedir que pessoas não autorizadas acessem, alterem ou divulguem informações armazenadas.
 - **Privacidade:** evitar o armazenamento desnecessário de dados pessoais de clientes e atendentes.
+- **CPF na nota fiscal:** o `cpf_consumidor` é um dado pessoal opcional. Ele só é guardado quando o cliente pede o CPF na nota. Se o cliente não quiser, a venda segue normalmente e o campo fica vazio. Isso é diferente da conferência de maioridade, em que nenhum dado do documento é armazenado.
 - **Dados fictícios:** utilizar informações fictícias nos exemplos e documentos acadêmicos, evitando a exposição de dados reais de clientes ou funcionários.
 
 ### Observação
