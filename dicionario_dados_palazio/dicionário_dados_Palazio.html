@@ -398,8 +398,91 @@
             </tr>
         </tbody>
     </table>
+    
+    <!-- TABELA COMPRA -->
+    <h2>COMPRA</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Atributo</th>
+                <th>Descrição</th>
+                <th>Regra de negócio associada</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>id_compra</td>
+                <td>Identifica de forma única cada compra de insumo registrada no sistema.</td>
+                <td>Deve ser único e obrigatório.</td>
+            </tr>
+            <tr>
+                <td>quantidade</td>
+                <td>Quantidade do insumo comprada.</td>
+                <td>Obrigatória e maior que zero. Cada compra se refere a um único insumo.</td>
+            </tr>
+            <tr>
+                <td>valor_unitario</td>
+                <td>Valor pago por unidade do insumo no momento da compra.</td>
+                <td>Obrigatório e não pode ser negativo. É o preço de compra, diferente do preço de venda do produto, e não muda se o fornecedor alterar o preço depois.</td>
+            </tr>
+            <tr>
+                <td>desconto</td>
+                <td>Valor de desconto concedido pelo fornecedor na compra.</td>
+                <td>Opcional. Quando informado, não pode ser negativo nem maior que o valor da compra (<code>quantidade</code> × <code>valor_unitario</code>).</td>
+            </tr>
+        </tbody>
+    </table>
 
-        <!-- TABELA FORNECEDOR -->
+    <!-- TABELA NOTA FISCAL DE COMPRA -->
+    <h2>NOTA_FISCAL_COMPRA</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Atributo</th>
+                <th>Descrição</th>
+                <th>Regra de negócio associada</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>id_nota_compra</td>
+                <td>Identifica de forma única cada nota fiscal de compra registrada no sistema.</td>
+                <td>Deve ser único e obrigatório.</td>
+            </tr>
+            <tr>
+                <td>numero_nota</td>
+                <td>Número da nota fiscal emitida pelo fornecedor na venda dos insumos.</td>
+                <td>Obrigatório.</td>
+            </tr>
+            <tr>
+                <td>serie</td>
+                <td>Série da nota fiscal emitida pelo fornecedor.</td>
+                <td>Obrigatória.</td>
+            </tr>
+            <tr>
+                <td>chave_acesso</td>
+                <td>Chave de acesso que identifica a nota fiscal perante o órgão fiscal.</td>
+                <td>Obrigatória e única.</td>
+            </tr>
+            <tr>
+                <td>data_emissao</td>
+                <td>Data em que o fornecedor emitiu a nota fiscal.</td>
+                <td>Obrigatória.</td>
+            </tr>
+            <tr>
+                <td>data_entrada</td>
+                <td>Data em que os insumos da nota chegaram ao estabelecimento.</td>
+                <td>Obrigatória e não pode ser anterior à data de emissão.</td>
+            </tr>
+            <tr>
+                <td>valor_total</td>
+                <td>Valor total que consta na nota fiscal de compra.</td>
+                <td>Obrigatório e maior que zero. Cada nota é emitida por um único fornecedor cadastrado e contém uma ou mais compras.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- TABELA FORNECEDOR -->
     <h2>FORNECEDOR</h2>
     <table>
         <thead>
@@ -434,30 +517,6 @@
                 <td>telefone</td>
                 <td>Telefone de contato do fornecedor.</td>
                 <td>Opcional.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- RELAÇÃO FORNECE (FORNECIMENTO) -->
-    <h2>FORNECIMENTO (relação "fornece": Fornecedor x Estoque)</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Atributo</th>
-                <th>Descrição</th>
-                <th>Regra de negócio associada</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>prazo_entrega</td>
-                <td>Prazo, em dias, que o fornecedor leva para entregar o item.</td>
-                <td>Opcional. Quando informado, deve ser um número inteiro igual ou superior a zero.</td>
-            </tr>
-            <tr>
-                <td>preco_custo</td>
-                <td>Valor que o fornecedor cobra pelo item, usado como custo de compra.</td>
-                <td>Obrigatório e não pode ser negativo. É o preço de compra, diferente do preço de venda do produto.</td>
             </tr>
         </tbody>
     </table>
