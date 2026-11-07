@@ -488,7 +488,7 @@ Palazio-del-Chef/
 | Dicionário de dados | ✅ Concluído |
 | Diagrama Entidade-Relacionamento | ✅ Concluído |
 | Fluxograma do processo | ✅ Concluído |
-| Modelo relacional | ⏳ Pendente |
+| Modelo relacional | ✅ Concluído |
 | Normalização | ⏳ Pendente |
 | Implementação SQL | ⏳ Pendente |
 | Consultas SQL | ⏳ Pendente |
