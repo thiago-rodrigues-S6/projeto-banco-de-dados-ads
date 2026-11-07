@@ -378,8 +378,13 @@ O modelo de banco de dados relacional é composto pelas seguintes entidades prin
 - **Pedido**
 - **Produto**
 - **Setor**
-- **estoque**
-- **pagamento**
+- **Insumo**
+- **Pagamento**
+- **Forma_Pagamento**
+- **Nota_Fiscal**
+- **Fornecedor**
+- **Compra**
+- **Nota_Fiscal_Compra**
 
 Cada entidade possui atributos específicos, identificadores e relacionamentos definidos de acordo com as necessidades levantadas durante a análise do estabelecimento.
 
@@ -534,6 +539,12 @@ A associação entre Pedido e Mesa permite identificar a mesa vinculada a cada p
 ### Representação dos Setores
 
 A entidade Setor representa as áreas de preparação e atendimento dos produtos, como cozinha e bar. Sua inclusão busca representar a organização operacional do estabelecimento e permitir que o modelo considere o encaminhamento dos produtos ao setor responsável.
+
+### Insumos, compras e fornecedores
+
+O controle de estoque foi modelado por meio da entidade Insumo. 
+
+As compras são representadas por Fornecedor, Nota_Fiscal_Compra e Compra. A nota é emitida por um fornecedor cadastrado e contém as compras de insumos, e a entidade Compra guarda quantidade, valor unitário e desconto opcional. Assim, o preço de compra fica separado do preço de venda do produto.
 
 ### Escolha do Modelo Relacional
 
