@@ -122,7 +122,7 @@ O restaurante realiza atendimento presencial e não oferece serviço de delivery
 
 O projeto tem como objetivo desenvolver a modelagem de um banco de dados relacional capaz de organizar e relacionar as principais informações envolvidas nas operações do Palazio del Chef.
 
-A proposta contempla a representação dos dados relacionados aos pedidos, produtos, mesas, atendentes, setores, pagamentos e estoque, considerando os processos identificados durante a análise do estabelecimento.
+A proposta contempla a representação dos dados relacionados aos pedidos, produtos, mesas, atendentes, setores, pagamentos, notas fiscais, estoque de insumos, compras e fornecedores, considerando os processos identificados durante a análise do estabelecimento.
 
 Por meio da definição de entidades, atributos, relacionamentos, cardinalidades e restrições de integridade, busca-se estruturar os dados de maneira consistente, permitindo representar as relações entre os elementos envolvidos nas operações do restaurante.
 
@@ -156,15 +156,18 @@ O processo de pagamento pode envolver a divisão da conta entre diferentes pesso
 
 A entidade Pagamento armazenará o valor pago e a data e o horário de cada pagamento, e se relaciona com a entidade Forma_Pagamento, que cadastra de forma padronizada as formas aceitas pelo estabelecimento (como dinheiro, crédito, débito e Pix). A associação entre os pedidos e seus pagamentos permitirá representar a quitação em etapas, conforme as regras definidas para o projeto. Enquanto o cliente não paga, o pedido permanece em aberto, sem nenhum pagamento registrado.
 
-O modelo também prevê a entidade Nota_Fiscal, que armazena os dados do cupom fiscal (número, série, data de emissão, valor total e chave de acesso). Como hipótese de modelagem, considera-se que a emissão é feita por um sistema externo ao banco de dados e que a nota se relaciona ao pedido, e não ao pagamento, porque o pagamento e a emissão do cupom podem ocorrer em momentos diferentes. Cada pedido possui no máximo uma nota fiscal.
+O modelo também prevê a entidade Nota_Fiscal, que armazena os dados do cupom fiscal (número, série, data de emissão, valor total e chave de acesso) e, quando o cliente pede, o CPF do consumidor (campo opcional). Como hipótese de modelagem, considera-se que a emissão é feita por um sistema externo ao banco de dados e que a nota se relaciona ao pedido, e não ao pagamento, porque o pagamento e a emissão do cupom podem ocorrer em momentos diferentes. Cada pedido possui no máximo uma nota fiscal.
 
 Os procedimentos específicos utilizados pelo restaurante para dividir as contas, registrar os pagamentos e emitir o cupom fiscal, assim como a eventual cobrança de taxa de serviço ou couvert, ainda precisam ser detalhados para que o modelo represente integralmente o processo atual.
 
+
 **e) Controle de estoque e compras**
 
-O gerenciamento do estoque envolve o acompanhamento das quantidades disponíveis dos produtos utilizados pelo estabelecimento. Conforme informado durante a entrevista, o controle é realizado manualmente, por meio de planilhas, anotações ou contagem física, e o proprietário é responsável pelas compras destinadas ao abastecimento.
+O gerenciamento do estoque envolve o acompanhamento das quantidades disponíveis dos insumos utilizados pelo estabelecimento. Conforme informado durante a entrevista, o controle é realizado manualmente, por meio de planilhas, anotações ou contagem física, e o proprietário é responsável pelas compras destinadas ao abastecimento.
 
-Na modelagem proposta, a entidade Estoque permitirá representar as quantidades registradas dos produtos. A estrutura deverá considerar a necessidade de organizar essas informações no banco de dados, sem pressupor que o estabelecimento já utiliza um sistema integrado para essa finalidade.
+Na modelagem proposta, a entidade Insumo representa o que fica em estoque, com a quantidade disponível, a unidade de medida e a quantidade mínima desejada. O modelo não trabalha com receitas: pratos como a feijoada são cadastrados como Produto, e uma bebida como a coca é um produto como qualquer outro. A entidade Insumo existe para dar sentido ao controle de estoque e às compras.
+
+As compras são representadas pelas entidades Fornecedor, Nota_Fiscal_Compra e Compra. Cada nota fiscal de compra é emitida por um fornecedor cadastrado e contém uma ou mais compras, e cada compra se refere a um insumo, com quantidade, valor unitário e desconto opcional. A estrutura deverá considerar a necessidade de organizar essas informações no banco de dados, sem pressupor que o estabelecimento já utiliza um sistema integrado para essa finalidade. A forma como as compras são registradas hoje ainda deverá ser confirmada com o gerente.
 
 **f) Cadastro e controle de atendentes**
 
@@ -209,7 +212,7 @@ flowchart TD
     MC --> E
     REC --> L
     E --> F{"Setor do produto?"}
-    E -.->|baixa| G[("Estoque do produto")]
+    E -.->|baixa| G[("Estoque de insumos")]
     F -->|Cozinha| H["Cozinha recebe e prepara"]
     F -->|Bar| I["Bar recebe e prepara"]
     H --> J["Item pronto"]
@@ -231,7 +234,7 @@ flowchart TD
 > **Nota sobre o fluxograma:** o desenho mostra a sequência do atendimento (da chegada do cliente até a mesa ser liberada). Os pontos abaixo são **hipóteses de modelagem da equipe**, e não fatos confirmados pelo gerente:
 >
 > - **Identificação do atendente:** o gerente informou que os funcionários não têm login individual no aplicativo. Por isso, o atendente se identifica escolhendo seu nome na tela, e não entrando com usuário e senha.
-> - **Baixa no estoque (seta pontilhada):** o gerente informou que o estoque é controlado manualmente (planilha, anotação ou contagem). A baixa automática a cada item pedido é uma proposta nossa para o sistema.
+> - **Baixa no estoque (seta pontilhada):** o gerente informou que o estoque é controlado manualmente (planilha, anotação ou contagem). A baixa automática a cada item pedido é uma proposta nossa para o sistema. 
 > - **Conferência de maioridade:** o gerente não informou como a idade é conferida na venda de bebida alcoólica. O fluxo representa a decisão do grupo (conferência de documento sem armazenar dados) e será validado na segunda entrevista.
 > - **Cancelamento de item e pagamento:** o cancelamento de item, a divisão da conta em vários pagamentos e o registro do cupom fiscal (emitido por sistema externo, seta pontilhada) também são hipóteses a validar.
 > - **Produto indisponível:** o limite diário de porções por produto é uma proposta do grupo (não foi informada pelo gerente). Quando o limite do dia é atingido, o produto fica indisponível para novos pedidos.
@@ -263,8 +266,12 @@ O modelo contemplará as seguintes estruturas principais:
 - **Pedido:** registro dos pedidos e de suas informações principais.
 - **Produto:** cadastro dos produtos, incluindo seus códigos e preços.
 - **Setor:** representação dos setores responsáveis pela preparação dos produtos, como cozinha e bar.
-- **Estoque:** representação das quantidades registradas dos produtos.
+- **Insumo:** representação do estoque, com quantidade disponível, unidade de medida e quantidade mínima.
 - **Pagamento:** armazenamento dos registros de pagamento associados aos pedidos.
+- **Forma_Pagamento:** cadastro padronizado das formas de pagamento aceitas (dinheiro, crédito, débito e Pix).
+- **Nota_Fiscal:** dados do cupom fiscal emitido, com o CPF do consumidor quando informado.
+- **Fornecedor:** cadastro dos fornecedores dos insumos.
+- **Compra e Nota_Fiscal_Compra:** registro das compras de insumos e das notas fiscais de compra emitidas pelos fornecedores.
 
 O relacionamento entre Pedido e Produto será representado por uma associação que permita registrar a quantidade solicitada e o preço unitário considerado para cada produto em determinado pedido. Essa estrutura permitirá representar pedidos compostos por diferentes produtos e a presença de um mesmo produto em vários pedidos.
 
