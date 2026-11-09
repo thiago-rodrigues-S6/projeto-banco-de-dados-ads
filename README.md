@@ -126,7 +126,7 @@ A proposta contempla a representação dos dados relacionados aos pedidos, produ
 
 Por meio da definição de entidades, atributos, relacionamentos, cardinalidades e restrições de integridade, busca-se estruturar os dados de maneira consistente, permitindo representar as relações entre os elementos envolvidos nas operações do restaurante.
 
-A modelagem também servirá de base para a construção do modelo relacional e para a futura implementação utilizando PostgreSQL e SQL, conforme as etapas previstas no projeto acadêmico.
+A modelagem também servirá de base para a construção do modelo relacional e para a futura implementação utilizando MySQL e SQL, conforme as etapas previstas no projeto acadêmico.
 
 ### 3.3 Mapeamento dos processos de negócio
 
@@ -281,7 +281,7 @@ Para o estoque, a proposta consiste em organizar os dados dos insumos em uma est
 
 A modelagem também deverá considerar restrições para preservar a consistência dos registros, como a identificação única dos produtos, a validação de quantidades e valores monetários e a utilização de referências válidas entre as entidades relacionadas.
 
-Após a conclusão e a validação do modelo conceitual, será desenvolvido o modelo relacional, seguido da análise de normalização e da implementação prevista em PostgreSQL. Essa etapa contemplará a criação das tabelas, a definição das restrições, a inserção de dados e a execução de consultas SQL.
+Após a conclusão e a validação do modelo conceitual, será desenvolvido o modelo relacional, seguido da análise de normalização e da implementação prevista em MySQL. Essa etapa contemplará a criação das tabelas, a definição das restrições, a inserção de dados e a execução de consultas SQL.
 
 Dessa maneira, a solução proposta estabelecerá uma estrutura organizada para representar as informações consideradas no projeto, servindo como base para as etapas posteriores de desenvolvimento e documentação do banco de dados.
 
@@ -451,7 +451,8 @@ Serão consideradas:
 
 ### 🛠️ Tecnologias e Ferramentas
 
-- **SGBD:** PostgreSQL
+
+- **SGBD:** MySQL
 - **Linguagem:** SQL
 - **Modelagem:** BRModelo
 - **Versionamento:** Git e GitHub
@@ -479,23 +480,31 @@ Entre as operações previstas estão:
 ## 📁 11. Estrutura do Projeto
 
 ```text
-Palazio-del-Chef/
+projeto-banco-de-dados-ads/
 │
-├── docs/
-│   └── diagrama-der.png
+├── README.md                              # Documentação principal do projeto
+├── banco-de-dados-palazio.sql             # Script completo do banco em MySQL (13 tabelas)
+├── cardapio_palazio_diurno.pdf            # Cardápio do estabelecimento (referência)
+├── imagem_palazio.jpeg                    # Foto do estabelecimento
+├── visita_palazio.jpeg                    # Registro da visita e da entrevista com o gerente
 │
 ├── Diagrama_Palazio_del_Chef/
-│   └── diagrama_palazio_del_chef.jpg
+│   ├── diagrama_palazio_del_chef.jpeg     # Diagrama Entidade-Relacionamento (DER)
+│   └── readme.md                          # Descrição das entidades e dos relacionamentos
 │
-├── Fluxograma_Palazio_del_Chef/
-│   └── fluxograma_palazio_del_chef.png
+├── modelo_relacional/
+│   ├── modelo_relacional.jpeg             # Modelo relacional (tabelas, PKs e FKs)
+│   └── Readme.md                          # Explicação do modelo relacional
 │
-├── sql/
-│   ├── create_tables.sql
-│   ├── insert_data.sql
-│   └── consultas.sql
-│
-└── README.md
+└── dicionario_dados_palazio/
+    ├── dicionário_dados_Palazio.html      # Dicionário de dados completo
+    └── readme.md                          # Descrição do dicionário
+
+```
+
+> O fluxograma do atendimento não é um arquivo de imagem: ele está no próprio README, na seção 3.4, escrito em Mermaid.
+
+
 ```
 
 ---
@@ -557,7 +566,7 @@ A modelagem também considera a possibilidade de expansão futura, conforme novo
 
 ### Tecnologias e Ferramentas
 
-O BRModelo foi utilizado para apoiar a elaboração do Diagrama Entidade-Relacionamento (DER). O PostgreSQL foi definido como Sistema Gerenciador de Banco de Dados (SGBD) para a futura implementação, utilizando SQL para a criação das estruturas, definição das restrições e execução de consultas. O Git e o GitHub são utilizados para o versionamento e a organização dos arquivos do projeto.
+O BRModelo foi utilizado para apoiar a elaboração do Diagrama Entidade-Relacionamento (DER). O MySQL foi definido como Sistema Gerenciador de Banco de Dados (SGBD) para a futura implementação, utilizando SQL para a criação das estruturas, definição das restrições e execução de consultas. O Git e o GitHub são utilizados para o versionamento e a organização dos arquivos do projeto.
 
 ---
 
@@ -635,7 +644,7 @@ A organização escolhida foi o **Palazio del Chef**, um estabelecimento do segm
 
 Com base nesse levantamento, o grupo desenvolveu a análise dos processos de negócio, a identificação do problema a ser abordado no projeto e a definição dos requisitos funcionais, requisitos não funcionais e regras de negócio. Essas etapas serviram como fundamento para a elaboração do modelo conceitual, contemplando a identificação das entidades, dos atributos, dos relacionamentos e das respectivas cardinalidades.
 
-O projeto também envolve a elaboração do dicionário de dados, a representação do Diagrama Entidade-Relacionamento (DER), a definição do modelo relacional e a análise de normalização. Como etapas posteriores, estão previstas a implementação do banco de dados utilizando PostgreSQL e SQL, a definição das chaves primárias e estrangeiras, a aplicação de restrições de integridade, a inserção de dados de teste e a elaboração de consultas para manipulação e recuperação das informações.
+O projeto também envolve a elaboração do dicionário de dados, a representação do Diagrama Entidade-Relacionamento (DER), a definição do modelo relacional e a análise de normalização. Como etapas posteriores, estão previstas a implementação do banco de dados utilizando MySQL e SQL, a definição das chaves primárias e estrangeiras, a aplicação de restrições de integridade, a inserção de dados de teste e a elaboração de consultas para manipulação e recuperação das informações.
 
 Além dos conhecimentos técnicos relacionados à modelagem de dados, o desenvolvimento da atividade busca exercitar a capacidade de interpretar informações obtidas em um contexto real, transformar necessidades operacionais em estruturas de dados e justificar as decisões adotadas durante a elaboração do modelo.
 
