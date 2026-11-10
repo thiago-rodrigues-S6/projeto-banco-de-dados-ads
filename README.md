@@ -428,11 +428,90 @@ A partir do modelo conceitual, será desenvolvido o modelo relacional contendo a
 
 ## 🧹 8. Normalização
 
-O modelo será analisado de acordo com os princípios de normalização de bancos de dados, buscando reduzir redundâncias e evitar inconsistências nas informações armazenadas.
+A análise foi feita sobre o modelo implementado em [`banco-de-dados-palazio2.sql`](./banco-de-dados-palazio2.sql) (13 tabelas). O critério adotado foi:
 
-Serão consideradas as formas normais necessárias para garantir uma estrutura organizada e adequada às necessidades do estabelecimento.
+| Forma normal | Condição verificada |
+| :--- | :--- |
+| **1FN** | Todos os atributos são atômicos, não há grupos repetidos e cada tabela tem chave primária. |
+| **2FN** | Está na 1FN e nenhum atributo depende apenas de **parte** de uma chave primária composta. |
+| **3FN** | Está na 2FN e nenhum atributo não chave depende de outro atributo não chave (sem dependência transitiva). |
 
-**Status:** ⏳ Em desenvolvimento
+### 8.1 Do registro de pedido às tabelas finais
+
+Ponto de partida: a comanda como o restaurante a registra, com tudo em um único registro.
+
+**Forma não normalizada (0FN)**
+
+```text
+PEDIDO_COMANDA (num_pedido, data_hora_pedido, maioridade_confirmada,
+                nmr_mesa, id_atendente, nome_atendente,
+                { codigo_produto, nome_produto, nome_setor, preco_unitario, qt_produto, status },
+                { forma_pagamento, valor_pago, data_hora_pagamento })
+```
+
+As chaves `{ ... }` indicam grupos que se repetem dentro do mesmo pedido.
+
+**1FN: retirar os grupos repetidos.** Um pedido tem vários produtos e vários pagamentos, então cada grupo vira uma tabela própria com chave:
+
+- `pedido (num_pedido, data_hora_pedido, maioridade_confirmada, nmr_mesa, id_atendente, nome_atendente)`
+- `item_pedido (num_pedido, codigo_produto, nome_produto, nome_setor, preco_unitario, qt_produto, status)`, chave composta `(num_pedido, codigo_produto)`
+- `pagamento (id_pagamento, num_pedido, forma_pagamento, valor_pago, data_hora_pagamento)`
+
+**2FN: eliminar dependência parcial.** Em `item_pedido`, `nome_produto` e `nome_setor` dependem só de `codigo_produto`, e não da chave inteira `(num_pedido, codigo_produto)`. Eles saem para a tabela `produto`. Ficam em `item_pedido` apenas `qt_produto`, `preco_unitario` e `status`, que dependem do par pedido + produto (o preço cobrado naquele pedido, RN04).
+
+**3FN: eliminar dependência transitiva.** Cada atributo que descreve outra entidade vai para a sua própria tabela:
+
+| Dependência transitiva encontrada | Tabela criada |
+| :--- | :--- |
+| `num_pedido → id_atendente → nome_atendente` | `atendente` |
+| `codigo_produto → id_setor → nome_setor` | `setor` |
+| `id_pagamento → id_forma_pagamento → descricao` | `forma_pagamento` |
+| `num_pedido → nmr_mesa` (a mesa é uma entidade com número próprio) | `mesa` |
+| `id_nota_compra → id_fornecedor → razao_social, cnpj, endereco, telefone` | `fornecedor` |
+| `compra → id_insumo → nome_insumo, unidade, estoque` | `insumo` |
+
+O total do pedido **não** é guardado em `pedido`: ele é calculado por `SUM(qt_produto * preco_unitario)` dos itens ativos (consulta C02), evitando um valor que poderia ficar diferente dos itens.
+
+### 8.2 Verificação tabela por tabela
+
+| Tabela | Chave primária | Principais dependências funcionais | 1FN | 2FN | 3FN |
+| :--- | :--- | :--- | :---: | :---: | :---: |
+| `setor` | `id_setor` | `id_setor → nome_setor` | ✅ | ✅ | ✅ |
+| `atendente` | `id_atendente` | `id_atendente → nome_atendente` | ✅ | ✅ | ✅ |
+| `mesa` | `nmr_mesa` | só a chave | ✅ | ✅ | ✅ |
+| `forma_pagamento` | `id_forma_pagamento` | `id_forma_pagamento → descricao` | ✅ | ✅ | ✅ |
+| `insumo` | `id_insumo` | `id_insumo → nome_insumo, qt_insumo, unidade_insumo, qt_minima_insumo` | ✅ | ✅ | ✅ |
+| `fornecedor` | `id_fornecedor` | `id_fornecedor → razao_social, cnpj, endereco, telefone` (`cnpj` é único) | ✅ | ✅ | ✅ |
+| `produto` | `codigo_produto` | `codigo_produto → nome_produto, preco_atual, limite_diario, bebida_alcoolica, id_setor, id_insumo` | ✅ | ✅ | ✅ |
+| `pedido` | `num_pedido` | `num_pedido → data_hora_pedido, maioridade_confirmada, id_atendente, nmr_mesa` | ✅ | ✅ | ✅ |
+| `item_pedido` | `(num_pedido, codigo_produto)` | `(num_pedido, codigo_produto) → qt_produto, preco_unitario, status, motivo_cancelamento, data_hora_cancelamento` | ✅ | ✅ | ✅ |
+| `pagamento` | `id_pagamento` | `id_pagamento → num_pedido, id_forma_pagamento, id_nota_fiscal, data_hora_pagamento, valor_pago` | ✅ | ✅ | ✅ (ver 8.3) |
+| `nota_fiscal` | `id_nota_fiscal` | `id_nota_fiscal → num_pedido, numero_nota, serie, data_emissao, valor_total, chave_acesso, cpf_consumidor` (`num_pedido` e `chave_acesso` são únicos) | ✅ | ✅ | ✅ (ver 8.3) |
+| `nota_fiscal_compra` | `id_nota_compra` | `id_nota_compra → id_fornecedor, numero_nota, serie, chave_acesso, data_emissao, data_entrada, valor_total` | ✅ | ✅ | ✅ (ver 8.3) |
+| `compra` | `id_compra` | `id_compra → id_insumo, id_nota_compra, quantidade, valor_unitario, desconto` | ✅ | ✅ | ✅ |
+
+Nas tabelas com chave simples a 2FN é satisfeita automaticamente. A única chave composta é a de `item_pedido`, e todos os seus atributos dependem do par completo.
+
+### 8.3 Redundâncias mantidas de propósito
+
+Algumas informações aparecem mais de uma vez por decisão de negócio, e não por falha de normalização. Cada uma tem uma consulta de auditoria que confere a coerência (seção 10.2):
+
+| Redundância | Por que foi mantida | Conferência |
+| :--- | :--- | :--- |
+| `item_pedido.preco_unitario` repete `produto.preco_atual` | O preço cobrado fica congelado no pedido; se o cardápio mudar, os pedidos antigos não mudam (RN04). | A06 |
+| `nota_fiscal.valor_total` pode ser calculado pelos itens do pedido | É o valor impresso no documento fiscal e não pode mudar depois da emissão. | A03 |
+| `nota_fiscal_compra.valor_total` pode ser calculado pelas compras | É o valor do documento do fornecedor. | A07 |
+| `pagamento.num_pedido` e `pagamento.id_nota_fiscal`: a nota já informa o pedido (`id_nota_fiscal → num_pedido`), uma dependência transitiva possível | A nota é opcional no momento do pagamento (RN22: o pagamento pode ser registrado antes da nota), então o pedido precisa estar no próprio pagamento. A RN29 exige que os dois apontem para o mesmo pedido. | A04 |
+
+### 8.4 Pontos de atenção e possíveis melhorias
+
+- **`fornecedor.endereco`** é um texto único. Se o grupo precisar de consultas por cidade ou bairro, o endereço deve ser dividido em atributos (logradouro, número, bairro, cidade), o que manteria a 1FN com atributos mais atômicos.
+- **`produto.id_insumo`** liga cada produto a no máximo um insumo (25 dos 266 produtos têm insumo). Se um prato usar vários insumos, será necessária uma tabela de ligação `produto_insumo` (ficha técnica), que não faz parte do escopo atual.
+- **`item_pedido.status`** é um texto livre (`ativo` ou `cancelado`). Um `CHECK` ou uma tabela de domínio garantiria os valores permitidos.
+
+**Conclusão:** todas as 13 tabelas estão na **3FN**. As redundâncias da seção 8.3 são deliberadas, documentadas e conferidas por consultas de auditoria.
+
+**Status:** ✅ Concluído
 
 ---
 
@@ -463,17 +542,404 @@ Serão consideradas:
 
 ## 📋 10. Consultas SQL
 
-Serão desenvolvidas consultas para manipulação e recuperação das informações armazenadas no banco de dados.
+As consultas foram escritas sobre o banco `palazio_del_chef` (arquivo [`banco-de-dados-palazio2.sql`](./banco-de-dados-palazio2.sql), MySQL 8.0, 13 tabelas e 50 pedidos de 01/11 a 08/11/2026) e estão reunidas em [`consultas_palazio.sql`](./consultas_palazio.sql). Todas foram executadas no MySQL 8.0.46 a partir do banco recém-importado, sem erros. Os resultados abaixo são a saída real dessa execução.
 
-Entre as operações previstas estão:
+**Como executar**
 
-- `INSERT` — inserção de dados;
-- `SELECT` — consulta de dados;
-- `UPDATE` — atualização de dados;
-- `DELETE` — exclusão de dados;
-- `JOIN` — relacionamento entre tabelas.
+```bash
+mysql -u root -p --default-character-set=utf8mb4 -e "CREATE DATABASE IF NOT EXISTS palazio_del_chef"
+mysql -u root -p --default-character-set=utf8mb4 palazio_del_chef < banco-de-dados-palazio2.sql
+mysql -u root -p --default-character-set=utf8mb4 -t < consultas_palazio.sql
+```
 
-**Status:** ⏳ Em desenvolvimento
+Recursos de SQL usados: `JOIN` (até 4 tabelas), `LEFT JOIN`, `GROUP BY` com `HAVING`, funções de agregação (`SUM`, `COUNT`, `AVG`, `ROUND`), função de janela (`SUM() OVER ()`), subconsultas em `FROM`, `NOT EXISTS` e subconsulta correlacionada.
+
+### 10.1 Consultas de negócio
+
+| Código | Pergunta | Regras |
+| :--- | :--- | :--- |
+| C01 | Comanda do pedido 2: o que foi pedido, por quem e em qual mesa (JOIN em 4 tabelas) | RN01, RN02, RN04 |
+| C02 | Valor total de cada pedido, sem os itens cancelados (agregação) | RN20 |
+| C03 | Faturamento por atendente: pedidos, ticket médio e total vendido | RN01 |
+| C04 | Os 10 produtos mais vendidos, com setor e participação na receita (função de janela) | RN03, RN05 |
+| C05 | Vendas por setor: Cozinha x Bar | RN05, RN10 |
+| C06 | Recebimentos por forma de pagamento (dinheiro, crédito, débito, Pix) | RN06, RN21 |
+| C07 | Pedidos ainda não quitados: total, pago e saldo a receber (LEFT JOIN + HAVING) | RN06, RN20 |
+| C08 | Itens cancelados: produto, motivo e quanto deixou de ser vendido | RN16, RN17 |
+| C09 | Insumos abaixo do estoque mínimo e quanto falta para repor | RN07, RN24 |
+| C10 | Compras por fornecedor: notas, itens e valor comprado (considera o desconto) | RN25, RN26, RN27 |
+| C11 | Produtos do cardápio sem nenhum pedido no período (subconsulta NOT EXISTS; são 174 de 266, lista limitada a 15) | RN03 (apoio à decisão: cardápio sem giro) |
+| C12 | Produtos com preço acima da média do seu setor (subconsulta correlacionada; lista limitada a 15) | RN03, RN05 |
+
+#### C01. Comanda do pedido 2: o que foi pedido, por quem e em qual mesa (JOIN em 4 tabelas)
+
+**Atende:** RN01, RN02, RN04
+
+```sql
+SELECT p.num_pedido, p.nmr_mesa AS mesa, a.nome_atendente AS atendente,
+       pr.nome_produto, i.qt_produto, i.preco_unitario,
+       i.qt_produto * i.preco_unitario AS subtotal
+  FROM pedido p
+  JOIN atendente   a  ON a.id_atendente  = p.id_atendente
+  JOIN item_pedido i  ON i.num_pedido    = p.num_pedido
+  JOIN produto     pr ON pr.codigo_produto = i.codigo_produto
+ WHERE p.num_pedido = 2 AND i.status = 'ativo'
+ ORDER BY pr.nome_produto;
+```
+
+**Resultado** (2 linhas):
+
+| num_pedido | mesa | atendente | nome_produto | qt_produto | preco_unitario | subtotal |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2 | 8 | Rafael Souza | Beirute de contrafilé | 1 | 48.00 | 48.00 |
+| 2 | 8 | Rafael Souza | Del Valle lata | 1 | 9.00 | 9.00 |
+
+#### C02. Valor total de cada pedido, sem os itens cancelados (agregação)
+
+**Atende:** RN20
+
+```sql
+SELECT p.num_pedido, p.data_hora_pedido, COUNT(*) AS itens, SUM(i.qt_produto) AS unidades,
+       SUM(i.qt_produto * i.preco_unitario) AS valor_total
+  FROM pedido p
+  JOIN item_pedido i ON i.num_pedido = p.num_pedido
+ WHERE i.status = 'ativo'
+ GROUP BY p.num_pedido, p.data_hora_pedido
+ ORDER BY valor_total DESC
+ LIMIT 10;
+```
+
+**Resultado** (10 linhas; primeiras 6):
+
+| num_pedido | data_hora_pedido | itens | unidades | valor_total |
+| --- | --- | --- | --- | --- |
+| 43 | 2026-11-07 19:58:00 | 6 | 21 | 660.00 |
+| 12 | 2026-11-02 19:18:00 | 4 | 9 | 606.00 |
+| 20 | 2026-11-04 19:27:00 | 3 | 9 | 545.00 |
+| 6 | 2026-11-01 18:46:00 | 6 | 36 | 538.00 |
+| 22 | 2026-11-04 20:15:00 | 3 | 3 | 534.00 |
+| 23 | 2026-11-04 20:48:00 | 4 | 23 | 520.00 |
+
+#### C03. Faturamento por atendente: pedidos, ticket médio e total vendido
+
+**Atende:** RN01
+
+```sql
+SELECT a.nome_atendente, COUNT(DISTINCT p.num_pedido) AS pedidos,
+       SUM(i.qt_produto * i.preco_unitario) AS vendido,
+       ROUND(SUM(i.qt_produto * i.preco_unitario) / COUNT(DISTINCT p.num_pedido), 2) AS ticket_medio
+  FROM atendente a
+  JOIN pedido p      ON p.id_atendente = a.id_atendente
+  JOIN item_pedido i ON i.num_pedido   = p.num_pedido AND i.status = 'ativo'
+ GROUP BY a.id_atendente, a.nome_atendente
+ ORDER BY vendido DESC;
+```
+
+**Resultado** (5 linhas):
+
+| nome_atendente | pedidos | vendido | ticket_medio |
+| --- | --- | --- | --- |
+| Mariana Costa | 13 | 3993.50 | 307.19 |
+| Rafael Souza | 12 | 2519.00 | 209.92 |
+| Fernanda Lima | 8 | 2498.00 | 312.25 |
+| Beatriz Alves | 10 | 2130.00 | 213.00 |
+| João Pereira | 6 | 670.00 | 111.67 |
+
+#### C04. Os 10 produtos mais vendidos, com setor e participação na receita (função de janela)
+
+**Atende:** RN03, RN05
+
+```sql
+SELECT pr.nome_produto, s.nome_setor, SUM(i.qt_produto) AS unidades,
+       SUM(i.qt_produto * i.preco_unitario) AS receita,
+       ROUND(100 * SUM(i.qt_produto * i.preco_unitario)
+             / SUM(SUM(i.qt_produto * i.preco_unitario)) OVER (), 1) AS pct_receita
+  FROM item_pedido i
+  JOIN produto pr ON pr.codigo_produto = i.codigo_produto
+  JOIN setor   s  ON s.id_setor        = pr.id_setor
+ WHERE i.status = 'ativo'
+ GROUP BY pr.codigo_produto, pr.nome_produto, s.nome_setor
+ ORDER BY receita DESC
+ LIMIT 10;
+```
+
+**Resultado** (10 linhas; primeiras 6):
+
+| nome_produto | nome_setor | unidades | receita | pct_receita |
+| --- | --- | --- | --- | --- |
+| Feijoada média | Cozinha | 10 | 950.00 | 8.0 |
+| Chopp Brahma 350 ml | Bar | 56 | 896.00 | 7.6 |
+| Combo whisky Jack Daniels (5 energéticos + 4 gelos de coco) | Bar | 2 | 760.00 | 6.4 |
+| Combo whisky Buchanan's 12 anos (5 energéticos + 4 gelos de coco) | Bar | 1 | 450.00 | 3.8 |
+| Espeto: Medalhão de frango | Cozinha | 26 | 390.00 | 3.3 |
+| Combo whisky Black Label (5 energéticos + 4 gelos de coco) | Bar | 1 | 380.00 | 3.2 |
+
+#### C05. Vendas por setor: Cozinha x Bar
+
+**Atende:** RN05, RN10
+
+```sql
+SELECT s.nome_setor, COUNT(DISTINCT i.num_pedido) AS pedidos_com_itens_do_setor,
+       SUM(i.qt_produto) AS unidades, SUM(i.qt_produto * i.preco_unitario) AS receita
+  FROM item_pedido i
+  JOIN produto pr ON pr.codigo_produto = i.codigo_produto
+  JOIN setor   s  ON s.id_setor        = pr.id_setor
+ WHERE i.status = 'ativo'
+ GROUP BY s.id_setor, s.nome_setor;
+```
+
+**Resultado** (2 linhas):
+
+| nome_setor | pedidos_com_itens_do_setor | unidades | receita |
+| --- | --- | --- | --- |
+| Bar | 48 | 201 | 5341.50 |
+| Cozinha | 48 | 193 | 6469.00 |
+
+#### C06. Recebimentos por forma de pagamento (dinheiro, crédito, débito, Pix)
+
+**Atende:** RN06, RN21
+
+```sql
+SELECT f.descricao AS forma, COUNT(*) AS pagamentos, SUM(pg.valor_pago) AS total_recebido,
+       ROUND(100 * SUM(pg.valor_pago) / SUM(SUM(pg.valor_pago)) OVER (), 1) AS pct
+  FROM pagamento pg
+  JOIN forma_pagamento f ON f.id_forma_pagamento = pg.id_forma_pagamento
+ GROUP BY f.id_forma_pagamento, f.descricao
+ ORDER BY total_recebido DESC;
+```
+
+**Resultado** (4 linhas):
+
+| forma | pagamentos | total_recebido | pct |
+| --- | --- | --- | --- |
+| credito | 24 | 4901.40 | 43.6 |
+| pix | 16 | 3048.60 | 27.1 |
+| debito | 16 | 1927.24 | 17.2 |
+| dinheiro | 7 | 1352.40 | 12.0 |
+
+#### C07. Pedidos ainda não quitados: total, pago e saldo a receber (LEFT JOIN + HAVING)
+
+**Atende:** RN06, RN20
+
+```sql
+SELECT t.num_pedido, p.nmr_mesa AS mesa, t.valor_total,
+       COALESCE(pg.pago, 0) AS pago, t.valor_total - COALESCE(pg.pago, 0) AS saldo
+  FROM (SELECT num_pedido, SUM(qt_produto * preco_unitario) AS valor_total
+          FROM item_pedido WHERE status = 'ativo' GROUP BY num_pedido) t
+  JOIN pedido p ON p.num_pedido = t.num_pedido
+  LEFT JOIN (SELECT num_pedido, SUM(valor_pago) AS pago FROM pagamento GROUP BY num_pedido) pg
+         ON pg.num_pedido = t.num_pedido
+ GROUP BY t.num_pedido, p.nmr_mesa, t.valor_total, pg.pago
+HAVING saldo <> 0
+ ORDER BY saldo DESC;
+```
+
+**Resultado** (3 linhas):
+
+| num_pedido | mesa | valor_total | pago | saldo |
+| --- | --- | --- | --- | --- |
+| 50 | 6 | 266.00 | 0.00 | 266.00 |
+| 48 | 11 | 250.00 | 0.00 | 250.00 |
+| 49 | 19 | 203.00 | 138.14 | 64.86 |
+
+#### C08. Itens cancelados: produto, motivo e quanto deixou de ser vendido
+
+**Atende:** RN16, RN17
+
+```sql
+SELECT i.num_pedido, pr.nome_produto, i.qt_produto, i.qt_produto * i.preco_unitario AS valor_cancelado,
+       i.motivo_cancelamento, i.data_hora_cancelamento
+  FROM item_pedido i
+  JOIN produto pr ON pr.codigo_produto = i.codigo_produto
+ WHERE i.status = 'cancelado'
+ ORDER BY i.data_hora_cancelamento;
+```
+
+**Resultado** (13 linhas; primeiras 6):
+
+| num_pedido | nome_produto | qt_produto | valor_cancelado | motivo_cancelamento | data_hora_cancelamento |
+| --- | --- | --- | --- | --- | --- |
+| 5 | Suco copo | 4 | 56.00 | Item lançado errado pelo atendente | 2026-11-01 18:06:00 |
+| 9 | Refrigerante 350 ml | 1 | 9.00 | Cliente desistiu do item | 2026-11-02 12:09:00 |
+| 9 | Prato light: filé de frango | 1 | 34.00 | Item lançado errado pelo atendente | 2026-11-02 12:15:00 |
+| 10 | Porção de filé mignon com catupiry | 1 | 145.00 | Cliente desistiu do item | 2026-11-02 13:24:00 |
+| 11 | Caipirinha da casa: Fabulosa | 4 | 152.00 | Demora no preparo | 2026-11-02 19:25:00 |
+| 11 | Espeto: Medalhão de carne | 3 | 45.00 | Cliente desistiu do item | 2026-11-02 19:27:00 |
+
+#### C09. Insumos abaixo do estoque mínimo e quanto falta para repor
+
+**Atende:** RN07, RN24
+
+```sql
+SELECT nome_insumo, qt_insumo, qt_minima_insumo, unidade_insumo,
+       qt_minima_insumo - qt_insumo AS falta_para_o_minimo
+  FROM insumo
+ WHERE qt_insumo < qt_minima_insumo
+ ORDER BY falta_para_o_minimo DESC;
+```
+
+**Resultado** (2 linhas):
+
+| nome_insumo | qt_insumo | qt_minima_insumo | unidade_insumo | falta_para_o_minimo |
+| --- | --- | --- | --- | --- |
+| Queijo mussarela | 4.20 | 8.00 | kg | 3.80 |
+| Linguiça calabresa | 5.50 | 8.00 | kg | 2.50 |
+
+#### C10. Compras por fornecedor: notas, itens e valor comprado (considera o desconto)
+
+**Atende:** RN25, RN26, RN27
+
+```sql
+SELECT f.razao_social, COUNT(DISTINCT n.id_nota_compra) AS notas, COUNT(c.id_compra) AS itens,
+       ROUND(SUM(c.quantidade * c.valor_unitario - COALESCE(c.desconto, 0)), 2) AS valor_comprado
+  FROM fornecedor f
+  JOIN nota_fiscal_compra n ON n.id_fornecedor = f.id_fornecedor
+  JOIN compra c             ON c.id_nota_compra = n.id_nota_compra
+ GROUP BY f.id_fornecedor, f.razao_social
+ ORDER BY valor_comprado DESC;
+```
+
+**Resultado** (5 linhas):
+
+| razao_social | notas | itens | valor_comprado |
+| --- | --- | --- | --- |
+| Distribuidora de Bebidas Mooca LTDA | 4 | 53 | 13863.50 |
+| Frigorífico Boa Mesa LTDA | 4 | 11 | 12234.24 |
+| Armazém Grãos do Brasil LTDA | 4 | 5 | 1547.33 |
+| Hortifruti Vila Carrão LTDA | 3 | 4 | 1069.16 |
+| Laticínios Serra Azul LTDA | 2 | 2 | 368.78 |
+
+#### C11. Produtos do cardápio sem nenhum pedido no período (subconsulta NOT EXISTS; são 174 de 266, lista limitada a 15)
+
+**Atende:** RN03 (apoio à decisão: cardápio sem giro)
+
+```sql
+SELECT pr.codigo_produto, pr.nome_produto, pr.preco_atual
+  FROM produto pr
+ WHERE NOT EXISTS (SELECT 1 FROM item_pedido i WHERE i.codigo_produto = pr.codigo_produto)
+ ORDER BY pr.nome_produto
+ LIMIT 15;
+```
+
+**Resultado** (15 linhas; primeiras 6):
+
+| codigo_produto | nome_produto | preco_atual |
+| --- | --- | --- |
+| 90 | A la carte: Ancho (1 pessoa) | 63.00 |
+| 91 | A la carte: Ancho (2 pessoas) | 125.00 |
+| 92 | A la carte: Chorizo (1 pessoa) | 68.00 |
+| 93 | A la carte: Chorizo (2 pessoas) | 127.00 |
+| 102 | A la carte: Filé de Saint Peter grelhado (1 pessoa) | 65.00 |
+| 103 | A la carte: Filé de Saint Peter grelhado (2 pessoas) | 115.00 |
+
+#### C12. Produtos com preço acima da média do seu setor (subconsulta correlacionada; lista limitada a 15)
+
+**Atende:** RN03, RN05
+
+```sql
+SELECT pr.nome_produto, s.nome_setor, pr.preco_atual
+  FROM produto pr
+  JOIN setor s ON s.id_setor = pr.id_setor
+ WHERE pr.preco_atual > (SELECT AVG(p2.preco_atual) FROM produto p2 WHERE p2.id_setor = pr.id_setor)
+ ORDER BY s.nome_setor, pr.preco_atual DESC
+ LIMIT 15;
+```
+
+**Resultado** (15 linhas; primeiras 6):
+
+| nome_produto | nome_setor | preco_atual |
+| --- | --- | --- |
+| Combo whisky Blue Label (5 energéticos + 4 gelos de coco) | Bar | 2000.00 |
+| Combo whisky Gold Label (5 energéticos + 4 gelos de coco) | Bar | 470.00 |
+| Combo whisky Buchanan's 12 anos (5 energéticos + 4 gelos de coco) | Bar | 450.00 |
+| Combo Gin Tanqueray (5 energéticos + mix de frutas) | Bar | 380.00 |
+| Combo Gin Bombay (5 energéticos + mix de frutas) | Bar | 380.00 |
+| Combo whisky Black Label (5 energéticos + 4 gelos de coco) | Bar | 380.00 |
+
+### 10.2 Consultas de auditoria
+
+Verificam se os dados respeitam as regras de negócio. As consultas A01 a A05 e A07 devem retornar **0 linhas**; a A06 é informativa e retorna um contador.
+
+| Código | Verificação | Regras | Resultado |
+| :--- | :--- | :--- | :--- |
+| A01 | Bebida alcoólica em pedido sem maioridade confirmada | RN18, RN19, RN23 | 0 linhas (OK) |
+| A02 | Pagamentos que ultrapassam o total do pedido | RN20 | 0 linhas (OK) |
+| A03 | Nota fiscal com valor diferente do total do pedido | RN22 | 0 linhas (OK) |
+| A04 | Pagamento ligado à nota fiscal de outro pedido | RN29 | 0 linhas (OK) |
+| A05 | Item cancelado sem motivo, ou item ativo com dados de cancelamento | RN17 | 0 linhas (OK) |
+| A06 | Preço do item diferente do preço atual do produto (informativo: o preço do pedido é histórico) | RN04 | contador = 0 (OK) |
+| A07 | Nota fiscal de compra com valor_total diferente da soma das compras (quantidade x valor unitário - desconto) | RN26, RN27 | 0 linhas (OK) |
+
+#### A01. Bebida alcoólica em pedido sem maioridade confirmada
+
+```sql
+SELECT DISTINCT p.num_pedido, pr.nome_produto
+  FROM pedido p
+  JOIN item_pedido i ON i.num_pedido = p.num_pedido
+  JOIN produto pr    ON pr.codigo_produto = i.codigo_produto
+ WHERE pr.bebida_alcoolica = 1 AND p.maioridade_confirmada = 0;
+```
+
+#### A02. Pagamentos que ultrapassam o total do pedido
+
+```sql
+SELECT t.num_pedido, t.valor_total, pg.pago
+  FROM (SELECT num_pedido, SUM(qt_produto * preco_unitario) AS valor_total
+          FROM item_pedido WHERE status = 'ativo' GROUP BY num_pedido) t
+  JOIN (SELECT num_pedido, SUM(valor_pago) AS pago FROM pagamento GROUP BY num_pedido) pg
+    ON pg.num_pedido = t.num_pedido
+ WHERE pg.pago > t.valor_total;
+```
+
+#### A03. Nota fiscal com valor diferente do total do pedido
+
+```sql
+SELECT nf.num_pedido, nf.numero_nota, nf.valor_total AS valor_nota, t.valor_total AS valor_pedido
+  FROM nota_fiscal nf
+  JOIN (SELECT num_pedido, SUM(qt_produto * preco_unitario) AS valor_total
+          FROM item_pedido WHERE status = 'ativo' GROUP BY num_pedido) t
+    ON t.num_pedido = nf.num_pedido
+ WHERE nf.valor_total <> t.valor_total;
+```
+
+#### A04. Pagamento ligado à nota fiscal de outro pedido
+
+```sql
+SELECT pg.id_pagamento, pg.num_pedido AS pedido_do_pagamento, nf.num_pedido AS pedido_da_nota
+  FROM pagamento pg
+  JOIN nota_fiscal nf ON nf.id_nota_fiscal = pg.id_nota_fiscal
+ WHERE nf.num_pedido <> pg.num_pedido;
+```
+
+#### A05. Item cancelado sem motivo, ou item ativo com dados de cancelamento
+
+```sql
+SELECT num_pedido, codigo_produto, status
+  FROM item_pedido
+ WHERE (status = 'cancelado' AND (motivo_cancelamento IS NULL OR data_hora_cancelamento IS NULL))
+    OR (status = 'ativo'     AND (motivo_cancelamento IS NOT NULL OR data_hora_cancelamento IS NOT NULL));
+```
+
+#### A06. Preço do item diferente do preço atual do produto (informativo: o preço do pedido é histórico)
+
+```sql
+SELECT COUNT(*) AS itens_com_preco_diferente_do_cadastro
+  FROM item_pedido i
+  JOIN produto pr ON pr.codigo_produto = i.codigo_produto
+ WHERE i.preco_unitario <> pr.preco_atual;
+```
+
+#### A07. Nota fiscal de compra com valor_total diferente da soma das compras (quantidade x valor unitário - desconto)
+
+```sql
+SELECT n.id_nota_compra, n.valor_total AS valor_nota, x.soma_compras
+  FROM nota_fiscal_compra n
+  JOIN (SELECT id_nota_compra, ROUND(SUM(quantidade * valor_unitario - COALESCE(desconto, 0)), 2) AS soma_compras
+          FROM compra GROUP BY id_nota_compra) x ON x.id_nota_compra = n.id_nota_compra
+ WHERE n.valor_total <> x.soma_compras;
+```
+
+**Status:** ✅ Concluído
 
 ---
 
@@ -483,7 +949,8 @@ Entre as operações previstas estão:
 projeto-banco-de-dados-ads/
 │
 ├── README.md                              # Documentação principal do projeto
-├── banco-de-dados-palazio.sql             # Script completo do banco em MySQL (13 tabelas)
+├── banco-de-dados-palazio2.sql            # Banco completo em MySQL (13 tabelas) com a massa de dados
+├── consultas_palazio.sql                  # Consultas SQL e auditorias (seção 10)
 ├── cardapio_palazio_diurno.pdf            # Cardápio do estabelecimento (referência)
 ├── imagem_palazio.jpeg                    # Foto do estabelecimento
 ├── visita_palazio.jpeg                    # Registro da visita e da entrevista com o gerente
@@ -521,9 +988,9 @@ projeto-banco-de-dados-ads/
 | Diagrama Entidade-Relacionamento | ✅ Concluído |
 | Fluxograma do processo | ✅ Concluído |
 | Modelo relacional | ✅ Concluído |
-| Normalização | ⏳ Pendente |
+| Normalização | ✅ Concluído |
 | Implementação SQL | ⏳ Pendente |
-| Consultas SQL | ⏳ Pendente |
+| Consultas SQL | ✅ Concluído |
 | Documentação final | ⏳ Pendente |
 
 ---
