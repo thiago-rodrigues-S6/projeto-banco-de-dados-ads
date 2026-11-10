@@ -417,13 +417,44 @@ O **Diagrama Entidade-Relacionamento (DER)** representa graficamente as entidade
 
 ## 🧩 7. Modelo Relacional
 
-A partir do modelo conceitual, será desenvolvido o modelo relacional contendo as tabelas, chaves primárias, chaves estrangeiras e demais restrições necessárias para a implementação do banco de dados.
+O modelo conceitual (seção 6) foi convertido em **13 tabelas**, implementadas em MySQL 8.0 no arquivo [`banco-de-dados-palazio2.sql`](./banco-de-dados-palazio2.sql). A imagem abaixo mostra as tabelas, as chaves primárias (PK) e as chaves estrangeiras (FK).
 
 <p align="center">
   <img src="./modelo_relacional/modelo_relacional.jpeg" alt="Modelo Relacional do Palazio del Chef" width="900">
 </p>
 
 > [Ver Modelo](./modelo_relacional/).
+
+### 7.1 Do modelo conceitual ao relacional
+
+| Elemento do DER | Regra de conversão | Resultado no banco |
+| :--- | :--- | :--- |
+| Entidade | Vira uma tabela; o identificador vira chave primária | `pedido` (`num_pedido`), `produto` (`codigo_produto`), `mesa` (`nmr_mesa`), `atendente`, `setor`, `forma_pagamento`, `insumo`, `fornecedor` |
+| Relacionamento N:N (o pedido contém produtos) | Vira uma tabela associativa, que guarda os atributos do relacionamento | `item_pedido`, com PK composta (`num_pedido`, `codigo_produto`) e os campos `qt_produto`, `preco_unitario`, `status`, `motivo_cancelamento` e `data_hora_cancelamento` |
+| Relacionamento 1:N | A chave do lado 1 vira chave estrangeira no lado N | `pedido.id_atendente`, `pedido.nmr_mesa`, `produto.id_setor`, `produto.id_insumo`, `pagamento.num_pedido`, `pagamento.id_forma_pagamento`, `compra.id_insumo`, `compra.id_nota_compra` |
+| Relacionamento 1:0..1 (um pedido tem no máximo uma nota fiscal) | Chave estrangeira com restrição `UNIQUE` | `nota_fiscal.num_pedido` é `UNIQUE` |
+| Atributo que não pode repetir | `UNIQUE` | `fornecedor.cnpj` e `nota_fiscal.chave_acesso` |
+| Regra de domínio | `CHECK` | 14 restrições: valores positivos, CNPJ com 14 dígitos, CPF com 11, desconto limitado ao valor da compra, entre outras |
+
+### 7.2 Chaves estrangeiras
+
+| Tabela filha | Coluna | Tabela pai |
+| :--- | :--- | :--- |
+| `pedido` | `id_atendente` | `atendente` |
+| `pedido` | `nmr_mesa` | `mesa` |
+| `item_pedido` | `num_pedido` | `pedido` |
+| `item_pedido` | `codigo_produto` | `produto` |
+| `produto` | `id_setor` | `setor` |
+| `produto` | `id_insumo` | `insumo` |
+| `pagamento` | `num_pedido` | `pedido` |
+| `pagamento` | `id_forma_pagamento` | `forma_pagamento` |
+| `pagamento` | `id_nota_fiscal` | `nota_fiscal` |
+| `nota_fiscal` | `num_pedido` | `pedido` |
+| `compra` | `id_insumo` | `insumo` |
+| `compra` | `id_nota_compra` | `nota_fiscal_compra` |
+| `nota_fiscal_compra` | `id_fornecedor` | `fornecedor` |
+
+Todas as chaves estrangeiras usam a ação padrão `NO ACTION`: o banco **não deixa apagar** um registro que ainda tem registros ligados a ele (exemplo no item D04 da seção 10.3).
 ---
 
 ## 🧹 8. Normalização
@@ -517,26 +548,61 @@ Algumas informações aparecem mais de uma vez por decisão de negócio, e não 
 
 ## 🗃️ 9. Implementação do Banco de Dados
 
-Após a conclusão do modelo lógico, será realizada a implementação do banco de dados utilizando SQL.
+O banco foi implementado em **MySQL 8.0** (testado na versão 8.0.46; o dump foi gerado no MySQL 8.4). O nome do banco é `palazio_del_chef`.
 
-Serão consideradas:
+### 9.1 Scripts do projeto
 
-- Criação das tabelas;
-- Definição das chaves primárias;
-- Definição das chaves estrangeiras;
-- Restrições de integridade;
-- Inserção de dados;
-- Consultas SQL.
+| Arquivo | O que faz |
+| :--- | :--- |
+| [`banco-de-dados-palazio2.sql`](./banco-de-dados-palazio2.sql) | Cria as 13 tabelas, as chaves primárias e estrangeiras e as restrições `CHECK`, e insere a massa de dados |
+| [`consultas_palazio.sql`](./consultas_palazio.sql) | 12 consultas de negócio e 7 auditorias (seção 10) |
+| [`update_delete_palazio.sql`](./update_delete_palazio.sql) | 4 `UPDATE` e 3 `DELETE`, mais uma demonstração de integridade (seção 10.3) |
+
+### 9.2 Massa de dados
+
+Os dados são **fictícios** e foram montados para simular uma semana de operação, de 01/11/2026 a 08/11/2026.
+
+| Tabela | Registros | Tabela | Registros |
+| :--- | ---: | :--- | ---: |
+| `pedido` | 50 | `produto` | 266 |
+| `item_pedido` | 185 | `insumo` | 42 |
+| `pagamento` | 63 | `compra` | 75 |
+| `nota_fiscal` | 33 | `nota_fiscal_compra` | 17 |
+| `atendente` | 5 | `fornecedor` | 5 |
+| `mesa` | 20 | `forma_pagamento` | 4 |
+| `setor` | 2 | | |
+
+### 9.3 Como executar
+
+O arquivo `banco-de-dados-palazio2.sql` **não cria o banco**, então o primeiro passo é criá-lo.
+
+**Pelo MySQL Workbench**
+
+1. Abra a conexão **Local instance MySQL80**.
+2. Em uma aba nova, execute `CREATE DATABASE IF NOT EXISTS palazio_del_chef;`.
+3. Vá em **File > Open SQL Script**, abra `banco-de-dados-palazio2.sql`, escreva `USE palazio_del_chef;` na primeira linha e execute tudo com **Ctrl+Shift+Enter**.
+4. Confira com `SELECT COUNT(*) FROM palazio_del_chef.pedido;`, que deve retornar **50**.
+5. Abra `consultas_palazio.sql` (ou `update_delete_palazio.sql`) e execute com **Ctrl+Shift+Enter**. Os resultados aparecem em abas na parte de baixo.
+
+**Pelo terminal (cmd)**
+
+```bash
+mysql -u root -p --default-character-set=utf8mb4 -e "CREATE DATABASE IF NOT EXISTS palazio_del_chef"
+mysql -u root -p --default-character-set=utf8mb4 palazio_del_chef < banco-de-dados-palazio2.sql
+mysql -u root -p --default-character-set=utf8mb4 -t < consultas_palazio.sql
+mysql -u root -p --default-character-set=utf8mb4 -t < update_delete_palazio.sql
+```
+
+> No PowerShell o símbolo `<` não funciona; use o `cmd` ou o Workbench. Se o seu banco de testes tiver outro nome, troque também a linha `USE palazio_del_chef;` no início dos arquivos de consultas.
 
 ### 🛠️ Tecnologias e Ferramentas
 
-
-- **SGBD:** MySQL
+- **SGBD:** MySQL 8.0
 - **Linguagem:** SQL
-- **Modelagem:** BRModelo
+- **Ferramentas:** MySQL Workbench e BRModelo
 - **Versionamento:** Git e GitHub
 
-**Status:** ⏳ Em desenvolvimento
+**Status:** ✅ Concluído
 
 ---
 
@@ -941,6 +1007,72 @@ SELECT n.id_nota_compra, n.valor_total AS valor_nota, x.soma_compras
 
 **Status:** ✅ Concluído
 
+### 10.3 Atualização e exclusão (UPDATE e DELETE)
+
+Os comandos estão em [`update_delete_palazio.sql`](./update_delete_palazio.sql). Cada um mostra a conferência **antes** e **depois**. O script roda dentro de uma transação que termina em `ROLLBACK`, então o banco volta ao estado original e as consultas da seção 10.1 continuam valendo. Para gravar as alterações, troque o `ROLLBACK` final por `COMMIT`.
+
+| Código | Comando | Situação de negócio | Resultado observado |
+| :--- | :--- | :--- | :--- |
+| U01 | `UPDATE produto` | Reajustar em 10% o preço do chopp (produto 266) | `preco_atual` de 16,00 para 17,60; os 11 itens já vendidos mantêm o preço antigo (histórico preservado) |
+| U02 | `UPDATE pedido` | Trocar o pedido 48 da mesa 11 para a mesa 12 | `nmr_mesa` de 11 para 12 |
+| U03 | `UPDATE insumo` | Repor 10 kg de queijo mussarela | Estoque de 4,20 para 14,20 kg, acima do mínimo (8,00); sai da consulta C09 |
+| U04 | `UPDATE item_pedido` | Cancelar um item do pedido 48 com motivo | `status` vira `cancelado`, com motivo e data; o total ativo do pedido vai de 250,00 para 212,00 |
+| D01 | `DELETE item_pedido` | Remover um item lançado por engano do pedido 50 | Itens do pedido: de 4 para 3 |
+| D02 | `DELETE produto` | Excluir do cardápio um produto nunca pedido (produto 90) | Produtos: de 266 para 265; o `NOT EXISTS` impede apagar produto com pedido |
+| D03 | `DELETE item_pedido` e `DELETE pedido` | Excluir o pedido 50 inteiro (em aberto, sem pagamento) | Pedidos: de 50 para 49; os itens são apagados antes, por causa das chaves estrangeiras |
+| D04 | `DELETE pedido` (comentado) | Tentar apagar o pedido 1, que tem itens e pagamentos | `Error 1451`: o banco bloqueia (`fk_item_pedido_pedido`); é a integridade referencial em ação |
+
+Depois do `ROLLBACK`, a conferência final retorna **50 pedidos, 266 produtos e preço do chopp de 16,00**, o mesmo estado de antes.
+
+### 10.4 BI e IA: arquitetura analítica
+
+Esta seção é uma **proposta de arquitetura**. Os indicadores abaixo já são calculados pelas consultas da seção 10.1; o painel de BI e os modelos de IA **não foram implementados**.
+
+**Indicadores calculados com os dados atuais**
+
+| Indicador | Consulta | Valor na base de teste |
+| :--- | :--- | :--- |
+| Faturamento (itens ativos) | C02 | R$ 11.810,50 em 50 pedidos (ticket médio de R$ 236,21) |
+| Vendas por setor | C05 | Cozinha R$ 6.469,00 e Bar R$ 5.341,50 |
+| Recebimentos por forma de pagamento | C06 | Crédito 43,6%, Pix 27,1%, Débito 17,2% e Dinheiro 12,0% |
+| Faturamento por atendente | C03 | Mariana Costa lidera, com 13 pedidos e R$ 3.993,50 |
+| Pedidos ainda não quitados | C07 | 3 pedidos, com R$ 580,86 a receber |
+| Estoque abaixo do mínimo | C09 | 2 insumos (queijo mussarela e linguiça calabresa) |
+| Itens cancelados | C08 | 13 itens, cada um com motivo registrado |
+| Produtos sem nenhum pedido | C11 | 174 de 266 produtos |
+| Compras por fornecedor | C10 | Distribuidora de Bebidas Mooca lidera, com R$ 13.863,50 |
+
+**Arquitetura proposta**
+
+```mermaid
+flowchart LR
+    A["MySQL operacional<br/>palazio_del_chef"] --> B["Views das consultas<br/>(C02 a C11)"]
+    B --> C["Ferramenta de BI<br/>(Power BI, Metabase ou Looker Studio)"]
+    C --> D["Painel do gerente"]
+    A --> E["Extração diária<br/>(CSV ou tabela de apoio)"]
+    E --> F["Modelos de IA<br/>(Python)"]
+    F --> D
+```
+
+O banco operacional continua sendo a fonte única. As consultas viram *views*, e a ferramenta de BI se conecta ao MySQL e lê só as views, sem escrever no banco. Para análise, o modelo se organiza em torno de três fatos:
+
+| Fato | Tabela de origem | Dimensões |
+| :--- | :--- | :--- |
+| Venda (um item vendido) | `item_pedido` | produto, setor, atendente, mesa e tempo (`data_hora_pedido`) |
+| Recebimento | `pagamento` | forma de pagamento, nota fiscal e tempo |
+| Compra de insumo | `compra` | insumo, fornecedor e tempo |
+
+**Aplicações de IA propostas**
+
+| Aplicação | Dados usados | Uso para o restaurante |
+| :--- | :--- | :--- |
+| Previsão de demanda por produto | Quantidade vendida por dia e por produto (`item_pedido`) | Planejar compras e produção |
+| Previsão de ruptura de estoque | `insumo` (estoque e mínimo) e `compra` | Evoluir a consulta C09 para um aviso antes de faltar insumo |
+| Detecção de anomalias | Cancelamentos por atendente (C08) e as auditorias A01 a A07 | Apontar padrões fora do normal |
+| Sugestão de combos | Produtos que aparecem juntos no mesmo pedido | Apoiar o cardápio e as promoções |
+
+**Limitações:** a base atual tem 50 pedidos de uma semana e é fictícia, o que **não é suficiente para treinar modelos**; seria preciso um histórico real de vários meses. O campo `cpf_consumidor` é dado pessoal e deve ser anonimizado antes de qualquer análise (LGPD).
+
 ---
 
 ## 📁 11. Estrutura do Projeto
@@ -951,6 +1083,7 @@ projeto-banco-de-dados-ads/
 ├── README.md                              # Documentação principal do projeto
 ├── banco-de-dados-palazio2.sql            # Banco completo em MySQL (13 tabelas) com a massa de dados
 ├── consultas_palazio.sql                  # Consultas SQL e auditorias (seção 10)
+├── update_delete_palazio.sql              # UPDATE e DELETE com conferência antes e depois (seção 10.3)
 ├── cardapio_palazio_diurno.pdf            # Cardápio do estabelecimento (referência)
 ├── imagem_palazio.jpeg                    # Foto do estabelecimento
 ├── visita_palazio.jpeg                    # Registro da visita e da entrevista com o gerente
@@ -971,9 +1104,6 @@ projeto-banco-de-dados-ads/
 
 > O fluxograma do atendimento não é um arquivo de imagem: ele está no próprio README, na seção 3.4, escrito em Mermaid.
 
-
-```
-
 ---
 
 ## 📌 12. Status do Projeto
@@ -989,9 +1119,11 @@ projeto-banco-de-dados-ads/
 | Fluxograma do processo | ✅ Concluído |
 | Modelo relacional | ✅ Concluído |
 | Normalização | ✅ Concluído |
-| Implementação SQL | ⏳ Pendente |
+| Implementação SQL | ✅ Concluído |
 | Consultas SQL | ✅ Concluído |
-| Documentação final | ⏳ Pendente |
+| UPDATE e DELETE | ✅ Concluído |
+| BI e IA (proposta de arquitetura) | ✅ Concluído |
+| Documentação final | ✅ Concluído |
 
 ---
 
@@ -1100,6 +1232,12 @@ As sugestões precisaram ser analisadas em relação aos dados da entrevista, à
 A inteligência artificial foi utilizada como ferramenta de apoio, e não como substituta do levantamento de informações, da análise acadêmica ou das decisões do grupo. Os integrantes são responsáveis por verificar o conteúdo incorporado ao projeto, justificar as escolhas realizadas e garantir a coerência entre a documentação e o modelo de banco de dados apresentado.
 
 O uso da ferramenta deve ser compreendido como um processo de consulta, análise e revisão, no qual as sugestões precisam ser avaliadas antes de sua incorporação ao trabalho. A versão final da documentação e da modelagem deve refletir as decisões efetivamente tomadas pelo grupo e as evidências disponíveis sobre o estabelecimento.
+
+### 14.9 Uso do Claude (Anthropic)
+
+Além do ChatGPT, o grupo usou o **Claude** (Anthropic) como apoio na parte final do projeto: na normalização (seção 8), nas consultas e auditorias (seção 10.1 e 10.2), nos scripts de `UPDATE` e `DELETE` (seção 10.3), na proposta de BI e IA (seção 10.4), na documentação da implementação (seção 9) e nos slides da apresentação.
+
+A verificação foi feita executando tudo: os scripts foram testados em um MySQL 8.0.46 a partir do banco importado, e os resultados publicados neste README são a saída real da execução. O integrante Victor Anjos também executou as consultas no MySQL Workbench. As respostas da IA não foram tratadas como prova de como o restaurante funciona, e as decisões finais continuaram com o grupo.
 
 ---
 
