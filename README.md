@@ -290,8 +290,6 @@ As soluções propostas são:
 | SP09 | Criar uma estrutura de histórico de preços, permitindo registrar os valores anteriores e atuais dos produtos, juntamente com a data e o responsável pela alteração. |
 
 A implementação dessas soluções deverá respeitar a estrutura do modelo relacional, utilizando chaves primárias, chaves estrangeiras e restrições de integridade para garantir a consistência das informações.
-
-As funcionalidades propostas representam possibilidades de evolução do banco de dados e deverão ser incorporadas ao modelo conforme a validação dos requisitos e a definição do escopo final do projeto.
 ---
 
 ## ⚙️ 4. Requisitos e Regras de Negócio
