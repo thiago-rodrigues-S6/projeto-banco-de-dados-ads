@@ -249,8 +249,6 @@ flowchart TD
 
 A análise dos processos operacionais do Palazio del Chef permitiu identificar necessidades relacionadas à organização, ao armazenamento e à consulta das informações utilizadas no funcionamento do estabelecimento.
 
-Considerando as características de um restaurante de pequeno porte, com equipe reduzida e dois gerentes responsáveis pela alternância entre os turnos diurno e noturno, foram identificados os seguintes pontos de atenção:
-
 | Código | Problema identificado |
 |---|---|
 | PN01 | Ausência de identificação individual dos funcionários no aplicativo utilizado para registrar os pedidos, dificultando a identificação dos responsáveis por cada operação. |
