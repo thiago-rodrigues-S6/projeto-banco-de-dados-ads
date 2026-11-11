@@ -62,6 +62,10 @@
 
 — **Redes sociais oficiais:** https://www.instagram.com/palaziodelchef/?hl=en
 
+— **Porte:** o Palazio del Chef é um bar e restaurante de pequeno porte, com
+atendimento presencial. O estabelecimento
+conta com 24 funcionários, somando os dois turnos.  volume de 100 a 200 pedidos (comandas)
+por dia.
 
 <p align="center">
   <img src="./imagem_palazio.jpeg" alt="Imagem visual do estabelecimento do Palazio Del Chef" width="550">
