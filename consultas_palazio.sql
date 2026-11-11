@@ -1,6 +1,6 @@
 -- =====================================================================
 -- Palazio del Chef | Consultas, UPDATE e DELETE (MySQL 8.0)
--- Banco: palazio_del_chef (banco-de-dados-palazio2.sql)
+-- Banco: palazio_del_chef (banco-de-dados-palazio.sql)
 -- Este arquivo reúne duas partes, na ordem em que devem ser executadas:
 --   PARTE 1: consultas (C01 a C12) e auditorias (A01 a A07), só leitura.
 --   PARTE 2: UPDATE e DELETE (U01 a U04, D01 a D04), dentro de uma transação
@@ -201,7 +201,7 @@ SELECT n.id_nota_compra, n.valor_total AS valor_nota, x.soma_compras
 -- PARTE 2 | UPDATE E DELETE
 -- #####################################################################
 
--- Banco: palazio_del_chef (banco-de-dados-palazio2.sql)
+-- Banco: palazio_del_chef (banco-de-dados-palazio.sql)
 -- Cada comando traz a situação de negócio, a conferência ANTES e a
 -- conferência DEPOIS. Tudo roda dentro de uma transação que termina em
 -- ROLLBACK: o banco volta ao estado original e as consultas e os slides
