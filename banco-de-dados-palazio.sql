@@ -16,8 +16,7 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Criacao do banco de dados (adicionado para o arquivo ficar completo)
---
+-- 
 
 CREATE DATABASE IF NOT EXISTS `palazio_del_chef` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 USE `palazio_del_chef`;
