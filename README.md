@@ -132,60 +132,87 @@ Por meio da definição de entidades, atributos, relacionamentos, cardinalidades
 
 A modelagem também servirá de base para a construção do modelo relacional e para a futura implementação utilizando MySQL e SQL, conforme as etapas previstas no projeto acadêmico.
 
+---
+
 ### 3.3 Mapeamento dos processos de negócio
 
 O mapeamento dos processos de negócio busca representar as principais atividades realizadas no estabelecimento, identificando as etapas conhecidas, os participantes envolvidos e as informações relacionadas a cada operação.
 
 Com base nas informações levantadas durante a entrevista, foram identificados os seguintes processos:
 
-**a) Atendimento ao cliente**
+#### A) Atendimento ao cliente
 
-O atendimento ocorre presencialmente, com os clientes utilizando as mesas do estabelecimento e sendo atendidos pelos atendentes responsáveis. Na modelagem proposta, a associação entre mesas, pedidos e atendentes permitirá representar as informações relacionadas ao atendimento.
+| Etapa | Descrição |
+|---|---|
+| Atendimento presencial | O atendimento ocorre presencialmente, com os clientes utilizando as mesas do estabelecimento. |
+| Responsável pelo atendimento | Os clientes são atendidos pelos atendentes responsáveis. |
+| Representação na modelagem | A associação entre mesas, pedidos e atendentes permitirá representar as informações relacionadas ao atendimento. |
 
-**b) Registro do pedido**
+#### B) Registro do pedido
 
-Os atendentes utilizam um aplicativo para registrar os pedidos realizados pelos clientes. No banco de dados proposto, esse processo será representado pelas entidades Pedido, Produto, Mesa e Atendente, permitindo relacionar cada pedido à mesa correspondente, identificar o atendente responsável pelo registro e armazenar os produtos solicitados, suas quantidades e seus preços unitários.
+| Etapa | Descrição |
+|---|---|
+| Registro dos pedidos | Os atendentes utilizam um aplicativo para registrar os pedidos realizados pelos clientes. |
+| Representação na modelagem | O processo será representado pelas entidades `Pedido`, `Produto`, `Mesa` e `Atendente`, permitindo relacionar cada pedido à mesa correspondente, identificar o atendente responsável pelo registro e armazenar os produtos solicitados, suas quantidades e seus preços unitários. |
+| Identificação de bebidas alcoólicas | Na venda de bebidas alcoólicas, a modelagem propõe que o produto seja identificado como bebida alcoólica (atributo `bebida_alcoolica` da entidade `Produto`) e que o pedido registre se a maioridade do cliente foi confirmada (atributo `maioridade_confirmada` da entidade `Pedido`). |
+| Conferência de maioridade | Pela regra proposta, antes de registrar um item alcoólico, o atendente solicita ao cliente um documento oficial com foto e confere se ele tem 18 anos ou mais. |
+| Proteção dos dados | O documento é apenas visualizado e nenhum dado dele é armazenado, em respeito ao princípio da necessidade previsto na LGPD. Esse procedimento é uma hipótese de modelagem, e a forma como o estabelecimento realiza essa conferência ainda deverá ser confirmada com o gerente. |
 
-Na venda de bebidas alcoólicas, a modelagem propõe que o produto seja identificado como bebida alcoólica (atributo `bebida_alcoolica` da entidade Produto) e que o pedido registre se a maioridade do cliente foi confirmada (atributo `maioridade_confirmada` da entidade Pedido). Pela regra proposta, antes de registrar um item alcoólico, o atendente solicita ao cliente um documento oficial com foto e confere se ele tem 18 anos ou mais. O documento é apenas visualizado e nenhum dado dele é armazenado, em respeito ao princípio da necessidade previsto na LGPD. Esse procedimento é uma hipótese de modelagem, e a forma como o estabelecimento realiza essa conferência ainda deverá ser confirmada com o gerente.
+#### C) Encaminhamento e preparação dos pedidos
 
-**c) Encaminhamento e preparação dos pedidos**
+| Etapa | Descrição |
+|---|---|
+| Encaminhamento | Após o registro no aplicativo, os pedidos são encaminhados à cozinha ou ao bar, conforme o setor responsável pela preparação dos produtos. |
+| Representação na modelagem | Para representar essa característica, a modelagem considera a entidade `Setor`, relacionada aos produtos de acordo com sua classificação. |
+| Validação do processo | O fluxo detalhado de preparação, incluindo a ordem das atividades e os procedimentos utilizados para acompanhar o andamento dos pedidos, ainda deverá ser confirmado com o estabelecimento. |
 
-Após o registro no aplicativo, os pedidos são encaminhados à cozinha ou ao bar, conforme o setor responsável pela preparação dos produtos. Para representar essa característica, a modelagem considera a entidade Setor, relacionada aos produtos de acordo com sua classificação.
+#### D) Fechamento da conta e pagamento
 
-O fluxo detalhado de preparação, incluindo a ordem das atividades e os procedimentos utilizados para acompanhar o andamento dos pedidos, ainda deverá ser confirmado com o estabelecimento.
+| Etapa | Descrição |
+|---|---|
+| Divisão da conta | O processo de pagamento pode envolver a divisão da conta entre diferentes pessoas ou a realização de vários pagamentos para quitar uma mesma conta. |
+| Registro dos pagamentos | Essa característica deve ser considerada na modelagem para permitir que um pedido possua mais de um registro de pagamento. |
+| Entidade `Pagamento` | Armazenará o valor pago e a data e o horário de cada pagamento. |
+| Entidade `Forma_Pagamento` | Cadastra de forma padronizada as formas aceitas pelo estabelecimento (como dinheiro, crédito, débito e Pix). |
+| Associação entre pedidos e pagamentos | Permitirá representar a quitação em etapas, conforme as regras definidas para o projeto. Enquanto o cliente não paga, o pedido permanece em aberto, sem nenhum pagamento registrado. |
+| Entidade `Nota_Fiscal` | Armazena os dados do cupom fiscal (número, série, data de emissão, valor total e chave de acesso) e, quando o cliente pede, o CPF do consumidor (campo opcional). |
+| Emissão fiscal | Como hipótese de modelagem, considera-se que a emissão é feita por um sistema externo ao banco de dados e que a nota se relaciona ao pedido e aos pagamentos dele. |
+| Relacionamento fiscal | Como o pagamento e a emissão do cupom podem ocorrer em momentos diferentes, o pagamento pode ser registrado antes da nota e ligado a ela depois. Cada pedido possui no máximo uma nota fiscal. |
+| Validação do processo | Os procedimentos específicos utilizados pelo restaurante para dividir as contas, registrar os pagamentos e emitir o cupom fiscal, assim como a eventual cobrança de taxa de serviço ou couvert, ainda precisam ser detalhados para que o modelo represente integralmente o processo atual. |
 
-**d) Fechamento da conta e pagamento**
+#### E) Controle de estoque e compras
 
-O processo de pagamento pode envolver a divisão da conta entre diferentes pessoas ou a realização de vários pagamentos para quitar uma mesma conta. Essa característica deve ser considerada na modelagem para permitir que um pedido possua mais de um registro de pagamento.
+| Etapa | Descrição |
+|---|---|
+| Gerenciamento do estoque | Envolve o acompanhamento das quantidades disponíveis dos insumos utilizados pelo estabelecimento. |
+| Procedimento atual | Conforme informado durante a entrevista, o controle é realizado manualmente, por meio de planilhas, anotações ou contagem física, e o proprietário é responsável pelas compras destinadas ao abastecimento. |
+| Entidade `Insumo` | Representa o que fica em estoque, com a quantidade disponível, a unidade de medida e a quantidade mínima desejada. |
+| Estrutura de produtos | O modelo não trabalha com receitas: pratos como a feijoada são cadastrados como `Produto`, e uma bebida como a coca é um produto como qualquer outro. A entidade `Insumo` existe para dar sentido ao controle de estoque e às compras. |
+| Entidade `Fornecedor` | Representa os fornecedores responsáveis pelo fornecimento dos insumos. |
+| Entidade `Nota_Fiscal_Compra` | Representa as notas fiscais de compra emitidas pelos fornecedores. |
+| Entidade `Compra` | Representa as compras de insumos, contendo quantidade, valor unitário e desconto opcional. |
+| Relacionamento das compras | Cada nota fiscal de compra é emitida por um fornecedor cadastrado e contém uma ou mais compras, e cada compra se refere a um insumo. |
+| Validação do processo | A forma como as compras são registradas hoje ainda deverá ser confirmada com o gerente. |
 
-A entidade Pagamento armazenará o valor pago e a data e o horário de cada pagamento, e se relaciona com a entidade Forma_Pagamento, que cadastra de forma padronizada as formas aceitas pelo estabelecimento (como dinheiro, crédito, débito e Pix). A associação entre os pedidos e seus pagamentos permitirá representar a quitação em etapas, conforme as regras definidas para o projeto. Enquanto o cliente não paga, o pedido permanece em aberto, sem nenhum pagamento registrado.
+#### F) Cadastro e controle de atendentes
 
-O modelo também prevê a entidade Nota_Fiscal, que armazena os dados do cupom fiscal (número, série, data de emissão, valor total e chave de acesso) e, quando o cliente pede, o CPF do consumidor (campo opcional). Como hipótese de modelagem, considera-se que a emissão é feita por um sistema externo ao banco de dados e que a nota se relaciona ao pedido e aos pagamentos dele. Como o pagamento e a emissão do cupom podem ocorrer em momentos diferentes, o pagamento pode ser registrado antes da nota e ligado a ela depois. Cada pedido possui no máximo uma nota fiscal.
+| Etapa | Descrição |
+|---|---|
+| Cadastro de atendentes | O cadastro de atendentes será considerado na modelagem para identificar os atendentes responsáveis pelo registro dos pedidos. |
+| Associação com pedidos | A associação entre `Pedido` e `Atendente` permitirá relacionar cada pedido ao atendente correspondente, conforme as regras de negócio estabelecidas no projeto. |
+| Acesso ao aplicativo | Durante a entrevista, também foi informado que os funcionários não possuem credenciais individuais de acesso ao aplicativo utilizado no registro dos pedidos. |
+| Análise de acesso | Essa informação deverá ser considerada na análise dos requisitos de identificação e controle de acesso, sem pressupor funcionalidades que ainda não foram confirmadas. |
 
-Os procedimentos específicos utilizados pelo restaurante para dividir as contas, registrar os pagamentos e emitir o cupom fiscal, assim como a eventual cobrança de taxa de serviço ou couvert, ainda precisam ser detalhados para que o modelo represente integralmente o processo atual.
+#### G) Cadastro de cardápio e preços
 
+| Etapa | Descrição |
+|---|---|
+| Organização do cardápio | O cardápio do estabelecimento apresenta os produtos comercializados, organizados por categorias e acompanhados de seus respectivos preços. |
+| Referência para modelagem | Esse material serve como referência para a identificação dos produtos que poderão ser representados na modelagem do banco de dados. |
+| Entidade `Produto` | Será responsável pelo cadastro das informações dos produtos, incluindo sua identificação e seu preço atual. |
+| Preço no pedido | O preço unitário aplicado a cada produto também será registrado no respectivo item do pedido, permitindo manter o histórico do valor considerado no momento da venda. |
+| Identificação de bebidas alcoólicas | O cadastro do produto também identifica se ele é uma bebida alcoólica, informação utilizada na regra de conferência de maioridade. |
 
-**e) Controle de estoque e compras**
-
-O gerenciamento do estoque envolve o acompanhamento das quantidades disponíveis dos insumos utilizados pelo estabelecimento. Conforme informado durante a entrevista, o controle é realizado manualmente, por meio de planilhas, anotações ou contagem física, e o proprietário é responsável pelas compras destinadas ao abastecimento.
-
-Na modelagem proposta, a entidade Insumo representa o que fica em estoque, com a quantidade disponível, a unidade de medida e a quantidade mínima desejada. O modelo não trabalha com receitas: pratos como a feijoada são cadastrados como Produto, e uma bebida como a coca é um produto como qualquer outro. A entidade Insumo existe para dar sentido ao controle de estoque e às compras.
-
-As compras são representadas pelas entidades Fornecedor, Nota_Fiscal_Compra e Compra. Cada nota fiscal de compra é emitida por um fornecedor cadastrado e contém uma ou mais compras, e cada compra se refere a um insumo, com quantidade, valor unitário e desconto opcional. A estrutura deverá considerar a necessidade de organizar essas informações no banco de dados, sem pressupor que o estabelecimento já utiliza um sistema integrado para essa finalidade. A forma como as compras são registradas hoje ainda deverá ser confirmada com o gerente.
-
-**f) Cadastro e controle de atendentes**
-
-O cadastro de atendentes será considerado na modelagem para identificar os atendentes responsáveis pelo registro dos pedidos. A associação entre Pedido e Atendente permitirá relacionar cada pedido ao atendente correspondente, conforme as regras de negócio estabelecidas no projeto.
-
-Durante a entrevista, também foi informado que os funcionários não possuem credenciais individuais de acesso ao aplicativo utilizado no registro dos pedidos. Essa informação deverá ser considerada na análise dos requisitos de identificação e controle de acesso, sem pressupor funcionalidades que ainda não foram confirmadas.
-
-O detalhamento desses processos servirá de base para a construção do fluxograma e para a definição dos requisitos funcionais, das regras de negócio e dos relacionamentos representados no Diagrama Entidade-Relacionamento (DER).
-
-**g) Cadastro de cardápio e preços**
-
-O cardápio do estabelecimento apresenta os produtos comercializados, organizados por categorias e acompanhados de seus respectivos preços. Esse material serve como referência para a identificação dos produtos que poderão ser representados na modelagem do banco de dados.
-
-Na estrutura proposta, a entidade Produto será responsável pelo cadastro das informações dos produtos, incluindo sua identificação e seu preço atual. O preço unitário aplicado a cada produto também será registrado no respectivo item do pedido, permitindo manter o histórico do valor considerado no momento da venda. O cadastro do produto também identifica se ele é uma bebida alcoólica, informação utilizada na regra de conferência de maioridade.
 
 📄 *Documento de referência:* [Consultar cardápio do Palazio del Chef (PDF)](./cardapio_palazio_diurno.pdf)
 
