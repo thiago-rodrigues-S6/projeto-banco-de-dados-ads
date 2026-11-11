@@ -479,7 +479,6 @@ O modelo conceitual (seção 6) foi convertido em **13 tabelas**, implementadas 
 | `compra` | `id_nota_compra` | `nota_fiscal_compra` |
 | `nota_fiscal_compra` | `id_fornecedor` | `fornecedor` |
 
-Todas as chaves estrangeiras usam a ação padrão `NO ACTION`: o banco **não deixa apagar** um registro que ainda tem registros ligados a ele (exemplo no item D04 da seção 10.3).
 ---
 
 ## 🧹 8. Normalização
