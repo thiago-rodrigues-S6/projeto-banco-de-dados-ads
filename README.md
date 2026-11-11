@@ -486,11 +486,13 @@ PEDIDO_COMANDA (num_pedido, data_hora_pedido, maioridade_confirmada,
 
 As chaves `{ ... }` indicam grupos que se repetem dentro do mesmo pedido.
 
-**1FN: retirar os grupos repetidos.** Um pedido tem vários produtos e vários pagamentos, então cada grupo vira uma tabela própria com chave:
+**1FN: retirar os grupos repetidos e garantir valores atômicos.** Um pedido tem vários produtos e vários pagamentos, então cada grupo vira uma tabela própria, com uma linha por ocorrência e chave primária:
 
 - `pedido (num_pedido, data_hora_pedido, maioridade_confirmada, nmr_mesa, id_atendente, nome_atendente)`
 - `item_pedido (num_pedido, codigo_produto, nome_produto, nome_setor, preco_unitario, qt_produto, status)`, chave composta `(num_pedido, codigo_produto)`
 - `pagamento (id_pagamento, num_pedido, forma_pagamento, valor_pago, data_hora_pagamento)`
+
+O mesmo raciocínio vale para a compra de insumos: uma nota de compra tem vários insumos, que ficam na tabela `compra`, e o cabeçalho fica em `nota_fiscal_compra`. A seção 8.1.1 mostra onde cada ponto aparece no projeto.
 
 **2FN: eliminar dependência parcial.** Em `item_pedido`, `nome_produto` e `nome_setor` dependem só de `codigo_produto`, e não da chave inteira `(num_pedido, codigo_produto)`. Eles saem para a tabela `produto`. Ficam em `item_pedido` apenas `qt_produto`, `preco_unitario` e `status`, que dependem do par pedido + produto (o preço cobrado naquele pedido, RN04).
 
