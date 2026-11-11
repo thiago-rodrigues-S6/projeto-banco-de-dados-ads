@@ -79,7 +79,7 @@ Durante a visita ao restaurante, foi realizada uma entrevista com um gerente do 
 
 A conversa permitiu identificar características da operação, incluindo o atendimento aos clientes, o registro dos pedidos, o encaminhamento dos pedidos aos setores responsáveis e o gerenciamento do estoque.
 
-Como evidência da visita realizada, apresenta-se a fotografia registrada pela equipe durante o encontro com o gerente do estabelecimento.
+Como evidência da visita realizada, apresenta-se a fotografia registrada pela equipe durante o encontro com o Sr. Luís gerente do período noturno do estabelecimento.
 
 <p align="center">
   <img src="./visita_palazio.jpeg" alt="Imagem da visita ao estabelecimento" width="800">
