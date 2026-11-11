@@ -420,7 +420,7 @@ Os atributos são tipados de acordo com suas características, utilizando tipos 
 
 O modelo utiliza **Chaves Primárias (PK)** e **Chaves Estrangeiras (FK)** para estabelecer os relacionamentos e garantir a integridade dos dados.
 
-> 📌 O dicionário de dados completo será disponibilizado na documentação do projeto.
+> 📌 dicionário de dados completo está disponível na documentação complementar do projeto, contendo a descrição das entidades, atributos, tipos de dados e demais características da estrutura relacional.
 
 [Ver Dicionario](./dicionario_dados_palazio/)
 
