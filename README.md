@@ -267,38 +267,31 @@ Os pontos apresentados representam necessidades de organização das informaçõ
 
 Dessa forma, o projeto busca estruturar uma solução de banco de dados relacional capaz de atender às necessidades identificadas, considerando a realidade operacional e a estrutura reduzida do estabelecimento.
 
+---
+
 ### 3.6 Solução proposta
 
-Como solução para a necessidade identificada, propõe-se desenvolver um modelo de banco de dados relacional que represente as principais informações e relações envolvidas nas operações do Palazio del Chef.
+Como solução para os pontos identificados, propõe-se desenvolver um banco de dados relacional utilizando MySQL, com o objetivo de centralizar e organizar as informações relacionadas às operações do Palazio del Chef.
 
-A estrutura será organizada em entidades específicas, com atributos definidos conforme a finalidade de cada uma. As chaves primárias permitirão identificar individualmente os registros, enquanto as chaves estrangeiras estabelecerão os vínculos entre as entidades e contribuirão para a integridade referencial dos dados.
+A estrutura proposta deverá considerar a realidade de um restaurante de pequeno porte, priorizando funcionalidades simples, integridade dos dados e facilidade de consulta.
 
-O modelo contemplará as seguintes estruturas principais:
+As soluções propostas são:
 
-- **Atendente:** identificação dos funcionários responsáveis pelo registro dos pedidos.
-- **Mesa:** identificação das mesas utilizadas no atendimento presencial.
-- **Pedido:** registro dos pedidos e de suas informações principais.
-- **Produto:** cadastro dos produtos, incluindo seus códigos e preços.
-- **Setor:** representação dos setores responsáveis pela preparação dos produtos, como cozinha e bar.
-- **Insumo:** representação do estoque, com quantidade disponível, unidade de medida e quantidade mínima.
-- **Pagamento:** armazenamento dos registros de pagamento associados aos pedidos.
-- **Forma_Pagamento:** cadastro padronizado das formas de pagamento aceitas (dinheiro, crédito, débito e Pix).
-- **Nota_Fiscal:** dados do cupom fiscal emitido, ligado ao pedido e aos pagamentos dele, com o CPF do consumidor quando informado.
-- **Fornecedor:** cadastro dos fornecedores dos insumos.
-- **Compra e Nota_Fiscal_Compra:** registro das compras de insumos e das notas fiscais de compra emitidas pelos fornecedores.
+| Código | Solução proposta |
+|---|---|
+| SP01 | Estruturar o cadastro de atendentes e relacionar cada pedido ao funcionário responsável pelo seu registro, permitindo identificar os responsáveis pelas operações. |
+| SP02 | Centralizar as informações dos insumos em uma estrutura relacional, armazenando quantidades disponíveis, unidades de medida e quantidades mínimas para reposição. |
+| SP03 | Criar uma estrutura de movimentação de estoque para registrar entradas, saídas, perdas e ajustes, identificando a data, a quantidade e o responsável pela operação. |
+| SP04 | Implementar o controle de turnos, relacionando cada período ao gerente responsável e permitindo registrar observações e pendências para consulta pelo próximo gerente. |
+| SP05 | Implementar o acompanhamento do status de preparação dos itens dos pedidos, permitindo identificar produtos recebidos, em preparo, prontos, entregues ou cancelados. |
+| SP06 | Relacionar os pagamentos aos respectivos turnos, permitindo consultar os valores recebidos por período e por forma de pagamento, além de registrar conferências financeiras. |
+| SP07 | Implementar o registro histórico de alterações e cancelamentos dos pedidos, armazenando o tipo de alteração, a data, o responsável e a justificativa. |
+| SP08 | Implementar o controle de disponibilidade dos produtos, permitindo registrar a situação de comercialização e os limites diários definidos para determinados itens. |
+| SP09 | Criar uma estrutura de histórico de preços, permitindo registrar os valores anteriores e atuais dos produtos, juntamente com a data e o responsável pela alteração. |
 
-O relacionamento entre Pedido e Produto será representado por uma associação que permita registrar a quantidade solicitada e o preço unitário considerado para cada produto em determinado pedido. Essa estrutura permitirá representar pedidos compostos por diferentes produtos e a presença de um mesmo produto em vários pedidos.
+A implementação dessas soluções deverá respeitar a estrutura do modelo relacional, utilizando chaves primárias, chaves estrangeiras e restrições de integridade para garantir a consistência das informações.
 
-A estrutura de pagamentos deverá permitir múltiplos registros associados a um mesmo pedido, contemplando a possibilidade de dividir a conta entre pessoas ou realizar pagamentos em etapas. A necessidade de identificar individualmente cada pagador deverá ser avaliada conforme os requisitos efetivamente definidos para o projeto.
-
-Para o estoque, a proposta consiste em organizar os dados dos insumos em uma estrutura relacional, com a quantidade disponível, a unidade de medida e a quantidade mínima desejada. As compras são representadas por notas fiscais de compra emitidas por fornecedores cadastrados, e cada nota contém as compras de insumos, com quantidade, valor unitário e desconto opcional. O detalhamento do recebimento de mercadorias e de como as compras são registradas hoje dependerá da confirmação com o gerente.
-
-A modelagem também deverá considerar restrições para preservar a consistência dos registros, como a identificação única dos produtos, a validação de quantidades e valores monetários e a utilização de referências válidas entre as entidades relacionadas.
-
-Após a conclusão e a validação do modelo conceitual, será desenvolvido o modelo relacional, seguido da análise de normalização e da implementação prevista em MySQL. Essa etapa contemplará a criação das tabelas, a definição das restrições, a inserção de dados e a execução de consultas SQL.
-
-Dessa maneira, a solução proposta estabelecerá uma estrutura organizada para representar as informações consideradas no projeto, servindo como base para as etapas posteriores de desenvolvimento e documentação do banco de dados.
-
+As funcionalidades propostas representam possibilidades de evolução do banco de dados e deverão ser incorporadas ao modelo conforme a validação dos requisitos e a definição do escopo final do projeto.
 ---
 
 ## ⚙️ 4. Requisitos e Regras de Negócio
