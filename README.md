@@ -1,7 +1,7 @@
 # 🍽️ Projeto: Palazio del Chef
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Status-Em%20Andamento-yellow?style=for-the-badge" alt="Status">
+  <img src="https://img.shields.io/badge/Status-Conclu%C3%ADdo-brightgreen?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/Banco_de_Dados-Relacional-blue?style=for-the-badge&logo=mysql" alt="Banco de Dados">
 </p>
 
@@ -153,7 +153,7 @@ Com base nas informações levantadas durante a entrevista, foram identificados 
 | Etapa | Descrição |
 |---|---|
 | Registro dos pedidos | Os atendentes utilizam um aplicativo para registrar os pedidos realizados pelos clientes. |
-| Representação na modelagem | O processo será representado pelas entidades `Pedido`, `Produto`, `Mesa` e `Atendente`, permitindo relacionar cada pedido à mesa correspondente, identificar o atendente responsável pelo registro e armazenar os produtos solicitados, suas quantidades e seus preços unitários. |
+| Representação na modelagem | O processo foi representado pelas entidades `Pedido`, `Produto`, `Mesa` e `Atendente`, permitindo relacionar cada pedido à mesa correspondente, identificar o atendente responsável pelo registro e armazenar os produtos solicitados, suas quantidades e seus preços unitários. |
 | Identificação de bebidas alcoólicas | Na venda de bebidas alcoólicas, a modelagem propõe que o produto seja identificado como bebida alcoólica (atributo `bebida_alcoolica` da entidade `Produto`) e que o pedido registre se a maioridade do cliente foi confirmada (atributo `maioridade_confirmada` da entidade `Pedido`). |
 | Conferência de maioridade | Pela regra proposta, antes de registrar um item alcoólico, o atendente solicita ao cliente um documento oficial com foto e confere se ele tem 18 anos ou mais. |
 | Proteção dos dados | O documento é apenas visualizado e nenhum dado dele é armazenado, em respeito ao princípio da necessidade previsto na LGPD. Esse procedimento é uma hipótese de modelagem, e a forma como o estabelecimento realiza essa conferência ainda deverá ser confirmada com o gerente. |
@@ -198,7 +198,7 @@ Com base nas informações levantadas durante a entrevista, foram identificados 
 
 | Etapa | Descrição |
 |---|---|
-| Cadastro de atendentes | O cadastro de atendentes será considerado na modelagem para identificar os atendentes responsáveis pelo registro dos pedidos. |
+| Cadastro de atendentes | O cadastro de atendentes foi considerado na modelagem para identificar os atendentes responsáveis pelo registro dos pedidos. |
 | Associação com pedidos | A associação entre `Pedido` e `Atendente` permitirá relacionar cada pedido ao atendente correspondente, conforme as regras de negócio estabelecidas no projeto. |
 | Acesso ao aplicativo | Durante a entrevista, também foi informado que os funcionários não possuem credenciais individuais de acesso ao aplicativo utilizado no registro dos pedidos. |
 | Análise de acesso | Essa informação deverá ser considerada na análise dos requisitos de identificação e controle de acesso, sem pressupor funcionalidades que ainda não foram confirmadas. |
@@ -210,7 +210,7 @@ Com base nas informações levantadas durante a entrevista, foram identificados 
 | Organização do cardápio | O cardápio do estabelecimento apresenta os produtos comercializados, organizados por categorias e acompanhados de seus respectivos preços. |
 | Referência para modelagem | Esse material serve como referência para a identificação dos produtos que poderão ser representados na modelagem do banco de dados. |
 | Entidade `Produto` | Será responsável pelo cadastro das informações dos produtos, incluindo sua identificação e seu preço atual. |
-| Preço no pedido | O preço unitário aplicado a cada produto também será registrado no respectivo item do pedido, permitindo manter o histórico do valor considerado no momento da venda. |
+| Preço no pedido | O preço unitário aplicado a cada produto também foi registrado no respectivo item do pedido, permitindo manter o histórico do valor considerado no momento da venda. |
 | Identificação de bebidas alcoólicas | O cadastro do produto também identifica se ele é uma bebida alcoólica, informação utilizada na regra de conferência de maioridade. |
 
 
@@ -442,11 +442,24 @@ O **Diagrama Entidade-Relacionamento (DER)** representa graficamente as entidade
 
 > [Ver Diagrama](./Diagrama_Palazio_del_Chef/).
 
+### 6.1 Revisão do DER em relação à Entrega 1
+
+O DER da Entrega 1 tinha **5 entidades** (Atendente, Mesa, Pedido, Produto e Setor) e o relacionamento `Possui` entre Pedido e Produto. O DER atual tem **12 entidades**. A organização estudada continua sendo a mesma, o **Palazio del Chef**; o que mudou foi a cobertura dos processos mapeados na seção 3.3 (pagamento, nota fiscal e controle de estoque), que não tinham entidade própria.
+
+| Mudança | Situação anterior | Situação atual | Por quê |
+| :--- | :--- | :--- | :--- |
+| Pagamento e nota fiscal | Só havia o pedido | Entidades `Pagamento`, `Forma_Pagamento` e `Nota_Fiscal` | Um pedido pode ser pago em mais de uma forma, e cada venda tem uma NFC-e |
+| Estoque | Só um controle de produtos | Entidade `Insumo`, ligada aos produtos | O estoque é de insumos (ingredientes e mercadorias) e tem quantidade mínima para reposição |
+| Compras | Não existiam | Entidades `Fornecedor`, `Nota_Fiscal_Compra` e `Compra` | Registrar de quem e a que preço cada insumo foi comprado |
+| Relacionamento `Possui` | Quantidade e preço unitário | Acrescenta status e dados de cancelamento; vira a tabela `item_pedido` | O preço da venda fica congelado no pedido e um cancelamento pode atingir só parte do pedido |
+
+As evidências da organização (endereço, telefone, mapa, redes sociais e fotos) estão na seção 2.1. Hipóteses que o gerente ainda não confirmou continuam marcadas nas seções 3.4 e 4.4.
+
 ---
 
 ## 🧩 7. Modelo Relacional
 
-O modelo conceitual (seção 6) foi convertido em **13 tabelas**, implementadas em MySQL 8.0 no arquivo [`banco-de-dados-palazio2.sql`](./banco-de-dados-palazio2.sql). A imagem abaixo mostra as tabelas, as chaves primárias (PK) e as chaves estrangeiras (FK).
+O modelo conceitual (seção 6) foi convertido em **13 tabelas**, implementadas em MySQL 8.0 no arquivo [`banco-de-dados-palazio.sql`](./banco-de-dados-palazio.sql). A imagem abaixo mostra as tabelas, as chaves primárias (PK) e as chaves estrangeiras (FK).
 
 <p align="center">
   <img src="./modelo_relacional/modelo_relacional.jpeg" alt="Modelo Relacional do Palazio del Chef" width="900">
@@ -487,7 +500,7 @@ O modelo conceitual (seção 6) foi convertido em **13 tabelas**, implementadas 
 
 ## 🧹 8. Normalização
 
-A análise foi feita sobre o modelo implementado em [`banco-de-dados-palazio2.sql`](./banco-de-dados-palazio2.sql) (13 tabelas). O critério adotado foi:
+A análise foi feita sobre o modelo implementado em [`banco-de-dados-palazio.sql`](./banco-de-dados-palazio.sql) (13 tabelas). O critério adotado foi:
 
 | Forma normal | Condição verificada |
 | :--- | :--- |
@@ -537,15 +550,15 @@ O total do pedido **não** é guardado em `pedido`: ele é calculado por `SUM(qt
 
 | Regra da 1FN | Onde foi aplicada | Evidência no repositório |
 | :--- | :--- | :--- |
-| Sem grupos repetidos: itens do pedido | `item_pedido`, uma linha por produto, chave composta `(num_pedido, codigo_produto)` | [`banco-de-dados-palazio2.sql`](./banco-de-dados-palazio2.sql), linhas 167 a 181 (chave na linha 175). Nos dados (INSERT da linha 190), o pedido 1 ocupa 3 linhas (produtos 4, 49 e 175) e o pedido 2 ocupa 2. A consulta C02 (`consultas_palazio.sql`, linha 20) soma essas linhas com `GROUP BY`. |
-| Sem grupos repetidos: pagamentos | `pagamento`, uma linha por pagamento, chave `id_pagamento` | Linhas 295 a 311. Nos dados (INSERT da linha 320), o pedido 2 foi pago em duas formas (pagamentos 2 e 3) e o pedido 3 também (pagamentos 4 e 5). |
-| Sem grupos repetidos: compras de insumos | `nota_fiscal_compra` (cabeçalho) e `compra` (um insumo por linha) | Linhas 260 a 275 e 49 a 64. No INSERT da linha 73, a nota de compra 1 aparece em várias linhas de `compra`. |
-| Sem colunas repetidas | Não existem colunas como `produto1`, `produto2` ou `forma_pagamento2`. O que se repete virou linha. | Todas as tabelas do script (linhas 25 a 401). |
-| Atributos atômicos | Cada coluna guarda um único valor: data e hora em uma só coluna (`data_hora_pedido`, linha 333), `cnpj` com 14 caracteres (`CHECK`, linha 117), `chave_acesso` com um valor (linha 231) e `cpf_consumidor` com `CHECK` de 11 caracteres (linha 238). | Linhas citadas |
-| Atributos atômicos: forma de pagamento | `forma_pagamento` é uma tabela própria, então o pagamento aponta para uma forma por linha, e não para um texto com lista como "dinheiro, pix". | Linhas 84 a 89 e 298 |
-| Chave primária em toda tabela | As 13 tabelas têm chave primária. | `atendente` (28), `compra` (56), `forma_pagamento` (87), `fornecedor` (115), `insumo` (144), `item_pedido` (175, composta), `mesa` (203), `nota_fiscal` (233), `nota_fiscal_compra` (269), `pagamento` (302), `pedido` (337), `produto` (370), `setor` (400) |
+| Sem grupos repetidos: itens do pedido | `item_pedido`, uma linha por produto, chave composta `(num_pedido, codigo_produto)` | [`banco-de-dados-palazio.sql`](./banco-de-dados-palazio.sql), linhas 173 a 187 (chave na linha 181). Nos dados (INSERT da linha 196), o pedido 1 ocupa 3 linhas (produtos 4, 49 e 175) e o pedido 2 ocupa 2. A consulta C02 (`consultas_palazio.sql`, linha 30) soma essas linhas com `GROUP BY`. |
+| Sem grupos repetidos: pagamentos | `pagamento`, uma linha por pagamento, chave `id_pagamento` | Linhas 301 a 317. Nos dados (INSERT da linha 326), o pedido 2 foi pago em duas formas (pagamentos 2 e 3) e o pedido 3 também (pagamentos 4 e 5). |
+| Sem grupos repetidos: compras de insumos | `nota_fiscal_compra` (cabeçalho) e `compra` (um insumo por linha) | Linhas 266 a 281 e 55 a 70. No INSERT da linha 79, a nota de compra 1 aparece em várias linhas de `compra`. |
+| Sem colunas repetidas | Não existem colunas como `produto1`, `produto2` ou `forma_pagamento2`. O que se repete virou linha. | Todas as tabelas do script (linhas 31 a 407). |
+| Atributos atômicos | Cada coluna guarda um único valor: data e hora em uma só coluna (`data_hora_pedido`, linha 339), `cnpj` com 14 caracteres (`CHECK`, linha 123), `chave_acesso` com um valor (linha 237) e `cpf_consumidor` com `CHECK` de 11 caracteres (linha 244). | Linhas citadas |
+| Atributos atômicos: forma de pagamento | `forma_pagamento` é uma tabela própria, então o pagamento aponta para uma forma por linha, e não para um texto com lista como "dinheiro, pix". | Linhas 90 a 95 e 304 |
+| Chave primária em toda tabela | As 13 tabelas têm chave primária. | `atendente` (34), `compra` (62), `forma_pagamento` (93), `fornecedor` (121), `insumo` (150), `item_pedido` (181, composta), `mesa` (209), `nota_fiscal` (239), `nota_fiscal_compra` (275), `pagamento` (308), `pedido` (343), `produto` (376), `setor` (406) |
 
-Pontos que seguem atômicos apenas em parte, já tratados em 8.4: `fornecedor.endereco` (linha 113) é um texto único e `fornecedor.telefone` (linha 114) guarda um único número.
+Pontos que seguem atômicos apenas em parte, já tratados em 8.4: `fornecedor.endereco` (linha 119) é um texto único e `fornecedor.telefone` (linha 120) guarda um único número.
 
 ### 8.2 Verificação tabela por tabela
 
@@ -600,13 +613,12 @@ O banco foi implementado em **MySQL 8.0** (testado na versão 8.0.46; o dump foi
 
 | Arquivo | O que faz |
 | :--- | :--- |
-| [`banco-de-dados-palazio2.sql`](./banco-de-dados-palazio2.sql) | Cria as 13 tabelas, as chaves primárias e estrangeiras e as restrições `CHECK`, e insere a massa de dados |
-| [`consultas_palazio.sql`](./consultas_palazio.sql) | 12 consultas de negócio e 7 auditorias (seção 10) |
-| [`update_delete_palazio.sql`](./update_delete_palazio.sql) | 4 `UPDATE` e 3 `DELETE`, mais uma demonstração de integridade (seção 10.3) |
+| [`banco-de-dados-palazio.sql`](./banco-de-dados-palazio.sql) | Cria o banco `palazio_del_chef`, as 13 tabelas, as chaves primárias e estrangeiras e as restrições `CHECK`, e insere a massa de dados |
+| [`consultas_palazio.sql`](./consultas_palazio.sql) | **Parte 1:** 12 consultas de negócio e 7 auditorias (seções 10.1 e 10.2), só leitura. **Parte 2:** 4 `UPDATE` e 3 `DELETE` dentro de uma transação com `ROLLBACK` (seção 10.3). Executar nessa ordem. |
 
 ### 9.2 Massa de dados
 
-Os dados são **fictícios** e foram montados para simular uma semana de operação, de 01/11/2026 a 08/11/2026.
+Os dados são **fictícios** (nenhum dado real da organização foi usado) e foram montados para simular uma semana de operação, de 01/11/2026 a 08/11/2026.
 
 | Tabela | Registros | Tabela | Registros |
 | :--- | ---: | :--- | ---: |
@@ -618,28 +630,27 @@ Os dados são **fictícios** e foram montados para simular uma semana de operaç
 | `mesa` | 20 | `forma_pagamento` | 4 |
 | `setor` | 2 | | |
 
+**Escala da massa de dados.** Na entrevista, o gerente informou um volume de 100 a 200 pedidos por dia. A massa cobre 8 dias com 50 pedidos (cerca de 6 por dia), então é uma **amostra reduzida**: ela basta para validar os relacionamentos, as regras de negócio e as consultas, mas não reproduz o volume diário real nem serve para treinar modelos de IA (ver seção 10.4). Os 50 pedidos têm de 1 a 6 itens, pagamentos em mais de uma forma, itens cancelados e pedidos ainda não quitados, para exercitar os casos que o banco precisa tratar.
+
 ### 9.3 Como executar
 
-O arquivo `banco-de-dados-palazio2.sql` **não cria o banco**, então o primeiro passo é criá-lo.
+O arquivo `banco-de-dados-palazio.sql` **cria o banco sozinho** (`CREATE DATABASE IF NOT EXISTS palazio_del_chef` e `USE`), então basta importá-lo. Requer MySQL 8.0.16 ou superior (por causa das restrições `CHECK`).
 
 **Pelo MySQL Workbench**
 
 1. Abra a conexão **Local instance MySQL80**.
-2. Em uma aba nova, execute `CREATE DATABASE IF NOT EXISTS palazio_del_chef;`.
-3. Vá em **File > Open SQL Script**, abra `banco-de-dados-palazio2.sql`, escreva `USE palazio_del_chef;` na primeira linha e execute tudo com **Ctrl+Shift+Enter**.
-4. Confira com `SELECT COUNT(*) FROM palazio_del_chef.pedido;`, que deve retornar **50**.
-5. Abra `consultas_palazio.sql` (ou `update_delete_palazio.sql`) e execute com **Ctrl+Shift+Enter**. Os resultados aparecem em abas na parte de baixo.
+2. Vá em **File > Open SQL Script**, abra `banco-de-dados-palazio.sql` e execute tudo com **Ctrl+Shift+Enter**.
+3. Confira com `SELECT COUNT(*) FROM palazio_del_chef.pedido;`, que deve retornar **50**.
+4. Abra `consultas_palazio.sql` e execute com **Ctrl+Shift+Enter**. Os resultados aparecem em abas na parte de baixo. A Parte 2 do arquivo termina em `ROLLBACK`, então o banco volta ao estado original.
 
 **Pelo terminal (cmd)**
 
 ```bash
-mysql -u root -p --default-character-set=utf8mb4 -e "CREATE DATABASE IF NOT EXISTS palazio_del_chef"
-mysql -u root -p --default-character-set=utf8mb4 palazio_del_chef < banco-de-dados-palazio2.sql
+mysql -u root -p --default-character-set=utf8mb4 < banco-de-dados-palazio.sql
 mysql -u root -p --default-character-set=utf8mb4 -t < consultas_palazio.sql
-mysql -u root -p --default-character-set=utf8mb4 -t < update_delete_palazio.sql
 ```
 
-> No PowerShell o símbolo `<` não funciona; use o `cmd` ou o Workbench. Se o seu banco de testes tiver outro nome, troque também a linha `USE palazio_del_chef;` no início dos arquivos de consultas.
+> No PowerShell o símbolo `<` não funciona; use o `cmd` ou o Workbench. O arquivo de consultas usa o banco `palazio_del_chef`; se você importou com outro nome, troque a linha `USE palazio_del_chef;` no início dele.
 
 ### 🛠️ Tecnologias e Ferramentas
 
@@ -654,15 +665,7 @@ mysql -u root -p --default-character-set=utf8mb4 -t < update_delete_palazio.sql
 
 ## 📋 10. Consultas SQL
 
-As consultas foram escritas sobre o banco `palazio_del_chef` (arquivo [`banco-de-dados-palazio2.sql`](./banco-de-dados-palazio2.sql), MySQL 8.0, 13 tabelas e 50 pedidos de 01/11 a 08/11/2026) e estão reunidas em [`consultas_palazio.sql`](./consultas_palazio.sql). Todas foram executadas no MySQL 8.0.46 a partir do banco recém-importado, sem erros. Os resultados abaixo são a saída real dessa execução.
-
-**Como executar**
-
-```bash
-mysql -u root -p --default-character-set=utf8mb4 -e "CREATE DATABASE IF NOT EXISTS palazio_del_chef"
-mysql -u root -p --default-character-set=utf8mb4 palazio_del_chef < banco-de-dados-palazio2.sql
-mysql -u root -p --default-character-set=utf8mb4 -t < consultas_palazio.sql
-```
+As consultas foram escritas sobre o banco `palazio_del_chef` (arquivo [`banco-de-dados-palazio.sql`](./banco-de-dados-palazio.sql), MySQL 8.0, 13 tabelas e 50 pedidos de 01/11 a 08/11/2026) e estão reunidas na Parte 1 de [`consultas_palazio.sql`](./consultas_palazio.sql). Todas foram executadas no MySQL 8.0.46 a partir do banco recém-importado, sem erros. Os resultados abaixo são a saída real dessa execução. Para rodar, siga a seção 9.3.
 
 Recursos de SQL usados: `JOIN` (até 4 tabelas), `LEFT JOIN`, `GROUP BY` com `HAVING`, funções de agregação (`SUM`, `COUNT`, `AVG`, `ROUND`), função de janela (`SUM() OVER ()`), subconsultas em `FROM`, `NOT EXISTS` e subconsulta correlacionada.
 
@@ -1055,7 +1058,7 @@ SELECT n.id_nota_compra, n.valor_total AS valor_nota, x.soma_compras
 
 ### 10.3 Atualização e exclusão (UPDATE e DELETE)
 
-Os comandos estão em [`update_delete_palazio.sql`](./update_delete_palazio.sql). Cada um mostra a conferência **antes** e **depois**. O script roda dentro de uma transação que termina em `ROLLBACK`, então o banco volta ao estado original e as consultas da seção 10.1 continuam valendo. Para gravar as alterações, troque o `ROLLBACK` final por `COMMIT`.
+Os comandos estão na Parte 2 de [`consultas_palazio.sql`](./consultas_palazio.sql), que deve ser executada depois da Parte 1. Cada um mostra a conferência **antes** e **depois**. O script roda dentro de uma transação que termina em `ROLLBACK`, então o banco volta ao estado original e as consultas da seção 10.1 continuam valendo. Para gravar as alterações, troque o `ROLLBACK` final por `COMMIT`.
 
 | Código | Comando | Situação de negócio | Resultado observado |
 | :--- | :--- | :--- | :--- |
@@ -1127,9 +1130,8 @@ O banco operacional continua sendo a fonte única. As consultas viram *views*, e
 projeto-banco-de-dados-ads/
 │
 ├── README.md                              # Documentação principal do projeto
-├── banco-de-dados-palazio2.sql            # Banco completo em MySQL (13 tabelas) com a massa de dados
-├── consultas_palazio.sql                  # Consultas SQL e auditorias (seção 10)
-├── update_delete_palazio.sql              # UPDATE e DELETE com conferência antes e depois (seção 10.3)
+├── banco-de-dados-palazio.sql             # Banco completo em MySQL (cria o banco, 13 tabelas e a massa de dados)
+├── consultas_palazio.sql                  # Parte 1: consultas e auditorias; Parte 2: UPDATE e DELETE (seção 10)
 ├── cardapio_palazio_diurno.pdf            # Cardápio do estabelecimento (referência)
 ├── imagem_palazio.jpeg                    # Foto do estabelecimento
 ├── visita_palazio.jpeg                    # Registro da visita e da entrevista com o gerente
@@ -1142,11 +1144,15 @@ projeto-banco-de-dados-ads/
 │   ├── modelo_relacional.jpeg             # Modelo relacional (tabelas, PKs e FKs)
 │   └── Readme.md                          # Explicação do modelo relacional
 │
-└── dicionario_dados_palazio/
-    ├── dicionário_dados_Palazio.html      # Dicionário de dados completo
-    └── readme.md                          # Descrição do dicionário
+├── dicionario_dados_palazio/
+│   ├── dicionário_dados_Palazio.html      # Dicionário de dados completo
+│   └── readme.md                          # Descrição do dicionário
+│
+└── dados_palazio/                         # Exportação da primeira versão do banco (modelo anterior), mantida só como histórico
 
 ```
+
+> A pasta `dados_palazio/` guarda tabelas exportadas de uma versão anterior do banco (com a tabela `funcionario`). Ela **não é usada** nas seções 9 e 10; o banco atual é o `banco-de-dados-palazio.sql`.
 
 > O fluxograma do atendimento não é um arquivo de imagem: ele está no próprio README, na seção 3.4, escrito em Mermaid.
 
@@ -1177,43 +1183,58 @@ projeto-banco-de-dados-ads/
 
 ## 🛠️ 13. Justificativa Técnica da Modelagem
 
-A modelagem do banco de dados do Palazio del Chef foi desenvolvida com base nos processos operacionais identificados durante a análise do estabelecimento. O objetivo é organizar as informações relacionadas aos pedidos, produtos, mesas, atendentes e setores, estabelecendo relacionamentos que representem as regras de negócio observadas.
+O banco foi modelado a partir dos processos observados na visita e na entrevista: registrar o pedido, preparar nos setores, receber o pagamento, emitir a nota fiscal e controlar estoque e compras. Cada decisão abaixo aponta para o que está implementado em [`banco-de-dados-palazio.sql`](./banco-de-dados-palazio.sql).
 
-### Organização das Entidades
+### 13.1 Chaves primárias
 
-As entidades **Atendente, Mesa, Pedido, Produto e Setor** foram definidas para representar os principais elementos envolvidos no funcionamento do estabelecimento. A separação dessas informações busca evitar a concentração de dados de diferentes finalidades em uma única estrutura, facilitando a organização, a manutenção e a futura ampliação do modelo.
+| Tabela | Chave primária | Justificativa |
+| :--- | :--- | :--- |
+| `atendente`, `setor`, `forma_pagamento`, `fornecedor`, `insumo`, `produto`, `pedido`, `pagamento`, `nota_fiscal`, `nota_fiscal_compra`, `compra` | Código inteiro com `AUTO_INCREMENT` (`id_...`, `codigo_produto`, `num_pedido`) | Nomes, descrições e razões sociais podem mudar ou se repetir. Um código curto e estável identifica cada registro e deixa as chaves estrangeiras pequenas. |
+| `mesa` | `nmr_mesa` | O número da mesa já identifica a mesa no salão e não se repete, então não foi preciso criar um código artificial. |
+| `item_pedido` | Composta: `(num_pedido, codigo_produto)` | Um produto aparece uma única vez em cada pedido, e a quantidade fica em `qt_produto`. A chave composta impede lançar o mesmo produto duas vezes no mesmo pedido. |
 
-### Relacionamento entre Pedido e Produto
+### 13.2 Chaves estrangeiras e relacionamentos
 
-O relacionamento **Possui** foi definido entre as entidades Pedido e Produto para representar os produtos incluídos em cada pedido. Sua cardinalidade é muitos para muitos (N:M), pois um pedido pode conter vários produtos, enquanto um mesmo produto pode estar presente em diferentes pedidos.
+As 13 chaves estrangeiras estão listadas na seção 7.2. Todas usam `NO ACTION`: o banco recusa apagar um registro que ainda tem registros ligados a ele, o que protege o histórico de vendas e de compras (exemplo no item D04 da seção 10.3).
 
-Os atributos `quantidade` e `preco_unitario` foram associados ao relacionamento Possui, pois representam, respectivamente, a quantidade de um produto em determinado pedido e o preço unitário considerado naquela associação. Essa organização permite representar situações em que um mesmo produto aparece em pedidos diferentes, com quantidades ou preços distintos.
+| Relacionamento | Chave estrangeira | O que garante |
+| :--- | :--- | :--- |
+| Atendente registra pedido | `pedido.id_atendente` | Todo pedido tem um atendente responsável, o problema identificado na seção 3.5 |
+| Mesa atende pedido | `pedido.nmr_mesa` | Todo pedido está ligado a uma mesa existente |
+| Pedido possui produtos (N:N) | `item_pedido.num_pedido` e `item_pedido.codigo_produto` | A tabela associativa guarda quantidade, preço e cancelamento de cada item |
+| Produto é designado a um setor | `produto.id_setor` | Cada produto vai para a cozinha ou para o bar |
+| Produto referente a um insumo | `produto.id_insumo` | Liga o produto ao estoque; é opcional, porque nem todo produto tem insumo controlado |
+| Pagamento quita o pedido | `pagamento.num_pedido`, `pagamento.id_forma_pagamento` | Um pedido pode ter vários pagamentos, cada um com uma forma |
+| Pagamento e nota fiscal | `pagamento.(id_nota_fiscal, num_pedido)` ligada a `nota_fiscal.(id_nota_fiscal, num_pedido)` | A chave composta obriga pagamento e nota a apontarem para o **mesmo pedido** (RN29) |
+| Nota fiscal refere-se ao pedido | `nota_fiscal.num_pedido` (`UNIQUE`) | No máximo uma nota por pedido |
+| Compra de insumo | `compra.id_insumo`, `compra.id_nota_compra`, `nota_fiscal_compra.id_fornecedor` | Cada compra tem insumo, nota e fornecedor conhecidos |
 
-### Chaves e Integridade dos Dados
+### 13.3 Restrições de integridade
 
-As chaves primárias foram definidas para identificar individualmente os registros de cada entidade. As chaves estrangeiras serão utilizadas no modelo relacional para estabelecer os vínculos entre as tabelas e preservar a integridade referencial.
+| Tipo | Onde foi aplicado | Por quê |
+| :--- | :--- | :--- |
+| `NOT NULL` | Chaves estrangeiras de `pedido` (atendente e mesa), nomes, datas e valores das notas e dos pagamentos | Regras do grupo: todo pedido tem atendente e mesa; documentos fiscais têm data e valor |
+| `UNIQUE` | `forma_pagamento.descricao`, `fornecedor.cnpj`, `nota_fiscal.num_pedido`, `nota_fiscal.chave_acesso`, `nota_fiscal_compra.chave_acesso` | Não pode haver duas formas de pagamento iguais, dois fornecedores com o mesmo CNPJ, nem duas notas com a mesma chave de acesso |
+| `CHECK` de valores | `qt_produto > 0`, `quantidade > 0`, `valor_pago > 0`, `valor_total > 0`; `preco_unitario`, `preco_atual` e `valor_unitario` maiores ou iguais a zero; `qt_insumo` e `qt_minima_insumo` maiores ou iguais a zero | Impedem quantidades e valores sem sentido, como estoque negativo |
+| `CHECK` de formato | `cnpj` com 14 caracteres; `cpf_consumidor` vazio ou com 11 caracteres | CPF é opcional na nota; quando existe, precisa ter o tamanho certo |
+| `CHECK` de coerência | `desconto` entre 0 e o valor da compra; `data_entrada` maior ou igual a `data_emissao` | A compra não pode ter desconto maior que o total, nem entrar antes de ser emitida |
+| `DEFAULT` | `status = 'ativo'`, `maioridade_confirmada = 0`, `data_hora_pedido` e `data_hora_pagamento` com a hora atual | Valores padrão evitam campos esquecidos |
 
-A associação entre Pedido e Mesa permite identificar a mesa vinculada a cada pedido. Já a associação entre Pedido e Atendente busca possibilitar a identificação do responsável pelo registro do pedido, contribuindo para a rastreabilidade das operações.
+Ao todo são 14 restrições `CHECK`. A consulta de auditoria A01 a A07 (seção 10.2) confere as regras que o banco não consegue garantir sozinho.
 
-### Representação dos Setores
+### 13.4 Decisões gerais do modelo
 
-A entidade Setor representa as áreas de preparação e atendimento dos produtos, como cozinha e bar. Sua inclusão busca representar a organização operacional do estabelecimento e permitir que o modelo considere o encaminhamento dos produtos ao setor responsável.
+- **`item_pedido` como tabela associativa:** a relação entre pedido e produto é N:N e carrega atributos próprios. O `preco_unitario` fica congelado no item, então mudar o cardápio não altera pedidos antigos (RN04).
+- **Cancelamento por item:** o cancelamento é registrado no item, com motivo e data, e não no pedido inteiro, porque um cancelamento pode atingir só parte do pedido.
+- **`forma_pagamento` como tabela própria:** evita listas como "dinheiro, pix" em uma coluna e permite pagar um pedido em mais de uma forma (1FN).
+- **`insumo` separado de `produto`:** o estoque é de insumos, e um produto pode ou não estar ligado a um.
+- **Nota fiscal opcional no pagamento:** o pagamento pode ser registrado antes da nota (RN22), por isso o pedido também fica no pagamento (redundância documentada na seção 8.3).
+- **MySQL 8.0 com InnoDB:** aplica chaves estrangeiras e restrições `CHECK`, e permite funções de janela usadas nas consultas.
+- **Limites conhecidos:** `fornecedor.endereco` é texto único, `produto` aceita só um insumo e `item_pedido.status` não tem `CHECK` (seção 8.4).
 
-### Insumos, compras e fornecedores
+### 13.5 Tecnologias e Ferramentas
 
-O controle de estoque foi modelado por meio da entidade Insumo. 
-
-As compras são representadas por Fornecedor, Nota_Fiscal_Compra e Compra. A nota é emitida por um fornecedor cadastrado e contém as compras de insumos, e a entidade Compra guarda quantidade, valor unitário e desconto opcional. Assim, o preço de compra fica separado do preço de venda do produto.
-
-### Escolha do Modelo Relacional
-
-O modelo relacional foi escolhido por permitir organizar os dados em tabelas conectadas por relacionamentos definidos, com chaves e restrições de integridade. A estrutura será analisada quanto à normalização, buscando reduzir redundâncias e prevenir inconsistências no armazenamento das informações.
-
-A modelagem também considera a possibilidade de expansão futura, conforme novos requisitos sejam identificados, sem perder a organização dos dados já representados.
-
-### Tecnologias e Ferramentas
-
-O BRModelo foi utilizado para apoiar a elaboração do Diagrama Entidade-Relacionamento (DER). O MySQL foi definido como Sistema Gerenciador de Banco de Dados (SGBD) para a futura implementação, utilizando SQL para a criação das estruturas, definição das restrições e execução de consultas. O Git e o GitHub são utilizados para o versionamento e a organização dos arquivos do projeto.
+O BRModelo foi usado para elaborar o Diagrama Entidade-Relacionamento (DER). O MySQL 8.0 foi o SGBD da implementação, com SQL para criar as estruturas, definir as restrições e consultar os dados.
 
 ---
 
@@ -1283,9 +1304,50 @@ O uso da ferramenta deve ser compreendido como um processo de consulta, análise
 
 ### 14.9 Uso do Claude (Anthropic)
 
-Além do ChatGPT, o grupo usou o **Claude** (Anthropic) como apoio na parte final do projeto: na normalização (seção 8), nas consultas e auditorias (seção 10.1 e 10.2), nos scripts de `UPDATE` e `DELETE` (seção 10.3), na proposta de BI e IA (seção 10.4), na documentação da implementação (seção 9) e nos slides da apresentação.
+O grupo também usou o **Claude** (Anthropic) na parte final do projeto. Os prompts abaixo são resumos fiéis do que foi pedido; as aspas indicam o texto próximo ao original.
 
-A verificação foi feita executando tudo: os scripts foram testados em um MySQL 8.0.46 a partir do banco importado, e os resultados publicados neste README são a saída real da execução. O integrante Victor Anjos também executou as consultas no MySQL Workbench. As respostas da IA não foram tratadas como prova de como o restaurante funciona, e as decisões finais continuaram com o grupo.
+**Uso 1: normalização, consultas e auditorias (seções 8 e 10.1 e 10.2)**
+- **Motivação:** documentar a normalização do banco criado por Thiago e Ricardo e escrever consultas de negócio e de auditoria ligadas às regras de negócio.
+- **Prompt (resumo):** analisar o banco, verificar 1FN, 2FN e 3FN tabela por tabela e escrever consultas que respondam perguntas de gestão e conferam regras.
+- **Resposta recebida:** as seções 8 e 10 e o arquivo de consultas (C01 a C12 e A01 a A07).
+- **Fontes e verificação:** não houve fontes externas. A verificação foi executar tudo em um MySQL 8.0.46 a partir do banco importado, e Victor repetiu no MySQL Workbench. Os resultados do README são a saída real.
+- **Corrigido ou rejeitado:** o que não rodou ou não bateu com os dados não entrou no README. As redundâncias que o modelo mantém de propósito foram registradas na seção 8.3, em vez de serem tratadas como erro.
+- **Justificativa:** o grupo manteve o que foi conferido na execução.
+- **Reflexão crítica:** a IA pode afirmar que uma tabela está na 3FN sem testar; por isso cada afirmação aponta para linhas do script e para uma consulta de auditoria. Os limites do modelo ficaram na seção 8.4.
+
+**Uso 2: UPDATE e DELETE (seção 10.3)**
+- **Motivação:** cumprir a etapa de `UPDATE` e `DELETE` do esqueleto da entrega, sem estragar os dados usados nos resultados.
+- **Prompt (resumo):** escrever comandos de atualização e exclusão com situação de negócio, conferência antes e depois, e testar.
+- **Resposta recebida:** a Parte 2 do arquivo de consultas, dentro de uma transação com `ROLLBACK`.
+- **Verificação:** o script foi executado em um banco de teste e a conferência final voltou a 50 pedidos, 266 produtos e preço do chopp de 16,00. A exclusão do pedido 1 foi testada e gerou o erro 1451 esperado.
+- **Reflexão crítica:** a ordem dos `DELETE` (itens antes do pedido) e as condições `NOT EXISTS` só foram corretas depois de rodar contra as chaves estrangeiras.
+
+**Uso 3: proposta de BI e IA (seção 10.4) e revisão do README**
+- **Motivação:** cumprir o item de arquitetura analítica e deixar o README coerente com o que foi implementado.
+- **Prompt (resumo):** "o que dá pra melhorar agora?" e "faça isso no rep do thiago, tudo que está faltando".
+- **Resposta recebida:** a seção 10.4, a conversão conceitual para relacional (seção 7), o "Como executar" (seção 9) e os ajustes de status e tempos verbais.
+- **Corrigido ou rejeitado:** a seção 10.4 foi escrita como **proposta**, e o texto diz que o painel de BI e os modelos de IA não foram implementados. Os indicadores citados vêm das consultas já executadas.
+- **Reflexão crítica:** com 50 pedidos de uma semana não dá para treinar modelo de IA; a seção diz isso.
+
+**Uso 4: slides da apresentação**
+- **Motivação:** montar a apresentação com os resultados reais.
+- **Prompt:** "faça slides de apresentação no modelo do thiago, para nós apresentarmos conforme o que foi pedido pelo professor".
+- **Resposta recebida:** 14 slides principais e 3 de anexo, com prints dos resultados das consultas.
+- **Corrigido:** os recortes dos prints foram refeitos por terem sobras e linhas cortadas, e a nota do slide de IA foi atualizada.
+
+**Uso 5: revisão do repositório e correção do sumário**
+- **Motivação:** conferir se o repositório atendia ao esqueleto da Entrega 2.
+- **Prompts:** "usa meu navegador e mexe no sumário no repositório do thiago, os links não funcionam" e "analisa tudo do repositório e diz se condiz com a entrega 2, se tem algo errado".
+- **Resposta recebida:** a correção dos 4 links do sumário (os títulos com emoji geravam âncoras inválidas) e a lista de pendências, entre elas os nomes de arquivos, a revisão do DER e esta seção de uso de IA.
+- **Reflexão crítica:** a IA só conseguiu apontar a diferença entre 100 a 200 pedidos por dia e os 50 pedidos da massa depois de cruzar o README com o banco. A decisão sobre aumentar ou não a massa ficou com o grupo (ver seção 9.2).
+
+**Limites e responsabilidade.** Uma resposta de IA não prova como o restaurante funciona: o que o gerente não confirmou continua marcado como hipótese a validar (seções 3.4 e 4.4). As decisões finais e a conferência dos resultados ficaram com os integrantes do grupo.
+
+### 14.10 Massa de dados
+
+A massa de dados é **fictícia** e foi montada para ser coerente com os processos modelados (seção 9.2). Foi gerada por Thiago e Ricardo.
+
+> ⚠️ **A completar por Thiago e Ricardo:** o esqueleto da entrega exige registrar se foi usada alguma IA (ChatGPT, Claude ou outra) para gerar a massa de dados, com os prompts e os ajustes manuais feitos. Se nenhuma IA foi usada, escrever isso aqui de forma explícita.
 
 ---
 
