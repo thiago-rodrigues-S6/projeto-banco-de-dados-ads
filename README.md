@@ -36,7 +36,7 @@
 10. [Consultas SQL](#-10-consultas-sql)
 11. [Estrutura do Projeto](#-11-estrutura-do-projeto)
 12. [Status do Projeto](#-12-status-do-projeto)
-13. [Justificativa Técnica da Modelagem](#-13-justificativa-tecnica-da-modelagem)
+13. [Justificativa Técnica da Modelagem](#-13-justificativa-técnica-da-modelagem)
 14. [Uso de Inteligência Artificial](#-14-uso-de-inteligência-artificial)
 15. [Contexto Acadêmico](#-15-contexto-acadêmico)
 
