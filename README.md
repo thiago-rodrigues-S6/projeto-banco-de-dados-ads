@@ -289,7 +289,6 @@ As soluções propostas são:
 | SP08 | Implementar o controle de disponibilidade dos produtos, permitindo registrar a situação de comercialização e os limites diários definidos para determinados itens. |
 | SP09 | Criar uma estrutura de histórico de preços, permitindo registrar os valores anteriores e atuais dos produtos, juntamente com a data e o responsável pela alteração. |
 
-A implementação dessas soluções deverá respeitar a estrutura do modelo relacional, utilizando chaves primárias, chaves estrangeiras e restrições de integridade para garantir a consistência das informações.
 ---
 
 ## ⚙️ 4. Requisitos e Regras de Negócio
