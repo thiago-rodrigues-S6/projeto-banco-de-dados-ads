@@ -1,126 +1,55 @@
-# Sistema de Gerenciamento de Pedidos — Palazio del Chef
+# Diagrama Entidade-Relacionamento — Palazio del Chef
 
-## Sobre o projeto
+## Sobre o diagrama
 
-Projeto de modelagem de banco de dados para um sistema de gerenciamento de pedidos de um restaurante. O objetivo é organizar as informações relacionadas aos pedidos, funcionários, mesas, produtos, pagamentos, notas fiscais, estoque e fornecedores.
+O Diagrama Entidade-Relacionamento (DER) do **Palazio del Chef** representa as entidades, os atributos, os relacionamentos e as cardinalidades do banco de dados de pedidos do restaurante. Ele foi feito no BRModelo e é a base do modelo relacional (pasta `modelo_relacional`) e do banco implementado em MySQL (`banco-de-dados-palazio.sql`).
 
-O banco de dados foi desenvolvido a partir de um **Modelo-Entidade-Relacionamento (DER)**, representando as entidades, seus atributos, os relacionamentos e as respectivas cardinalidades.
+<p align="center">
+  <img src="./diagrama_palazio_del_chef.jpeg" alt="Diagrama Entidade-Relacionamento do Palazio del Chef" width="900">
+</p>
 
-## Modelo do Banco de Dados
+## Entidades
 
-O sistema possui as seguintes entidades:
+O diagrama tem **12 entidades**:
 
-- **Atendente:** armazena os dados dos funcionários responsáveis pelo registro dos pedidos.
-- **Mesa:** representa as mesas disponíveis no estabelecimento.
-- **Pedido:** registra os pedidos realizados, incluindo data, horário, status e informações sobre cancelamentos.
-- **Produto:** contém os produtos cadastrados, preços, limite diário de vendas e identificação de bebidas alcoólicas.
-- **Setor:** identifica o setor ao qual cada produto pertence.
-- **Estoque:** controla a quantidade disponível dos produtos armazenados.
-- **Fornecedor:** armazena informações sobre os fornecedores do restaurante.
-- **Pagamento:** registra os pagamentos realizados, incluindo valor, data, horário e forma de pagamento.
-- **Nota Fiscal:** armazena os dados relacionados à NFC-e (Nota Fiscal de Consumidor Eletrônica).
+| Entidade | O que representa |
+| :--- | :--- |
+| `atendente` | Funcionários que registram os pedidos |
+| `mesa` | Mesas do salão |
+| `pedido` | Pedidos (comandas), com data, hora e conferência de maioridade |
+| `produto` | Itens do cardápio, com preço atual, limite diário e indicação de bebida alcoólica |
+| `setor` | Setor de preparo do produto (cozinha ou bar) |
+| `insumo` | Insumos em estoque, com quantidade, unidade e quantidade mínima |
+| `formas_pagamento` | Formas de pagamento aceitas (dinheiro, débito, crédito e pix) |
+| `pagamento` | Pagamentos de um pedido, com valor e data |
+| `nota_fiscal` | NFC-e emitida para o pedido |
+| `fornecedor` | Fornecedores de insumos |
+| `nota_fiscal_compra` | Notas fiscais de compra emitidas pelos fornecedores |
+| `compra` | Compras de insumos, com quantidade, valor unitário e desconto |
 
-## Principais relacionamentos
+## Relacionamentos e cardinalidades
 
-### Funcionário → Pedido
-Um Funcionário pode registrar vários pedidos, enquanto cada pedido é registrado por um único funcionário.
+| Relacionamento | Entidades | Cardinalidade |
+| :--- | :--- | :--- |
+| registra | atendente e pedido | Um atendente registra vários pedidos; cada pedido tem um atendente |
+| atende | mesa e pedido | Uma mesa atende vários pedidos; cada pedido tem uma mesa |
+| possui | pedido e produto | Muitos para muitos. Guarda quantidade, preço unitário, status, motivo e data de cancelamento (vira a tabela `item_pedido`) |
+| designado | produto e setor | Cada produto pertence a um setor; um setor tem vários produtos |
+| referente | produto e insumo | Liga o produto ao insumo que ele consome no estoque |
+| quita | pagamento e formas_pagamento | Cada pagamento tem uma forma; uma forma está em vários pagamentos |
+| recebe | pagamento e nota_fiscal | O pagamento pode ser ligado a uma nota fiscal (a nota é opcional no momento do pagamento) |
+| refere-se | nota_fiscal e pedido | Cada nota refere-se a um pedido, e cada pedido tem no máximo uma nota |
+| refere-se | compra e insumo | Cada compra é de um insumo |
+| contém | compra e nota_fiscal_compra | Uma nota de compra contém várias compras |
+| emite | nota_fiscal_compra e fornecedor | Cada nota de compra é emitida por um fornecedor |
 
-### Mesa → Pedido
-Uma mesa pode estar relacionada a vários pedidos ao longo do tempo, enquanto cada pedido está associado a uma mesa.
+## Revisão em relação à Entrega 1
 
-### Pedido → Produto
-Um pedido pode conter vários produtos, e um produto pode aparecer em diferentes pedidos. O relacionamento registra a quantidade de cada produto e seu preço unitário.
+O DER da Entrega 1 tinha 5 entidades (atendente, mesa, pedido, produto e setor). Esta versão acrescenta pagamento, nota fiscal, estoque de insumos, fornecedores e compras, que cobrem os processos de pagamento e controle de estoque mapeados na análise. O quadro completo da revisão está na seção 6.1 do [README principal](../README.md).
 
-### Produto → Setor
-Cada produto é designado a um setor, e um setor pode possuir vários produtos.
+## Documentos relacionados
 
-### Produto → Estoque
-O relacionamento controla as informações referentes ao estoque dos produtos, incluindo as quantidades disponíveis.
-
-### Fornecedor → Estoque
-Representa o fornecimento de produtos ao estoque do restaurante, permitindo relacionar fornecedores e registros de estoque.
-
-### Pedido → Pagamento
-Um pedido pode receber vários pagamentos, enquanto cada pagamento está associado a um único pedido.
-
-### Pedido → Nota Fiscal
-A nota fiscal refere-se ao pedido correspondente. O modelo prevê uma NFC-e para a venda, independentemente da quantidade de formas de pagamento utilizadas.
-
-## Principais atributos
-
-### Atendente
-- `id_atendente`
-- `nome_atendente`
-
-### Mesa
-- `nmr_mesa`
-
-### Pedido
-- `Num_pedido`
-- `data_hora_pedido`
-- `status`
-- `motivo_cancelamento`
-- `data_hora_cancelamento`
-- `maior_idade`
-
-### Produto
-- `codigo_produto`
-- `nome_produto`
-- `preço_atual`
-- `limite_diario`
-- `bebida_alcoolica`
-
-### Setor
-- `id_setor`
-- `nome_setor`
-
-### Estoque
-- `id_estoque`
-- `qt_produto_estoque`
-- `qt_disponível`
-
-### Fornecedor
-- `id_fornecedor`
-- `razão_social`
-- `CNPJ`
-- `telefone`
-- `endereço`
-- `prazo_entrega`
-- `prazo_custo`
-
-### Pagamento
-- `id_pagamento`
-- `data_hora_pagamento`
-- `valor_pago`
-- `id_formas_pagamento`
-
-### Nota Fiscal
-- `id_nota_fiscal`
-- `numero_nota`
-- `serie`
-- `data_emissão`
-- `valor_total`
-- `chave_acesso`
-- `CPF_consumidor`
-
-## Tecnologias
-
-- Modelagem de Banco de Dados
-- Modelo Entidade-Relacionamento (DER)
-- SQL
-- Banco de Dados Relacional
-
-## Objetivo
-
-Este projeto foi desenvolvido com o objetivo de praticar conceitos de:
-
-- Modelagem de dados
-- Entidades e atributos
-- Chaves primárias
-- Chaves estrangeiras
-- Relacionamentos
-- Cardinalidade
-- Organização de bancos de dados relacionais
-
+- [Dicionário de dados](../dicionario_dados_palazio/)
+- [Modelo relacional](../modelo_relacional/)
 
 [🔝 Voltar ao início](https://github.com/thiago-rodrigues-S6/projeto-banco-de-dados-ads)
