@@ -263,10 +263,6 @@ Considerando as características de um restaurante de pequeno porte, com equipe 
 | PN08 | Necessidade de controlar a disponibilidade dos produtos comercializados, permitindo identificar itens temporariamente indisponíveis e limites diários de comercialização. |
 | PN09 | Necessidade de manter um histórico das alterações de preços dos produtos, possibilitando consultar os valores praticados em diferentes períodos. |
 
-Os pontos apresentados representam necessidades de organização das informações e oportunidades de melhoria identificadas durante a análise dos processos. Nem todas as situações foram relatadas como dificuldades existentes pelo gerente entrevistado, sendo necessária a validação dos procedimentos ainda não confirmados.
-
-Dessa forma, o projeto busca estruturar uma solução de banco de dados relacional capaz de atender às necessidades identificadas, considerando a realidade operacional e a estrutura reduzida do estabelecimento.
-
 ---
 
 ### 3.6 Solução proposta
