@@ -247,15 +247,25 @@ flowchart TD
 
 ### 3.5 Identificação do problema
 
-A análise do funcionamento do Palazio del Chef permitiu identificar diferentes elementos envolvidos nas operações do estabelecimento, incluindo pedidos, produtos, mesas, atendentes, setores de preparação, pagamentos e estoque.
+A análise dos processos operacionais do Palazio del Chef permitiu identificar necessidades relacionadas à organização, ao armazenamento e à consulta das informações utilizadas no funcionamento do estabelecimento.
 
-Esses elementos possuem relações entre si que precisam ser consideradas na construção de um modelo de dados consistente. Além disso, as informações levantadas demonstram que diferentes atividades possuem características próprias de registro e controle, como o encaminhamento dos pedidos aos setores responsáveis, a possibilidade de realizar vários pagamentos para quitar uma conta e o controle manual do estoque.
+Considerando as características de um restaurante de pequeno porte, com equipe reduzida e dois gerentes responsáveis pela alternância entre os turnos diurno e noturno, foram identificados os seguintes pontos de atenção:
 
-No âmbito deste projeto acadêmico, a necessidade identificada consiste em estruturar essas informações em um banco de dados relacional, definindo como os registros serão identificados, relacionados e submetidos às restrições de integridade. Essa estrutura deverá permitir representar adequadamente os processos considerados no escopo do projeto.
+| Código | Problema identificado |
+|---|---|
+| PN01 | Ausência de identificação individual dos funcionários no aplicativo utilizado para registrar os pedidos, dificultando a identificação dos responsáveis por cada operação. |
+| PN02 | Controle manual do estoque, dificultando a centralização das informações sobre as quantidades disponíveis e a consulta dos registros de movimentação dos insumos. |
+| PN03 | Necessidade de registrar entradas, saídas, perdas e ajustes de estoque, permitindo identificar as alterações realizadas nas quantidades dos insumos. |
+| PN04 | Necessidade de organizar a passagem de informações entre os gerentes, permitindo consultar pendências, pedidos em aberto e ocorrências registradas nos turnos anteriores. |
+| PN05 | Ausência de uma estrutura definida na modelagem atual para acompanhar as etapas de preparação dos pedidos, desde o encaminhamento à cozinha ou ao bar até a entrega ao cliente. |
+| PN06 | Necessidade de organizar as informações financeiras por turno, permitindo consultar pagamentos recebidos, formas de pagamento utilizadas e valores registrados em cada período. |
+| PN07 | Necessidade de manter um histórico das alterações e dos cancelamentos realizados nos pedidos, identificando os responsáveis, os horários e as respectivas justificativas. |
+| PN08 | Necessidade de controlar a disponibilidade dos produtos comercializados, permitindo identificar itens temporariamente indisponíveis e limites diários de comercialização. |
+| PN09 | Necessidade de manter um histórico das alterações de preços dos produtos, possibilitando consultar os valores praticados em diferentes períodos. |
 
-É importante destacar que, durante a entrevista, não foi relatada uma dificuldade operacional específica que pudesse ser apresentada como um problema comprovado do estabelecimento. Portanto, a proposta não parte da afirmação de que o restaurante apresenta falhas no atendimento, erros nos pedidos ou inconsistências no estoque.
+Os pontos apresentados representam necessidades de organização das informações e oportunidades de melhoria identificadas durante a análise dos processos. Nem todas as situações foram relatadas como dificuldades existentes pelo gerente entrevistado, sendo necessária a validação dos procedimentos ainda não confirmados.
 
-O foco está na elaboração de uma modelagem que organize as informações selecionadas para o projeto e estabeleça uma estrutura adequada para seu armazenamento e relacionamento. A identificação de possíveis dificuldades adicionais dependerá de um levantamento complementar sobre os procedimentos de pagamento, controle de estoque, compras e acompanhamento dos pedidos.
+Dessa forma, o projeto busca estruturar uma solução de banco de dados relacional capaz de atender às necessidades identificadas, considerando a realidade operacional e a estrutura reduzida do estabelecimento.
 
 ### 3.6 Solução proposta
 
