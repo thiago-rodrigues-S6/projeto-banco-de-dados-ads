@@ -509,6 +509,20 @@ O mesmo raciocínio vale para a compra de insumos: uma nota de compra tem vário
 
 O total do pedido **não** é guardado em `pedido`: ele é calculado por `SUM(qt_produto * preco_unitario)` dos itens ativos (consulta C02), evitando um valor que poderia ficar diferente dos itens.
 
+### 8.1.1 Onde a 1FN foi aplicada no projeto
+
+| Regra da 1FN | Onde foi aplicada | Evidência no repositório |
+| :--- | :--- | :--- |
+| Sem grupos repetidos: itens do pedido | `item_pedido`, uma linha por produto, chave composta `(num_pedido, codigo_produto)` | [`banco-de-dados-palazio2.sql`](./banco-de-dados-palazio2.sql), linhas 167 a 181 (chave na linha 175). Nos dados (INSERT da linha 190), o pedido 1 ocupa 3 linhas (produtos 4, 49 e 175) e o pedido 2 ocupa 2. A consulta C02 (`consultas_palazio.sql`, linha 20) soma essas linhas com `GROUP BY`. |
+| Sem grupos repetidos: pagamentos | `pagamento`, uma linha por pagamento, chave `id_pagamento` | Linhas 295 a 311. Nos dados (INSERT da linha 320), o pedido 2 foi pago em duas formas (pagamentos 2 e 3) e o pedido 3 também (pagamentos 4 e 5). |
+| Sem grupos repetidos: compras de insumos | `nota_fiscal_compra` (cabeçalho) e `compra` (um insumo por linha) | Linhas 260 a 275 e 49 a 64. No INSERT da linha 73, a nota de compra 1 aparece em várias linhas de `compra`. |
+| Sem colunas repetidas | Não existem colunas como `produto1`, `produto2` ou `forma_pagamento2`. O que se repete virou linha. | Todas as tabelas do script (linhas 25 a 401). |
+| Atributos atômicos | Cada coluna guarda um único valor: data e hora em uma só coluna (`data_hora_pedido`, linha 333), `cnpj` com 14 caracteres (`CHECK`, linha 117), `chave_acesso` com um valor (linha 231) e `cpf_consumidor` com `CHECK` de 11 caracteres (linha 238). | Linhas citadas |
+| Atributos atômicos: forma de pagamento | `forma_pagamento` é uma tabela própria, então o pagamento aponta para uma forma por linha, e não para um texto com lista como "dinheiro, pix". | Linhas 84 a 89 e 298 |
+| Chave primária em toda tabela | As 13 tabelas têm chave primária. | `atendente` (28), `compra` (56), `forma_pagamento` (87), `fornecedor` (115), `insumo` (144), `item_pedido` (175, composta), `mesa` (203), `nota_fiscal` (233), `nota_fiscal_compra` (269), `pagamento` (302), `pedido` (337), `produto` (370), `setor` (400) |
+
+Pontos que seguem atômicos apenas em parte, já tratados em 8.4: `fornecedor.endereco` (linha 113) é um texto único e `fornecedor.telefone` (linha 114) guarda um único número.
+
 ### 8.2 Verificação tabela por tabela
 
 | Tabela | Chave primária | Principais dependências funcionais | 1FN | 2FN | 3FN |
