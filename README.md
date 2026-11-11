@@ -27,16 +27,16 @@
 1. [Integrantes](#-1-integrantes)
 2. [Contextualização e Visão Geral](#-2-contextualização-e-visão-geral)
 3. [Análise e Modelagem](#-3-análise-e-modelagem)
-4. [Requisitos e Regras de Negócio](#-4-requisitos-e-regras-de-negócio)
-5. [Dicionário de Dados](#-5-dicionário-de-dados)
+4. [Requisitos e Regras de Negócio](#sec-requisitos)
+5. [Dicionário de Dados](#sec-dicionario)
 6. [Diagrama Entidade-Relacionamento](#-6-diagrama-entidade-relacionamento)
 7. [Modelo Relacional](#-7-modelo-relacional)
 8. [Normalização](#-8-normalização)
-9. [Implementação do Banco de Dados](#-9-implementação-do-banco-de-dados)
+9. [Implementação do Banco de Dados](#sec-implementacao)
 10. [Consultas SQL](#-10-consultas-sql)
 11. [Estrutura do Projeto](#-11-estrutura-do-projeto)
 12. [Status do Projeto](#-12-status-do-projeto)
-13. [Justificativa Técnica da Modelagem](#-13-justificativa-técnica-da-modelagem)
+13. [Justificativa Técnica da Modelagem](#sec-justificativa)
 14. [Uso de Inteligência Artificial](#-14-uso-de-inteligência-artificial)
 15. [Contexto Acadêmico](#-15-contexto-acadêmico)
 
@@ -312,6 +312,8 @@ As soluções propostas são:
 
 ---
 
+<a id="sec-requisitos"></a>
+
 ## ⚙️ 4. Requisitos e Regras de Negócio
 
 Esta seção apresenta os requisitos funcionais e não funcionais e as regras de negócio consideradas no desenvolvimento do banco de dados do Palazio del Chef. Sua definição tem como base as informações levantadas durante a entrevista com um gerente do estabelecimento e as entidades e os relacionamentos representados no Diagrama Entidade-Relacionamento (DER).
@@ -394,6 +396,8 @@ Os requisitos e as regras apresentados orientam a estruturação das entidades, 
 As regras que dependem de decisões operacionais ainda não confirmadas deverão ser validadas com o estabelecimento antes da implementação definitiva do sistema.
 
 ---
+
+<a id="sec-dicionario"></a>
 
 ## 🗄️ 5. Dicionário de Dados
 
@@ -585,6 +589,8 @@ Algumas informações aparecem mais de uma vez por decisão de negócio, e não 
 **Status:** ✅ Concluído
 
 ---
+
+<a id="sec-implementacao"></a>
 
 ## 🗃️ 9. Implementação do Banco de Dados
 
@@ -1166,6 +1172,8 @@ projeto-banco-de-dados-ads/
 | Documentação final | ✅ Concluído |
 
 ---
+
+<a id="sec-justificativa"></a>
 
 ## 🛠️ 13. Justificativa Técnica da Modelagem
 
